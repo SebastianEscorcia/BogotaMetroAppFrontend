@@ -1,6 +1,7 @@
+import Welcome from "./views/Welcome";
+
+import "./assets/styles/layout.css";
 
 export const BogotaMetroApp = () => {
-  return (
-    <div>BogotaMetroApp</div>
-  )
-}
+  return <Welcome></Welcome>;
+};
