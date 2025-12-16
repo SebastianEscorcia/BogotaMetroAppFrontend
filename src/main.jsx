@@ -1,9 +1,9 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-
-import {  BogotaMetroAppogotaMetroApp } from './BogotaMetroApp'
+import {  BogotaMetroApp } from './BogotaMetroApp'
+import "@fortawesome/fontawesome-free/css/all.min.css";
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BogotaMetroAppogotaMetroApp/>
+    <BogotaMetroApp/>
   </StrictMode>,
 )
