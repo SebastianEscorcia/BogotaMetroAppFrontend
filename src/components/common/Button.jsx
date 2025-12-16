@@ -1,9 +1,7 @@
-function Button({ onEvent, children, className }) {
+export function Button({ onClick, children, className, type }) {
   return (
-    <button className={className} onClick={onEvent}>
-      {" "}
-      {children}{" "}
+    <button className={className} onClick={onClick} type={type} >
+      {children}
     </button>
   );
 }
-export default Button;
