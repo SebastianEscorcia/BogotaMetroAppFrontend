@@ -1,37 +1,26 @@
-const BASE_URL = "http://localhost:8080/api";
-
-export const httpClient = async (
-  endpoint,
-  { method = "GET", body, headers = {} } = {}
-) => {
+export const httpClient = async (endpoint, options = {}) => {
   const token = localStorage.getItem("token");
 
-  const config = {
-    method,
+  const response = await fetch(`http://localhost:8080/api${endpoint}`, {
     headers: {
       "Content-Type": "application/json",
       ...(token && { Authorization: `Bearer ${token}` }),
-      ...headers,
     },
-  };
+    ...options,
+  });
 
-  if (body) {
-    config.body = JSON.stringify(body);
-  }
+  const isJson = response.headers
+    .get("content-type")
+    ?.includes("application/json");
 
-  const response = await fetch(`${BASE_URL}${endpoint}`, config);
-
-  if (response.status === 401) {
-    // ejemplo: token inválido o expirado
-    localStorage.removeItem("token");
-    window.location.href = "/login";
-    throw new Error("Sesión expirada");
-  }
+  const data = isJson ? await response.json() : null;
 
   if (!response.ok) {
-    const error = await response.text();
-    throw new Error(error || "Error en la petición");
+    throw {
+      status: response.status,
+      ...data,
+    };
   }
 
-  return response.json();
+  return data;
 };

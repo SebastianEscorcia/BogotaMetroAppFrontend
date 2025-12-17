@@ -1,13 +1,11 @@
 import { useNavigate } from "react-router-dom";
 
-
 export const useNavigateTo = () => {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const goTo = (path, options = {}) => {
+    navigate(path, options);
+  };
 
-    const goTo = (patch) => {
-        navigate(patch)
-    }
-
-    return {goTo};
+  return { goTo };
 };

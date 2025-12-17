@@ -1,17 +1,46 @@
-import { Login, Welcome, Register,RecoverPassword  } from "./views";
+import { Login, Welcome, Register, RecoverPassword, Home } from "./views";
 import "./assets/styles/layout.css";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import { AuthProvider } from "./context/AuthUserContext";
+import { ProtectedRoute, PublicRoute } from "./guards";
 export const BogotaMetroApp = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Welcome />}></Route>
-        <Route path="/login" element={<Login/>}></Route>
-        <Route path="/register" element={<Register />}></Route>
-        <Route path="/recover-password" element={<RecoverPassword/>}></Route>
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Welcome />} />
+
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            }
+          />
+
+          <Route
+            path="/register"
+            element={
+              <PublicRoute>
+                <Register />
+              </PublicRoute>
+            }
+          />
+
+          <Route path="/recover-password" element={<RecoverPassword />} />
+
+          <Route
+            path="/home"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 };
