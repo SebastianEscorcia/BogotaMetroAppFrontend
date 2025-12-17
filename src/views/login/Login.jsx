@@ -11,7 +11,6 @@ export const Login = () => {
     <div className="login-container">
       <Logo className={"login-logo"} logo={logo} />
       <LoginForms handleInputs={handleLogin}/>
-      
     </div>
   );
 };

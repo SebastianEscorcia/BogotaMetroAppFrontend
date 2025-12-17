@@ -1,5 +1,4 @@
 export *  from './login/Login'
-export *  from './Register'
 export *  from './welcome/Welcome'
 export * from './RecoverPassword'
-export * from './Register'
+export * from './register/Register'
