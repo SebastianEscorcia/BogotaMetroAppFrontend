@@ -2,11 +2,11 @@ import { useState } from "react";
 
 import { validateEmail, validatePassword } from "../helpers";
 
-export const useLoginForms = (onSubmit) => {
+export const useLoginForms = (handleLogin) => {
   const [correo, setCorreo] = useState("");
   const [clave, setClave] = useState("");
 
-  const [error, SetError] = useState(null);
+  const [error, setError] = useState(null);
   const handleCorreoChange = ({ target }) => {
     setCorreo(target.value);
   };
@@ -15,24 +15,31 @@ export const useLoginForms = (onSubmit) => {
     setClave((claveV) => (claveV = target.value));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const cleanCorreo = correo.trim();
     const cleanClave = clave.trim();
-
-    if (!validateEmail(cleanCorreo)) {
-      SetError("El formato del correo es incorrecto ");
-      return;
+    try {
+      if (!validateEmail(cleanCorreo)) {
+        setError("El formato del correo es incorrecto ");
+        return;
+      }
+      if (!validatePassword(cleanClave)) {
+        setError(
+          "La contraseña  debe llevar como mínimo una Mayúscula, minúscula, un número, caracter especial y 8 dígitos"
+        );
+        return;
+      }
+      await handleLogin({
+        correo,
+        clave,
+      });
+      setError(null);
+      setCorreo("");
+      setClave("");
+    } catch (err) {
+      setError("Credenciales inválidas");
     }
-    if (!validatePassword(cleanClave)) {
-      SetError("La contraseña  debe llevar como mínimo una Mayúscula, minúscula, un número, caracter especial y 8 dígitos");
-      return;
-    }
-
-    SetError(null);
-    onSubmit(cleanCorreo, cleanClave);
-    setCorreo("");
-    setClave("");
   };
 
   return {

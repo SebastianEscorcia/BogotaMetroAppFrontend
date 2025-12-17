@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { validateEmail, validatePassword } from "../helpers";
 
-export const useRegisterForm = (onSubmit) => {
+export const useRegisterForm = (handleRegister) => {
   const [nombres, setNombres] = useState({
     primerNombre: "",
     segundoNombre: "",
@@ -28,7 +28,7 @@ export const useRegisterForm = (onSubmit) => {
 
   const handleNombresChange = (e) => {
     const { name, value } = e.target;
-    
+
     setNombres((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -44,13 +44,15 @@ export const useRegisterForm = (onSubmit) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (!validateEmail(formData.correo)) {
       setError("El formato del correo es incorrecto");
       return;
     }
     if (!validatePassword(formData.clave)) {
-      setError("La contraseña debe ser segura (min 8 caracteres, mayúscula, minúscula, número, símbolo)");
+      setError(
+        "La contraseña debe ser segura (min 8 caracteres, mayúscula, minúscula, número, símbolo)"
+      );
       return;
     }
     if (!nombres.primerNombre || !nombres.primerApellido) {
@@ -66,8 +68,10 @@ export const useRegisterForm = (onSubmit) => {
       nombres.primerNombre,
       nombres.segundoNombre,
       nombres.primerApellido,
-      nombres.segundoApellido
-    ].filter(Boolean).join(" ");
+      nombres.segundoApellido,
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     const telefonoFinal = `${telefonoData.indicativo} ${telefonoData.numero}`;
 
@@ -78,7 +82,7 @@ export const useRegisterForm = (onSubmit) => {
     };
 
     setError(null);
-    onSubmit(dataToSend);
+    handleRegister(dataToSend);
   };
 
   return {
@@ -86,6 +90,7 @@ export const useRegisterForm = (onSubmit) => {
     nombres,
     telefonoData,
     error,
+    setError,
     handleNombresChange,
     handleTelefonoChange,
     handleChange,

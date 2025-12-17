@@ -1,27 +1,33 @@
-import {registerPasajero} from '../../services'
-import { useRegisterForm } from "../../hooks";
-import { Logo, Form, Input } from "../../components/common";
+import { useAuth } from "../../context/AuthUserContext";
+import { useRegisterForm, useNavigateTo } from "../../hooks";
+import { Logo, Form, Input, Button } from "../../components/common";
 import logo from "../../assets/img/imgs/logo2.svg";
 import "./register.css";
-import { 
-  FaUser, 
-  FaPhone, 
-  FaIdCard, 
-  FaCalendarAlt, 
-  FaMapMarkerAlt 
+import {
+  FaUser,
+  FaPhone,
+  FaIdCard,
+  FaCalendarAlt,
+  FaMapMarkerAlt,
 } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 
 export const Register = () => {
+  const { goTo } = useNavigateTo();
+  const { register } = useAuth();
+
   const handleRegister = async (data) => {
     try {
-      const result = await registerPasajero(data);
-      console.log("Registro Exitoso", result);
-      
+      await register(data);
+      goTo("/login", { replace: true });
     } catch (error) {
-      console.log(error.message);
+      if (error.code === "PAS-409") {
+        setError("El Usuario ya está registrado");
+      } else {
+        setError(error.message || "Error del servidor");
+      }
     }
   };
 
@@ -35,6 +41,7 @@ export const Register = () => {
     nombres,
     telefonoData,
     error,
+    setError,
     handleNombresChange,
     handleTelefonoChange,
     handleChange,
@@ -45,12 +52,11 @@ export const Register = () => {
     <div className="register-container">
       <div className="register-form">
         <div className="logo-container">
-           <Logo logo={logo} className="logo-register" />
+          <Logo logo={logo} className="logo-register" />
         </div>
         <h2 className="register-title">Crear Cuenta</h2>
 
         <Form handleSubmit={handleSubmit} className="register-form-content">
-          
           <div className="form-row">
             <Input
               icon={<FaUser />}
@@ -103,11 +109,11 @@ export const Register = () => {
                 { value: "CC", label: "C.C." },
                 { value: "TI", label: "T.I." },
                 { value: "CE", label: "C.E." },
-                { value: "PAS", label: "Pasaporte" }
+                { value: "PAS", label: "Pasaporte" },
               ]}
             />
             <Input
-              icon={<span style={{ width: '16px' }}></span>}
+              icon={<span style={{ width: "16px" }}></span>}
               name="numDocumento"
               placeholder="Número de Documento *"
               value={numDocumento}
@@ -131,7 +137,7 @@ export const Register = () => {
                 { value: "+51", label: "🇵🇪 +51" },
                 { value: "+56", label: "🇨🇱 +56" },
                 { value: "+1", label: "🇺🇸 +1" },
-                { value: "+34", label: "🇪🇸 +34" }
+                { value: "+34", label: "🇪🇸 +34" },
               ]}
             />
             <Input
@@ -151,8 +157,8 @@ export const Register = () => {
             value={fechaNacimiento}
             onChange={handleChange}
             required
-            className={`date-input ${fechaNacimiento ? 'has-value' : ''}`}
-          />  
+            className={`date-input ${fechaNacimiento ? "has-value" : ""}`}
+          />
 
           <Input
             icon={<FaMapMarkerAlt />}
@@ -185,10 +191,9 @@ export const Register = () => {
 
           {error && <p className="error-msg">{error}</p>}
 
-          <button type="submit" className="btn-register">
+          <Button type={"submit"} className={"btn-register"}>
             Registrarse
-          </button>
-
+          </Button>
           <div className="login-link-container">
             <Link to="/login" className="login-link">
               ¿Ya tienes cuenta? Inicia Sesión

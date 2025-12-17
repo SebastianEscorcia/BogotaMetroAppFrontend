@@ -26,7 +26,7 @@ export function Welcome() {
             <strong>Recomendaciones expertas para tu viaje</strong>
           </p>
 
-          <Button  onClick={() => goTo("/login")}>
+          <Button onClick={() => goTo("/login", { replace: true })}>
             Continuar <i className="fa-solid fa-arrow-right"></i>
           </Button>
         </div>
