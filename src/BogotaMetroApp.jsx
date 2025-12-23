@@ -1,9 +1,17 @@
-import { Login, Welcome, Register, RecoverPassword, Home } from "./views";
+import {
+  Login,
+  Welcome,
+  Register,
+  RecoverPassword,
+  Home,
+  Unauthorized,
+} from "./views";
 import "./assets/styles/layout.css";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthUserContext";
-import { ProtectedRoute, PublicRoute } from "./guards";
+import {ROLES} from './helpers'
+import { ProtectedRoute, PublicRoute, RoleGuard } from "./guards";
 export const BogotaMetroApp = () => {
   return (
     <AuthProvider>
@@ -30,12 +38,14 @@ export const BogotaMetroApp = () => {
           />
 
           <Route path="/recover-password" element={<RecoverPassword />} />
-
+          <Route path="/unauthorized" element={<Unauthorized />} />
           <Route
             path="/home"
             element={
               <ProtectedRoute>
-                <Home />
+                <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
+                  <Home />
+                </RoleGuard>
               </ProtectedRoute>
             }
           />
