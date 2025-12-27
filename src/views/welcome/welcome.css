@@ -1,0 +1,61 @@
+.welcome-container {
+  min-height: 100dvh;
+  background-image: url("../../assets/img/imgs/fondo.edit.png");
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+:root {
+  --negro: #000000;
+  --rojo: #fd0000;
+  --rojoprofundo: #b30000;
+  --gris: #aba99c;
+  --amarillo: #ffd700;
+  --grisclaro: #e3e3e3;
+  --vinotinto: #722f37;
+}
+
+.welcome-title{
+  font-size: 2.4rem;
+  padding-bottom: 3rem;
+  color: var(--rojo); 
+  text-shadow: 1px 1px 3px var(--gris);
+}
+.welcome-parrafo {
+  padding-bottom: 2rem;
+  text-align: center;
+  color: var(--grisclaro);
+  line-height: 1.6;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+}
+
+.logo-bienvenida {
+  display: flex;
+  justify-content: center;
+  align-content: baseline;
+  padding-top: 1.5rem;
+  padding-bottom: 0rem;
+}
+.logo-bienvenida img {
+  width: 200px;
+  max-width: 80%;
+}
+
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.header-b {
+  background-color: var(--rojo);
+  padding: 20px;
+  width: 100%;
+}
+
