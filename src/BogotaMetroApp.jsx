@@ -3,7 +3,7 @@ import {
   Welcome,
   Register,
   RecoverPassword,
-  Home,
+  HomeScreen,
   Unauthorized,
 } from "./views";
 import "./assets/styles/layout.css";
@@ -44,7 +44,7 @@ export const BogotaMetroApp = () => {
             element={
               <ProtectedRoute>
                 <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
-                  <Home />
+                  <HomeScreen />
                 </RoleGuard>
               </ProtectedRoute>
             }
