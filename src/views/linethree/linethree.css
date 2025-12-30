@@ -1,0 +1,38 @@
+.container-linethree{
+    min-height: 100vh;
+    width: 100vw;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)),url('/src/images/lineaTres.avif');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.header-linethree{
+    display: flex;
+    background-color: red;
+    height: 68px;
+}
+
+.header-linethree button{
+    font-size: 40px;
+    background-color: red;
+    margin-top: -15px;
+
+}
+
+.header-linethree span{
+    color: black;
+    font-size: 25px;
+    background-color: azure;
+    width: 170px;
+    height: 48px;
+    margin-left: 450px;
+    margin-top: 8px;
+    border-radius: 7px;
+    border: 1px solid black;
+}
+
+.header-linethree p{
+    margin-top: 6px;
+    margin-left: 40px;
+}
+

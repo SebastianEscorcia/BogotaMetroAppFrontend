@@ -1,0 +1,38 @@
+.container-map{
+    min-height: 100vh;
+    width: 100vw;
+    background-image: linear-gradient( rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)),url('/src/images/lineaUno.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+
+}
+
+.headerMap{
+    display: flex;
+    background-color: red;
+    height: 68px;
+    
+}
+.headerMap button{
+    font-size: 40px;
+    background-color: red;
+    margin-top: -15px;
+}
+
+.headerMap span{
+    color: black;
+    font-size: 25px;
+    margin-left: 500px;
+    background-color: azure;
+    width: 170px;
+    height: 48px;
+    margin-top: 7px;
+    border-radius: 7px;
+    border: 1px solid black;
+}
+
+
+.headerMap p{
+    margin-top: 6px;
+    margin-left: 40px;
+}

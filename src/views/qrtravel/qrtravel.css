@@ -1,0 +1,98 @@
+.header-qrtravel{
+    display: flex;
+    background-color: red;
+    color: white;
+    background-size: cover;
+    font-size: 12px;
+    width: 254.7% ;
+    height: 80px ;
+    margin-left: -421px;
+    margin-top: -23px;
+
+    
+    
+}
+
+.header-qrtravel button{
+    background-color: red;
+    color: white;
+    font-size:50px;
+    margin-left: -20px;
+    margin-top: -22px;
+    
+}
+
+.header-qrtravel h1{
+    display: flex;
+    align-content: center;
+    align-items: center;
+    margin-left: 380px;
+    font-size: 50px;
+
+}
+
+.logo-qrtravel img{
+    display: block;
+    width: 170px;
+    height: 90px;
+    margin-left: 200px;
+    margin-top: 10px;
+}
+.logo-qrtravel span{
+    color: black;
+    font-size: 18px;
+    margin-left: 275px;
+}
+
+.questionOneQrtravel{
+    color: black;
+    font-size: 12px;
+    margin-left: 20px;
+
+
+}
+
+.buttonsQrtravel button{
+    background-color: red;
+    color: white;
+    margin-left: 20px;
+
+}
+
+
+.imagenQr{
+    width: 190px;
+    height: 190px;
+    margin-left: 180px;
+    margin-top: 40px;
+}
+
+.opcionsQrtravel button{
+    align-items: center;
+    color: black;
+    background-color: rgb(226, 224, 224, 0.9);
+    border-radius: 25px;
+    border-color: red;
+    height: 28px;
+    margin-left: 90px;
+    margin-top: 30px;
+
+}
+
+
+
+
+.infoQrtravel p {
+    color: black;
+    font-size: 13px;
+    margin-left: 145px;
+}
+
+.infoQrtravel button{
+    background-color: red;
+    color: white;
+    margin-left: 150px;
+    margin-top: 10px;
+    width: 260px;
+
+}

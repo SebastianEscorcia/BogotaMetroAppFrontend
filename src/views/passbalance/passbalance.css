@@ -1,0 +1,131 @@
+.header-pass {
+    display: flex;
+    align-items: center;
+    background: red;
+    color: white;
+    background-size: cover;
+    font-size: 12px;
+    width: 323.9%;
+    height: 90px;
+    margin-top: -62px;
+    margin-left: -500px ;
+}
+
+.header-pass h1{
+    justify-content: center;
+    margin-left: 430px;
+
+
+}
+
+.button-go {
+    background-color: red;
+    color: none;
+    border: none;
+    font-size: 39px;
+    cursor: pointer;
+    margin-top: -10px;
+}
+.Question-pass1 {
+    margin-top: 70px;
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.input-pass {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    margin-left: 30px;
+}
+.input-pass label {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: black;
+}
+
+.input-pass input {
+    height: 25px;
+    width: 300px;
+    border-radius: 8px;
+    border: 1px solid gray;
+    background-color: white;
+}
+
+.input-pass p{
+    margin-top: 10px;
+    font-size: 14px;
+    color: black;
+}
+
+.Question-pass2 {
+    margin-top: 40px;
+    color: black;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.Buttons-pass {
+    margin-top: 30px;
+    display: flex;
+    gap: 20px;
+    
+}
+.Buttons-pass button {
+    align-content: center;
+    background-color: red;
+    border-color: black;
+}
+
+.valeu-pass {
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+    margin-left: 30px;
+
+}
+
+.valeu-pass label {
+    margin-bottom: 0px;
+    font-size: 16px;
+    color: black;
+}
+
+.valeu-pass input {
+    margin-top: 10px;
+    height: 25px;
+    width: 300px;
+    border-radius: 8px;
+    border: 1px solid gray;
+    background-color: white;
+}
+
+.valeu-pass p{
+    margin-top: 0px;
+    font-size: 14px;
+    color: black;
+}
+
+.balance-pass {
+    margin-top: 60px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+} 
+.balance-pass button {
+    background-color: red;
+    border: none;
+    height: 40px;
+    width: 40%;
+    cursor: pointer;
+    border: 1px solid white;
+}
+
+.balance-pass label{
+    color: black;
+    font-size: 30px;
+    border-radius: 1px;
+    border-color: black;
+
+}
