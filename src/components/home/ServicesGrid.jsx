@@ -7,8 +7,8 @@ export const ServicesGrid = ({ goTo }) => (
   <section className="services-grid">
     <Service icon={iconoTarjeta} label="Tarjeta Metro" />
     <Service icon={<BiCog />} label="Adapta tu experiencia" />
-    <Service icon={iconoViaje} label="Viaje" onClick={() => goTo("/Travel")} />
-    <Service icon={<FaDollarSign />} label="Saldo" onClick={() => goTo("/HomeBalance")} />
+    <Service icon={iconoViaje} label="Viaje" onClick={() => goTo("/travel")} />
+    <Service icon={<FaDollarSign />} label="Saldo" onClick={() => goTo("/homebalance")} />
   </section>
 );
 

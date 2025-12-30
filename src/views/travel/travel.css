@@ -1,0 +1,75 @@
+.header-travel{
+    display: flex;
+    align-items: center;
+    background-color: red;
+    width:1438px;
+    height: 80px;
+    margin-top: -87px;
+}
+
+.header-travel button{
+    margin-left: 10px;
+    background-color: transparent;
+    font-size: 40px;
+}
+
+.header-travel p{
+    margin-left: 450px;
+    font-size: 40px;
+}
+
+.content-travel{
+    display: block;
+    justify-content: space-between;
+    align-items: center;
+    color: black;
+    margin-left: 450px;
+    margin-top: 20px;
+}
+
+
+.content-travel img{
+    width: 37px;
+    height: 37px;
+    margin-left: 80px;
+}
+
+.content-travel button{
+    background-color: rgba(245, 245, 220, 0.4);
+    color: black;
+    margin-top:40px ;
+    width: 400px;
+    height: 50px;
+}
+
+.button-continue{
+    background-color: red;
+    margin-left: 530px;
+    margin-top: 90px;
+    width: 230px;
+    height: 40px;
+    font-size: 20px;
+    align-content: center;
+    border-color: white;
+    
+}
+
+.imgOne img{
+    width: 50px;
+    height: 50px;
+    margin-top: -25px;
+    margin-left: -45px;
+}
+
+
+.three-travel img{
+    margin-left: 180px;
+}
+
+.four-travel img{
+    margin-left: 110px;
+}
+
+.five-travel img{
+    margin-left: 100px;
+}
