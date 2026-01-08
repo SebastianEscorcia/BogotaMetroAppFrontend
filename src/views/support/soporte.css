@@ -1,0 +1,248 @@
+.soporte {
+  width: 100%;
+justify-content: center;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  
+}
+
+/* Header */
+.soporte header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0 2rem 0;
+  color: var(--negro);
+  
+}
+
+.soporte header svg {
+  font-size: 1.8rem;
+  color: var(--rojo);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.soporte header svg:hover {
+  transform: translateX(-4px);
+}
+
+.soporte header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--negro);
+  margin: 0;
+}
+
+/* Main content */
+.soporte main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  position: relative;
+}
+
+.soporte main h2 {
+  font-size: 1.5rem;
+  color: var(--negro);
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+}
+
+/* Search icon - Puedes convertirlo en input después */
+.soporte main > svg {
+  position: absolute;
+  top: 4.5rem;
+  left: 1rem;
+  font-size: 1.5rem;
+  color: var(--gris);
+  pointer-events: none;
+}
+
+
+.soporte .search-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
+  
+}
+.soporte .search-container svg {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  color: var(--gris);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.soporte .search-input {
+  width: 100%;
+  padding: 0.875rem 1rem 0.875rem 3rem;
+  border: 2px solid var(--grisclaro);
+  border-radius: 12px;
+  font-size: 1rem;
+  background-color: white;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.soporte .search-input:focus {
+  border-color: var(--rojo);
+  box-shadow: 0 0 0 3px rgba(253, 0, 0, 0.1);
+}
+
+/* FAQ Buttons Grid */
+.faq-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.faq-btn {
+  background-color: white;
+  color: var(--negro);
+  border: 2px solid var(--grisclaro);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.faq-btn:hover {
+  background-color: var(--rojo);
+  color: white;
+  border-color: var(--rojo);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(253, 0, 0, 0.2);
+}
+
+.faq-btn:active {
+  transform: translateY(0);
+}
+
+/* Contact Support Section */
+.contact-support {
+  margin-top: auto;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.btn-contact-support {
+  width: 100%;
+  background: linear-gradient(135deg, var(--rojo) 0%, var(--rojoprofundo) 100%);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(253, 0, 0, 0.3);
+}
+
+.btn-contact-support:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(253, 0, 0, 0.4);
+  background: linear-gradient(135deg, var(--rojoprofundo) 0%, var(--rojo) 100%);
+}
+
+.btn-contact-support:active {
+  transform: translateY(-1px);
+}
+
+.btn-contact-support p {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0;
+  text-align: left;
+}
+
+.btn-contact-support img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  filter: brightness(1.1);
+}
+
+/* Loading and Error States */
+.soporte-loading,
+.soporte-error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100dvh;
+  font-size: 1.125rem;
+  color: var(--negro);
+}
+
+.soporte-error {
+  color: var(--rojo);
+  font-weight: 600;
+}
+
+
+@media (max-width: 768px) {
+  .soporte {
+    padding: 1rem;
+  }
+
+  .soporte header h1 {
+    font-size: 1.5rem;
+  }
+
+  .soporte main h2 {
+    font-size: 1.25rem;
+  }
+
+  .faq-buttons {
+    grid-template-columns: 1fr;
+    gap: 0.875rem;
+  }
+
+  .faq-btn {
+    padding: 1rem 1.25rem;
+  }
+
+  .btn-contact-support {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .btn-contact-support p {
+    font-size: 1rem;
+  }
+
+  .btn-contact-support img {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .soporte header svg {
+    font-size: 1.5rem;
+  }
+
+  .soporte header h1 {
+    font-size: 1.25rem;
+  }
+
+  .soporte main h2 {
+    font-size: 1.125rem;
+  }
+
+  .btn-contact-support img {
+    width: 35px;
+    height: 35px;
+  }
+}

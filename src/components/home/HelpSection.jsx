@@ -1,8 +1,14 @@
 import { BsQuestionCircle } from "react-icons/bs";
-
-export const HelpSection = () => (
-  <div className="help-section">
-    <BsQuestionCircle />
-    <span>¿Necesitas ayuda?</span>
-  </div>
-);
+import { useNavigateTo } from "../../hooks";
+import { Button } from "../common";
+export const HelpSection = () => {
+  const { goTo } = useNavigateTo();
+  return (
+    <Button className="help-section" onClick={()=>{
+      goTo("/soporte")
+    }}>
+      <BsQuestionCircle />
+      ¿Necesitas ayuda?
+    </Button>
+  );
+};

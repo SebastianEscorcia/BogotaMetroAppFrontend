@@ -11,6 +11,7 @@ import {
   QrTravel,
   Recharge,
   Travel,
+  Soporte,
   Unauthorized,
 } from "./views";
 
@@ -143,6 +144,16 @@ export const BogotaMetroApp = () => {
               <ProtectedRoute>
                 <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
                   <QrTravel />
+                </RoleGuard>
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/soporte"
+            element={
+              <ProtectedRoute>
+                <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
+                  <Soporte />
                 </RoleGuard>
               </ProtectedRoute>
             }
