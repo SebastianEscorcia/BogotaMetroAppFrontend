@@ -1,1 +1,2 @@
-export * from './SupportButton'
+export * from './SupportButton' ;
+export * from './RenderSupportFaq';
