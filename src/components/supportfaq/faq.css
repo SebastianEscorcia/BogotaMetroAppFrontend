@@ -1,0 +1,126 @@
+/* Contenedor principal de la vista FAQ */
+.faq-view {
+  width: 100%;
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.9); 
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Título */
+.faq-view h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--negro);
+  margin: 0;
+  border-bottom: 2px solid var(--grisclaro);
+  padding-bottom: 0.5rem;
+  text-align: center;
+}
+
+/* Lista de FAQs */
+.faq-view ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Cada ítem FAQ */
+.faq-view li {
+  background-color: #fff;
+  border: 1px solid var(--grisclaro);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.faq-view li:hover {
+  background-color: var(--rojo);
+  border-color: var(--rojo);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(253, 0, 0, 0.2);
+}
+
+/* Pregunta */
+.faq-view li strong {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: inherit;
+}
+
+/* Respuesta */
+.faq-view li p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+  color: inherit;
+}
+
+/* Estados de carga y error */
+.faq-loading,
+.faq-error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.faq-error {
+  color: var(--rojo);
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .faq-view {
+    padding: 1.25rem;
+    gap: 1rem;
+  }
+
+  .faq-view h2 {
+    font-size: 1.5rem;
+  }
+
+  .faq-view li strong {
+    font-size: 1rem;
+  }
+
+  .faq-view li p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .faq-view {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  .faq-view h2 {
+    font-size: 1.25rem;
+  }
+
+  .faq-view li {
+    padding: 0.75rem 1rem;
+  }
+
+  .faq-view li strong {
+    font-size: 0.95rem;
+  }
+
+  .faq-view li p {
+    font-size: 0.85rem;
+  }
+}

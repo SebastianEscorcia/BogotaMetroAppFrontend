@@ -1,4 +1,4 @@
-/* homeScreen.css */
+
 
 /* ============================================
    HOME SCREEN - CONTENEDOR PRINCIPAL
@@ -398,8 +398,8 @@
   justify-content: center;
   gap: 0.75rem;
   padding: 1rem;
-  background-color: white;
   border-radius: 25px;
+  color: white;
   cursor: pointer;
   transition: all 0.3s ease;
   margin: 1rem;
@@ -409,24 +409,14 @@
 
 .help-section svg {
   font-size: 28px;
-  color: var(--rojo);
 }
 
-.help-section span {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--rojo);
-}
+
 
 .help-section:hover {
-  background-color: var(--rojo);
+  background-color: #d40000;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(253, 0, 0, 0.3);
-}
-
-.help-section:hover svg,
-.help-section:hover span {
-  color: white;
 }
 
 .help-section:active {

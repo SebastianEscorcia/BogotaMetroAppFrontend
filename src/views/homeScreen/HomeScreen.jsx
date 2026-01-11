@@ -11,12 +11,10 @@ import {
   UserInfo,
 } from "../../components/home";
 
-//Hooks
 import { useNavigateTo } from "../../hooks";
 
 
 
-//css
 import "./homescreen.css";
 
 export function HomeScreen() {
