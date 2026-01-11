@@ -14,7 +14,20 @@ import {
   Soporte,
   Unauthorized,
 } from "./views";
-
+import {
+  MapFaq,
+  MetroAppFaq,
+  MetroCardFaq,
+  MetroPayFaq,
+  MoreServicesFaq,
+  RatesFaq,
+  RechargeFaq,
+  RegisterFaq,
+  ScheduleFaq,
+  TransportFaq,
+  UpdateDataFaq,
+  TransferBalanceFaq,
+} from "./views/questions-and-answer-faq";
 import "./assets/styles/layout.css";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -154,6 +167,126 @@ export const BogotaMetroApp = () => {
               <ProtectedRoute>
                 <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
                   <Soporte />
+                </RoleGuard>
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/faq/registro"
+            element={
+              <ProtectedRoute>
+                <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
+                  <RegisterFaq />
+                </RoleGuard>
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/faq/recarga"
+            element={
+              <ProtectedRoute>
+                <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
+                  <RechargeFaq />
+                </RoleGuard>
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/faq/metroapp"
+            element={
+              <ProtectedRoute>
+                <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
+                  <MetroAppFaq />
+                </RoleGuard>
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/faq/pasarsaldo"
+            element={
+              <ProtectedRoute>
+                <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
+                  <TransferBalanceFaq />
+                </RoleGuard>
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/faq/metropay"
+            element={
+              <ProtectedRoute>
+                <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
+                  <MetroPayFaq />
+                </RoleGuard>
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/faq/masservicios"
+            element={
+              <ProtectedRoute>
+                <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
+                  <MoreServicesFaq />
+                </RoleGuard>
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/faq/transporte"
+            element={
+              <ProtectedRoute>
+                <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
+                  <TransportFaq />
+                </RoleGuard>
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/faq/tarifas"
+            element={
+              <ProtectedRoute>
+                <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
+                  <RatesFaq />
+                </RoleGuard>
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/faq/tarjetametro"
+            element={
+              <ProtectedRoute>
+                <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
+                  <MetroCardFaq />
+                </RoleGuard>
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/faq/horarios"
+            element={
+              <ProtectedRoute>
+                <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
+                  <ScheduleFaq />
+                </RoleGuard>
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/faq/mapa"
+            element={
+              <ProtectedRoute>
+                <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
+                  <MapFaq />
+                </RoleGuard>
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/faq/actualizardatos"
+            element={
+              <ProtectedRoute>
+                <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
+                  <UpdateDataFaq />
                 </RoleGuard>
               </ProtectedRoute>
             }

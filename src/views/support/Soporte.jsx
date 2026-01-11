@@ -1,13 +1,15 @@
 import { Button, FondoPag } from "../../components/common";
-import { useCategoryFaq } from "../../hooks";
+import { SupportButton } from "../../components/supportfaq/SupportButton";
+import { useCategoryFaq, useNavigateTo } from "../../hooks";
+import { routeMapFaq } from "../../helpers";
 import { AiFillCaretLeft } from "react-icons/ai";
 import { CiSearch } from "react-icons/ci";
-import Robot from "../../assets/img/imgs/icono-robot-chat.png";
 import "./soporte.css";
 
 export const Soporte = () => {
   const { faqCategorys, loading, error } = useCategoryFaq();
 
+  const { goTo } = useNavigateTo();
   if (loading) {
     return (
       <FondoPag>
@@ -38,43 +40,31 @@ export const Soporte = () => {
 
         <main>
           <h2>¿Cómo podemos ayudarte?</h2>
-          
-          
+
           <div className="search-container">
             <CiSearch aria-hidden="true" />
-            <input 
+            <input
               type="search"
               className="search-input"
               placeholder="Buscar en preguntas frecuentes..."
               aria-label="Buscar ayuda"
             />
           </div>
-         
 
           <div className="faq-buttons">
             {faqCategorys.map((cat) => (
-              <Button 
-                key={cat.id} 
+              <Button
+                key={cat.id}
                 className="faq-btn"
                 aria-label={`Ver preguntas sobre ${cat.name}`}
+                onClick={() => goTo(routeMapFaq[cat.name])}
               >
                 {cat.name}
               </Button>
             ))}
           </div>
 
-          <div className="contact-support">
-            <Button 
-              className="btn-contact-support"
-              aria-label="Contactar con soporte"
-            >
-              <p>Llámanos o escríbenos</p>
-              <img
-                src={Robot}
-                alt="Robot asistente del Metro de Bogotá"
-              />
-            </Button>
-          </div>
+          <SupportButton />
         </main>
       </div>
     </FondoPag>
