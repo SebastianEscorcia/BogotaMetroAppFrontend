@@ -31,9 +31,11 @@ export const AuthProvider = ({ children }) => {
 
       setRol(response.rol);
       setIsAuthenticated(true);
-
-      const me = await getMe();
-      setUser(me);
+      if (response.rol === "PASAJERO") {
+        const me = await getMe();
+        setUser(me);
+      }
+      
     } catch (err) {
       setError(err);
       throw err;
