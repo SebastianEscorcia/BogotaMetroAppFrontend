@@ -3,6 +3,7 @@ import {
   Welcome,
   Register,
   RecoverPassword,
+  ResetPassword,
   HomeScreen,
   HomeBalance,
   ConfirmInfo,
@@ -59,6 +60,7 @@ export const BogotaMetroApp = () => {
             }
           />
           <Route path="/recover-password" element={<RecoverPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route
             path="/home"
