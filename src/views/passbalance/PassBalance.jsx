@@ -1,12 +1,12 @@
 import { GoChevronLeft } from "react-icons/go";
 import { Navigate, useNavigate } from "react-router-dom";
 import { FondoPag } from "../../components/common";
-
+import {useAuth} from '../../context/AuthUserContext'
 import "./PassBalance.css";
 
 export function PassBalance() {
   const navigate = useNavigate();
-
+  const {user} = useAuth();
   return (
     <FondoPag>
       <div>
@@ -51,7 +51,7 @@ export function PassBalance() {
           <button>Mi saldo</button>
           <label htmlFor="$1.500">
             <u>
-              <strong>$1.500</strong>
+              <strong>${user.saldo}</strong>
             </u>
           </label>
         </div>

@@ -1,13 +1,14 @@
 import { Navigate, useNavigate } from "react-router-dom";
 import { GoChevronLeft } from "react-icons/go";
 import {FondoPag} from "../../components/common";
+import {useAuth} from '../../context/AuthUserContext';
 
 import "./recharge.css";
 
 
 export function Recharge () {
     const Navigate = useNavigate();
-
+    const {user} = useAuth();
     return (
     <FondoPag>
         
@@ -31,7 +32,7 @@ export function Recharge () {
         
         <div className="current-balance">
             <span>Saldo actual</span>
-            <p>$0.0</p>
+            <p>${user.saldo}</p>
         </div>
         </div>
 
