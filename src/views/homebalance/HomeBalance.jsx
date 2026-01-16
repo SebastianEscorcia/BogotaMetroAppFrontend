@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { GoArrowLeft } from "react-icons/go";
+import {useAuth} from '../../context/AuthUserContext'
 import { FondoPag } from "../../components/common";
 import "./HomeBalance.css";
 
 export function HomeBalance() {
   const navigate = useNavigate();
-
+  const {user} = useAuth();
   return (
     <FondoPag>
       <div className="home-one">
@@ -17,7 +18,7 @@ export function HomeBalance() {
           <div className="home-card">
             <div>
               <h1>Mi saldo</h1>
-              <p className="saldo-valor">$1.500</p>
+              <p className="saldo-valor">${user.saldo}</p>
             </div>
           </div>
 

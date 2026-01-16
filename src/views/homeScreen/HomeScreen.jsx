@@ -1,5 +1,6 @@
 // Components
 import { FondoPag } from "../../components/common";
+import {useAuth} from '../../context/AuthUserContext';
 import { Footer } from "../../layouts";
 import {
   HelpSection,
@@ -18,6 +19,7 @@ import { useNavigateTo } from "../../hooks";
 import "./homescreen.css";
 
 export function HomeScreen() {
+  const {user} = useAuth();
   const { goTo } = useNavigateTo();
 
    return (
@@ -25,7 +27,7 @@ export function HomeScreen() {
       <div className="home-screen">
         <div className="home-main-content">
           <HomeHeader />
-          <UserInfo />
+          <UserInfo user={user} />
           <QuickActions />
           <ServicesGrid goTo={goTo} />
           <TravelPlanner />
