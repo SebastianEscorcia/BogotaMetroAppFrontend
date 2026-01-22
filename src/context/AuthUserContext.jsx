@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { registerPasajero, getMe, loginPasajero } from "../services";
-
+import { sanitizeUser } from "../utils/sanitizeUser";
 export const AuthUserContext = createContext(null);
 
 export const useAuth = () => {
@@ -12,9 +12,16 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [rol, setRol] = useState(null);
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem("user");
+    return saved ? JSON.parse(saved) : null;
+  });
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return !!localStorage.getItem("token");
+  });
+  const [rol, setRol] = useState(() => {
+    return localStorage.getItem("rol");
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -34,8 +41,9 @@ export const AuthProvider = ({ children }) => {
       if (response.rol === "PASAJERO") {
         const me = await getMe();
         setUser(me);
+        const safeUser = sanitizeUser(me);
+        localStorage.setItem("user", JSON.stringify(safeUser));
       }
-      
     } catch (err) {
       setError(err);
       throw err;
@@ -45,23 +53,37 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("rol");
+    localStorage.removeItem("user");
     setUser(null);
     setRol(null);
     setIsAuthenticated(false);
+  };
+
+  const refreshUser = async () => {
+    try {
+      const me = await getMe();
+      const safeUser = sanitizeUser(me);
+      setUser(safeUser);
+      localStorage.setItem("user", JSON.stringify(safeUser));
+    } catch (error) {
+      logout();
+    }
   };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const savedRol = localStorage.getItem("rol");
 
-    if (!token) {
+    if (!token || user) {
       setLoading(false);
       return;
     }
 
     getMe()
-      .then((user) => {
-        setUser(user);
+      .then((userData) => {
+        const safeUser = sanitizeUser(userData);
+        setUser(safeUser);
+        localStorage.setItem("user", JSON.stringify(safeUser));
         setRol(savedRol);
         setIsAuthenticated(true);
       })
@@ -69,7 +91,7 @@ export const AuthProvider = ({ children }) => {
         logout();
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [user]);
 
   return (
     <AuthUserContext.Provider
@@ -82,6 +104,7 @@ export const AuthProvider = ({ children }) => {
         register,
         login,
         logout,
+        refreshUser,
       }}
     >
       {children}

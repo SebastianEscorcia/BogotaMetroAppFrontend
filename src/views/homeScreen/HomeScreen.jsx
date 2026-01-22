@@ -14,8 +14,6 @@ import {
 
 import { useNavigateTo } from "../../hooks";
 
-
-
 import "./homescreen.css";
 
 export function HomeScreen() {
