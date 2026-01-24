@@ -14,6 +14,7 @@ import {
   Travel,
   Soporte,
   Unauthorized,
+  DashBoardAdmin,
 } from "./views";
 import {
   MapFaq,
@@ -293,6 +294,18 @@ export const BogotaMetroApp = () => {
               </ProtectedRoute>
             }
           ></Route>
+
+          {/* Rutas de Administrador */}
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute>
+                <RoleGuard allowedRoles={[ROLES.ADMIN]}>
+                  <DashBoardAdmin />
+                </RoleGuard>
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { registerPasajero, getMe, loginPasajero } from "../services";
+import { registerPasajero, getMe, loginUser } from "../services";
 import { sanitizeUser } from "../utils/sanitizeUser";
 export const AuthUserContext = createContext(null);
 
@@ -31,19 +31,27 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (data) => {
     try {
-      const response = await loginPasajero(data);
+      const response = await loginUser(data);
 
       localStorage.setItem("token", response.token);
       localStorage.setItem("rol", response.rol);
-
+      
       setRol(response.rol);
       setIsAuthenticated(true);
-      if (response.rol === "PASAJERO") {
-        const me = await getMe();
-        setUser(me);
-        const safeUser = sanitizeUser(me);
-        localStorage.setItem("user", JSON.stringify(safeUser));
+
+      switch (response.rol) {
+        case "PASAJERO":
+          const me = await getMe();
+          setUser(me);
+          const safeUser = sanitizeUser(me);
+          localStorage.setItem("user", JSON.stringify(safeUser));
+          break;
+        case "ADMIN":
+          break;
+        default:
+          break;
       }
+      
     } catch (err) {
       setError(err);
       throw err;
@@ -74,23 +82,41 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem("token");
     const savedRol = localStorage.getItem("rol");
 
-    if (!token || user) {
+    if (!token) {
       setLoading(false);
       return;
     }
 
-    getMe()
-      .then((userData) => {
-        const safeUser = sanitizeUser(userData);
-        setUser(safeUser);
-        localStorage.setItem("user", JSON.stringify(safeUser));
-        setRol(savedRol);
-        setIsAuthenticated(true);
-      })
-      .catch(() => {
-        logout();
-      })
-      .finally(() => setLoading(false));
+    // Si ya hay usuario o el rol no necesita cargar datos de usuario, solo actualizar estado
+    if (
+      user ||
+      savedRol === "ADMIN" ||
+      savedRol === "OPERADOR" ||
+      savedRol === "SOPORTE"
+    ) {
+      setRol(savedRol);
+      setIsAuthenticated(true);
+      setLoading(false);
+      return;
+    }
+
+    // Solo para PASAJERO: cargar datos del usuario
+    if (savedRol === "PASAJERO") {
+      getMe()
+        .then((userData) => {
+          const safeUser = sanitizeUser(userData);
+          setUser(safeUser);
+          localStorage.setItem("user", JSON.stringify(safeUser));
+          setRol(savedRol);
+          setIsAuthenticated(true);
+        })
+        .catch(() => {
+          logout();
+        })
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
   }, [user]);
 
   return (
