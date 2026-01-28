@@ -5,3 +5,5 @@ export { RolesTable } from "./RolesTable";
 export { RoleModal } from "./RoleModal";
 export { ConfirmDialog } from "./ConfirmDialog";
 export { AlertMessage } from "./AlertMessage";
+export { UserTable } from "./UserTable";
+export { UserModal } from "./UserModal";

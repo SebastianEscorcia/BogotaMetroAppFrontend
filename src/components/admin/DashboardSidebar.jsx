@@ -1,16 +1,21 @@
 import { useAuth } from "../../context/AuthUserContext";
-import { 
-  MdDashboard, 
-  MdSecurity, 
-  MdPeople, 
-  MdBuild, 
-  MdHeadsetMic, 
-  MdBarChart, 
-  MdSettings, 
-  MdLogout 
+import {
+  MdDashboard,
+  MdSecurity,
+  MdPeople,
+  MdBuild,
+  MdHeadsetMic,
+  MdBarChart,
+  MdSettings,
+  MdLogout,
 } from "react-icons/md";
 
-export const DashboardSidebar = ({ activeSection, onSectionChange, isOpen, onClose }) => {
+export const DashboardSidebar = ({
+  activeSection,
+  onSectionChange,
+  isOpen,
+  onClose,
+}) => {
   const { logout } = useAuth();
 
   const navItems = [
@@ -18,17 +23,42 @@ export const DashboardSidebar = ({ activeSection, onSectionChange, isOpen, onClo
       section: "main",
       title: "Principal",
       items: [
-        { id: "dashboard", icon: <MdDashboard />, label: "Dashboard", badge: null },
-        { id: "roles", icon: <MdSecurity />, label: "Gestión de Roles", badge: null },
+        {
+          id: "dashboard",
+          icon: <MdDashboard />,
+          label: "Dashboard",
+          badge: null,
+        },
+        {
+          id: "roles",
+          icon: <MdSecurity />,
+          label: "Gestión de Roles",
+          badge: null,
+        },
       ],
     },
     {
       section: "users",
       title: "Usuarios",
       items: [
-        { id: "passengers", icon: <MdPeople />, label: "Pasajeros", badge: null },
-        { id: "operators", icon: <MdBuild />, label: "Operadores", badge: null },
-        { id: "support", icon: <MdHeadsetMic />, label: "Soporte", badge: null },
+        {
+          id: "passengers",
+          icon: <MdPeople />,
+          label: "Pasajeros",
+          badge: null,
+        },
+        {
+          id: "operators",
+          icon: <MdBuild />,
+          label: "Operadores",
+          badge: null,
+        },
+        {
+          id: "support",
+          icon: <MdHeadsetMic />,
+          label: "Soporte",
+          badge: null,
+        },
       ],
     },
     {
@@ -36,7 +66,12 @@ export const DashboardSidebar = ({ activeSection, onSectionChange, isOpen, onClo
       title: "Sistema",
       items: [
         { id: "reports", icon: <MdBarChart />, label: "Reportes", badge: null },
-        { id: "settings", icon: <MdSettings />, label: "Configuración", badge: null },
+        {
+          id: "settings",
+          icon: <MdSettings />,
+          label: "Configuración",
+          badge: null,
+        },
       ],
     },
   ];
@@ -48,11 +83,11 @@ export const DashboardSidebar = ({ activeSection, onSectionChange, isOpen, onClo
 
   return (
     <>
-      <div 
-        className={`sidebar-overlay ${isOpen ? 'visible' : ''}`} 
+      <div
+        className={`sidebar-overlay ${isOpen ? "visible" : ""}`}
         onClick={onClose}
       />
-      <aside className={`dashboard-sidebar ${isOpen ? 'open' : ''}`}>
+      <aside className={`dashboard-sidebar ${isOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <div className="sidebar-logo">BM</div>
           <div>
@@ -73,7 +108,9 @@ export const DashboardSidebar = ({ activeSection, onSectionChange, isOpen, onClo
                 >
                   <span className="nav-item-icon">{item.icon}</span>
                   <span>{item.label}</span>
-                  {item.badge && <span className="nav-item-badge">{item.badge}</span>}
+                  {item.badge && (
+                    <span className="nav-item-badge">{item.badge}</span>
+                  )}
                 </div>
               ))}
             </div>
@@ -88,11 +125,10 @@ export const DashboardSidebar = ({ activeSection, onSectionChange, isOpen, onClo
               <div className="user-role">Super Admin</div>
             </div>
           </div>
-          <div
-            className="nav-item logout-btn"
-            onClick={logout}
-          >
-            <span className="nav-item-icon"><MdLogout /></span>
+          <div className="nav-item logout-btn" onClick={logout}>
+            <span className="nav-item-icon">
+              <MdLogout />
+            </span>
             <span>Cerrar Sesión</span>
           </div>
         </div>

@@ -1,6 +1,7 @@
 export * from './useLoginForm';
 export * from './useNavigateTo';
 export * from './useRegisterForm';
+export * from './useDebounce';
 export * from './faqs-supports/useCategorysFaq';
 export * from './faqs-supports/useSupportsFaq';
 export * from './recovery-password/useRecoverPassword';
