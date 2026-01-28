@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllsFaqCategorys } from "../../services";
+import { getAllsFaqCategorys } from "../../services/faqs-soporte";
 
 export function useCategoryFaq() {
   const [faqCategorys, setFaqCategorys] = useState([]);

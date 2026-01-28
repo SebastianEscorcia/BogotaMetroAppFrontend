@@ -100,6 +100,26 @@
   flex: 0 0 30%;
 }
 
+.input-flex-35,
+.input-flex-30 {
+  position: relative;
+}
+
+.input-flex-35 .icon,
+.input-flex-30 .icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.input-flex-35 select,
+.input-flex-30 select {
+  padding-left: 30px;
+}
+
 
 .date-input input {
   color: #7a7a7a;

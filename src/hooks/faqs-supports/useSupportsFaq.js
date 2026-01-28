@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getFaqSupport } from "../../services";
+import { getFaqSupport } from "../../services/faqs-soporte";
 export const useSupportFaq = () => {
   const [supportFaq, setsupportFaq] = useState([]);
   const [loading, setLoading] = useState(true); 
