@@ -104,6 +104,30 @@ export const useChatRoom = (idSesionInicial = null) => {
     [connect, cargarHistorial, cargarSesionInfo]
   );
 
+  // Conectar a una sesión ya asignada (sin llamar a asignarSoporteASesion)
+  const reconectarASesion = useCallback(
+    async (sesionId) => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        setIdSesion(sesionId);
+
+        await connect();
+
+        await Promise.all([cargarHistorial(sesionId), cargarSesionInfo(sesionId)]);
+
+        return sesionId;
+      } catch (err) {
+        setError(err.message || "Error al conectar a la sesión");
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [connect, cargarHistorial, cargarSesionInfo]
+  );
+
   /**
    * Enviar mensaje al chat
    * Backend: @MessageMapping("/chat/{idSesion}")
@@ -192,6 +216,7 @@ export const useChatRoom = (idSesionInicial = null) => {
     isConnected,
     iniciarChat,
     unirseASesion,
+    reconectarASesion,
     enviarMensaje,
     cerrarChat,
     cargarHistorial,

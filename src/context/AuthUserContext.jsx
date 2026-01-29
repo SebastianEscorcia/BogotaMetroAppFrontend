@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { registerPasajero, obtenerDatosPasajero, loginUser } from "../services";
+import { registerPasajero, obtenerDatosPasajero, loginUser, obtenerUserAuth } from "../services";
 import { sanitizeUser } from "../utils/sanitizeUser";
 export const AuthUserContext = createContext(null);
 
@@ -48,6 +48,22 @@ export const AuthProvider = ({ children }) => {
           break;
         case "ADMIN":
           break;
+        case "SOPORTE":
+        case "OPERADOR":
+          // Para SOPORTE y OPERADOR, obtener datos básicos del usuario
+          try {
+            const userData = await obtenerUserAuth();
+            const userInfo = {
+              id: userData.idUsuario || userData.id,
+              correo: userData.correo,
+              rol: response.rol,
+            };
+            setUser(userInfo);
+            localStorage.setItem("user", JSON.stringify(userInfo));
+          } catch (err) {
+            console.error("Error al obtener datos del usuario:", err);
+          }
+          break;
         default:
           break;
       }
@@ -81,28 +97,71 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const savedRol = localStorage.getItem("rol");
+    const savedUser = localStorage.getItem("user");
 
     if (!token) {
       setLoading(false);
       return;
     }
 
-    // Si ya hay usuario o el rol no necesita cargar datos de usuario, solo actualizar estado
-    if (
-      user ||
-      savedRol === "ADMIN" ||
-      savedRol === "OPERADOR" ||
-      savedRol === "SOPORTE"
-    ) {
+    // Si ya hay usuario guardado en localStorage, usarlo
+    if (savedUser) {
+      try {
+        const parsedUser = JSON.parse(savedUser);
+        setUser(parsedUser);
+        // Usar el rol del usuario guardado si existe, si no usar savedRol
+        const userRol = parsedUser.rol || savedRol;
+        setRol(userRol);
+        // Sincronizar rol en localStorage si viene del user
+        if (parsedUser.rol && !savedRol) {
+          localStorage.setItem("rol", parsedUser.rol);
+        }
+        setIsAuthenticated(true);
+        setLoading(false);
+        return;
+      } catch (e) {
+        // Si hay error parseando, continuar con la carga normal
+      }
+    }
+
+    // Si hay rol guardado pero no hay usuario, establecer el rol
+    if (savedRol) {
+      setRol(savedRol);
+      setIsAuthenticated(true);
+    }
+
+    // Si el rol es ADMIN, no necesita cargar datos
+    if (savedRol === "ADMIN") {
       setRol(savedRol);
       setIsAuthenticated(true);
       setLoading(false);
       return;
     }
 
-    // Solo para PASAJERO: cargar datos del usuario
+    // Para SOPORTE y OPERADOR: cargar datos básicos
+    if (savedRol === "SOPORTE" || savedRol === "OPERADOR") {
+      obtenerUserAuth()
+        .then((userData) => {
+          const userInfo = {
+            id: userData.idUsuario || userData.id,
+            correo: userData.correo,
+            rol: savedRol,
+          };
+          setUser(userInfo);
+          localStorage.setItem("user", JSON.stringify(userInfo));
+          setRol(savedRol);
+          setIsAuthenticated(true);
+        })
+        .catch(() => {
+          logout();
+        })
+        .finally(() => setLoading(false));
+      return;
+    }
+
+    // Para PASAJERO: cargar datos completos
     if (savedRol === "PASAJERO") {
-      getMe()
+      obtenerDatosPasajero()
         .then((userData) => {
           const safeUser = sanitizeUser(userData);
           setUser(safeUser);
@@ -114,10 +173,11 @@ export const AuthProvider = ({ children }) => {
           logout();
         })
         .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
+      return;
     }
-  }, [user]);
+
+    setLoading(false);
+  }, []);
 
   return (
     <AuthUserContext.Provider
