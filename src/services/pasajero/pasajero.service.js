@@ -6,7 +6,7 @@ export const registerPasajero = (data) => {
   });
 };
 
-export const getMe =  () => {
+export const obtenerDatosPasajero =  () => {
   return httpClient("/pasajero/me");
 };
 

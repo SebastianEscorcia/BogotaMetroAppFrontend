@@ -5,3 +5,5 @@ export const loginUser = (data) => {
     body: JSON.stringify(data),
   });
 };
+
+export const obtenerUserAuth  = () => httpClient("/auth/usuario/me");

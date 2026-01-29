@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { registerPasajero, getMe, loginUser } from "../services";
+import { registerPasajero, obtenerDatosPasajero, loginUser } from "../services";
 import { sanitizeUser } from "../utils/sanitizeUser";
 export const AuthUserContext = createContext(null);
 
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
 
       switch (response.rol) {
         case "PASAJERO":
-          const me = await getMe();
+          const me = await obtenerDatosPasajero();
           setUser(me);
           const safeUser = sanitizeUser(me);
           localStorage.setItem("user", JSON.stringify(safeUser));
