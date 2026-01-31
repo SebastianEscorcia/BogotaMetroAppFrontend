@@ -13,6 +13,16 @@ import {
 } from "../services";
 import { sanitizeUser } from "../utils/sanitizeUser";
 
+const getRolFromToken = (token) => {
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.rol || payload.role || null;
+  } catch {
+    return null;
+  }
+};
+
 export const AuthUserContext = createContext(null);
 
 export const useAuth = () => {
@@ -32,7 +42,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(
     () => !!localStorage.getItem("token"),
   );
-  const [rol, setRol] = useState("");
+  const [rol, setRol] = useState(() => getRolFromToken(localStorage.getItem("token")));
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
