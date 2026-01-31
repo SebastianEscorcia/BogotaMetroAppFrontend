@@ -1,5 +1,6 @@
 import { Button, FondoPag } from "../../components/common";
 import { SupportButton } from "../../components/supportfaq/SupportButton";
+import { PasajeroChatWindow } from "../../components/pasajero";
 import { useCategoryFaq, useNavigateTo } from "../../hooks";
 import { routeMapFaq } from "../../helpers";
 import { AiFillCaretLeft } from "react-icons/ai";
@@ -7,7 +8,8 @@ import { CiSearch } from "react-icons/ci";
 import "./soporte.css";
 import { useAuth } from "../../context/AuthUserContext";
 import { useChatRoom } from "../../hooks";
-import {useState} from 'react'
+import { useState } from "react";
+
 export const Soporte = () => {
   const { faqCategorys, loading, error } = useCategoryFaq();
   const { user } = useAuth();
@@ -16,10 +18,13 @@ export const Soporte = () => {
 
   const {
     idSesion,
+    mensajes,
+    sesionInfo,
     loading: loadingChat,
     error: errorChat,
     isConnected,
     iniciarChat,
+    enviarMensaje,
     limpiarError,
   } = useChatRoom();
 
@@ -27,7 +32,6 @@ export const Soporte = () => {
     try {
       limpiarError();
       const sesionId = await iniciarChat(user.id);
-      console.log("✅ Sesión creada:", sesionId);
       setMostrarChat(true);
     } catch (err) {
       console.error("Error al solicitar soporte:", err);
@@ -54,7 +58,6 @@ export const Soporte = () => {
     );
   }
 
-   // Si ya inició el chat, mostrar pantalla de espera
   if (mostrarChat && idSesion) {
     return (
       <FondoPag>
@@ -66,32 +69,19 @@ export const Soporte = () => {
               style={{ cursor: "pointer" }}
             />
             <h1>Chat de Soporte</h1>
+            <span className="sesion-id">#{idSesion}</span>
           </header>
 
-          <main className="chat-espera">
-            <div className="espera-container">
-              <div className="espera-icon">⏳</div>
-              <h2>Esperando a un agente...</h2>
-              <p>Tu solicitud ha sido registrada.</p>
-              <p>Un agente de soporte se conectará contigo pronto.</p>
-
-              <div className="espera-info">
-                <p>
-                  <strong>Sesión:</strong> #{idSesion}
-                </p>
-                <p>
-                  <strong>Estado:</strong>{" "}
-                  {isConnected ? "🟢 Conectado" : "🔴 Desconectado"}
-                </p>
-              </div>
-
-              {errorChat && (
-                <div className="error-message">
-                  <p>❌ {errorChat}</p>
-                  <Button onClick={limpiarError}>Cerrar</Button>
-                </div>
-              )}
-            </div>
+          <main className="chat-container">
+            <PasajeroChatWindow
+              mensajes={mensajes}
+              isConnected={isConnected}
+              loading={loadingChat}
+              error={errorChat}
+              enviarMensaje={enviarMensaje}
+              idUsuario={user?.id}
+              sesionInfo={sesionInfo}
+            />
           </main>
         </div>
       </FondoPag>

@@ -6,7 +6,7 @@ const WEBSOCKET_URL = "http://localhost:8080/ws-metro";
 class WebSocketService {
   constructor() {
     this.client = null;
-    this.subscriptions = new Map(); // Guardamos las suscripciones activas
+    this.subscriptions = new Map(); 
     this.isConnected = false;
     this.connectionPromise = null;
   }
@@ -16,12 +16,12 @@ class WebSocketService {
    * @returns {Promise} Promesa que se resuelve cuando la conexión está establecida
    */
   connect() {
-    // Si ya hay una conexión en progreso, retornamos esa promesa
+    // Si  hay una conexión en progreso, retornamos esa promesa
     if (this.connectionPromise) {
       return this.connectionPromise;
     }
 
-    // Si ya está conectado, retornamos una promesa resuelta
+    // Si está conectado, retornamos una promesa resuelta
     if (this.isConnected && this.client?.connected) {
       return Promise.resolve();
     }
@@ -30,10 +30,8 @@ class WebSocketService {
       const token = localStorage.getItem("token");
 
       this.client = new Client({
-        // Usamos SockJS como transporte (fallback para navegadores sin WebSocket nativo)
         webSocketFactory: () => new SockJS(WEBSOCKET_URL),
         
-        // Headers de conexión (útil para autenticación)
         connectHeaders: {
           Authorization: token ? `Bearer ${token}` : "",
         },
@@ -43,15 +41,12 @@ class WebSocketService {
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
 
-        // Callback cuando la conexión es exitosa
         onConnect: () => {
-          console.log("✅ Conectado al WebSocket");
           this.isConnected = true;
           this.connectionPromise = null;
           resolve();
         },
 
-        // Callback cuando hay un error en la conexión
         onStompError: (frame) => {
           console.error("❌ Error STOMP:", frame.headers["message"]);
           this.isConnected = false;
@@ -59,13 +54,10 @@ class WebSocketService {
           reject(new Error(frame.headers["message"]));
         },
 
-        // Callback cuando se pierde la conexión
         onDisconnect: () => {
-          console.log("🔌 Desconectado del WebSocket");
           this.isConnected = false;
         },
 
-        // Callback cuando hay error en el WebSocket
         onWebSocketError: (error) => {
           console.error("❌ Error WebSocket:", error);
           this.isConnected = false;
@@ -74,7 +66,6 @@ class WebSocketService {
         },
       });
 
-      // Activamos la conexión
       this.client.activate();
     });
 
@@ -86,17 +77,14 @@ class WebSocketService {
    */
   disconnect() {
     if (this.client) {
-      // Cancelamos todas las suscripciones
       this.subscriptions.forEach((subscription) => {
         subscription.unsubscribe();
       });
       this.subscriptions.clear();
 
-      // Desactivamos el cliente
       this.client.deactivate();
       this.isConnected = false;
       this.connectionPromise = null;
-      console.log("🔌 WebSocket desconectado manualmente");
     }
   }
 
@@ -112,16 +100,12 @@ class WebSocketService {
       return null;
     }
 
-    // Creamos la suscripción
     const subscription = this.client.subscribe(destination, (message) => {
-      // Parseamos el mensaje JSON y lo pasamos al callback
       const body = JSON.parse(message.body);
       callback(body);
     });
 
-    // Guardamos la suscripción para poder cancelarla después
     this.subscriptions.set(subscription.id, subscription);
-    console.log(`📡 Suscrito a: ${destination}`);
 
     return subscription.id;
   }
@@ -166,5 +150,4 @@ class WebSocketService {
   }
 }
 
-// Exportamos una instancia única (Singleton)
 export const webSocketService = new WebSocketService();

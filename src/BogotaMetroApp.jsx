@@ -48,7 +48,7 @@ export const BogotaMetroApp = () => {
           <Route
             path="/login"
             element={
-              <PublicRoute>
+              <PublicRoute >
                 <Login />
               </PublicRoute>
             }

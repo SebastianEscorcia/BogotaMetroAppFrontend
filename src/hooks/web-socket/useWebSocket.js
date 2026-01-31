@@ -9,7 +9,7 @@ import { webSocketService } from "../../services";
 export const useWebSocket = (autoConnect = true) => {
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState(null);
-  const subscriptionsRef = useRef([]); // Para limpiar suscripciones al desmontar
+  const subscriptionsRef = useRef([]); 
 
   const connect = useCallback(async () => {
     try {

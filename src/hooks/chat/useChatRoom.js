@@ -79,7 +79,6 @@ export const useChatRoom = (idSesionInicial = null) => {
     [connect, cargarSesionInfo]
   );
 
-  // Unirse a sesión existente (para soporte)
   const unirseASesion = useCallback(
     async (sesionId, idSoporte) => {
       try {
@@ -104,7 +103,6 @@ export const useChatRoom = (idSesionInicial = null) => {
     [connect, cargarHistorial, cargarSesionInfo]
   );
 
-  // Conectar a una sesión ya asignada (sin llamar a asignarSoporteASesion)
   const reconectarASesion = useCallback(
     async (sesionId) => {
       try {

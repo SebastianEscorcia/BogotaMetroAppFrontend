@@ -1,6 +1,18 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { registerPasajero, obtenerDatosPasajero, loginUser, obtenerUserAuth } from "../services";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
+import {
+  registerPasajero,
+  obtenerDatosPasajero,
+  loginUser,
+  obtenerUserAuth,
+} from "../services";
 import { sanitizeUser } from "../utils/sanitizeUser";
+
 export const AuthUserContext = createContext(null);
 
 export const useAuth = () => {
@@ -16,14 +28,55 @@ export const AuthProvider = ({ children }) => {
     const saved = localStorage.getItem("user");
     return saved ? JSON.parse(saved) : null;
   });
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return !!localStorage.getItem("token");
-  });
-  const [rol, setRol] = useState(() => {
-    return localStorage.getItem("rol");
-  });
+
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    () => !!localStorage.getItem("token"),
+  );
+  const [rol, setRol] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const saveUserSession = (token, role, userData) => {
+    if (token) localStorage.setItem("token", token);
+    if (role) {
+      setRol(role);
+    }
+
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
+    setIsAuthenticated(true);
+  };
+
+  /**
+   *  Función Centralizada: Obtener perfil según el rol
+   * Usamos useCallback para poder usarla en el useEffect sin warnings
+   *  */
+  const fetchUserProfile = useCallback(async (currentRol) => {
+    try {
+      let userData = null;
+
+      switch (currentRol) {
+        case "PASAJERO":
+          userData = sanitizeUser(await obtenerDatosPasajero());
+          break;
+        case "SOPORTE":
+        case "OPERADOR":
+          userData = await obtenerUserAuth();
+          break;
+        case "ADMIN":
+          break;
+        default:
+          break;
+      }
+
+      if (userData) {
+        saveUserSession(null, currentRol, userData);
+      }
+    } catch (err) {
+      console.error("Error fetching profile:", err);
+      logout();
+    }
+  }, []);
 
   const register = async (data) => {
     await registerPasajero(data);
@@ -34,40 +87,12 @@ export const AuthProvider = ({ children }) => {
       const response = await loginUser(data);
 
       localStorage.setItem("token", response.token);
-      localStorage.setItem("rol", response.rol);
-      
       setRol(response.rol);
       setIsAuthenticated(true);
 
-      switch (response.rol) {
-        case "PASAJERO":
-          const me = await obtenerDatosPasajero();
-          setUser(me);
-          const safeUser = sanitizeUser(me);
-          localStorage.setItem("user", JSON.stringify(safeUser));
-          break;
-        case "ADMIN":
-          break;
-        case "SOPORTE":
-        case "OPERADOR":
-          // Para SOPORTE y OPERADOR, obtener datos básicos del usuario
-          try {
-            const userData = await obtenerUserAuth();
-            const userInfo = {
-              id: userData.idUsuario || userData.id,
-              correo: userData.correo,
-              rol: response.rol,
-            };
-            setUser(userInfo);
-            localStorage.setItem("user", JSON.stringify(userInfo));
-          } catch (err) {
-            console.error("Error al obtener datos del usuario:", err);
-          }
-          break;
-        default:
-          break;
-      }
-      
+      await fetchUserProfile(response.rol);
+
+      return response.rol;
     } catch (err) {
       setError(err);
       throw err;
@@ -76,108 +101,35 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("rol");
     localStorage.removeItem("user");
     setUser(null);
     setRol(null);
     setIsAuthenticated(false);
   };
 
-  const refreshUser = async () => {
-    try {
-      const me = await getMe();
-      const safeUser = sanitizeUser(me);
-      setUser(safeUser);
-      localStorage.setItem("user", JSON.stringify(safeUser));
-    } catch (error) {
-      logout();
-    }
-  };
-
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const savedRol = localStorage.getItem("rol");
-    const savedUser = localStorage.getItem("user");
+    const initAuth = async () => {
+      const token = localStorage.getItem("token");
+      const savedUser = localStorage.getItem("user");
 
-    if (!token) {
-      setLoading(false);
-      return;
-    }
+      if (!token) {
+        setLoading(false);
+        return;
+      }
 
-    // Si ya hay usuario guardado en localStorage, usarlo
-    if (savedUser) {
-      try {
-        const parsedUser = JSON.parse(savedUser);
-        setUser(parsedUser);
-        // Usar el rol del usuario guardado si existe, si no usar savedRol
-        const userRol = parsedUser.rol || savedRol;
-        setRol(userRol);
-        // Sincronizar rol en localStorage si viene del user
-        if (parsedUser.rol && !savedRol) {
-          localStorage.setItem("rol", parsedUser.rol);
-        }
+      if (savedUser) {
+        setUser(JSON.parse(savedUser));
         setIsAuthenticated(true);
         setLoading(false);
         return;
-      } catch (e) {
-        // Si hay error parseando, continuar con la carga normal
       }
-    }
 
-    // Si hay rol guardado pero no hay usuario, establecer el rol
-    if (savedRol) {
-      setRol(savedRol);
-      setIsAuthenticated(true);
-    }
 
-    // Si el rol es ADMIN, no necesita cargar datos
-    if (savedRol === "ADMIN") {
-      setRol(savedRol);
-      setIsAuthenticated(true);
       setLoading(false);
-      return;
-    }
+    };
 
-    // Para SOPORTE y OPERADOR: cargar datos básicos
-    if (savedRol === "SOPORTE" || savedRol === "OPERADOR") {
-      obtenerUserAuth()
-        .then((userData) => {
-          const userInfo = {
-            id: userData.idUsuario || userData.id,
-            correo: userData.correo,
-            rol: savedRol,
-          };
-          setUser(userInfo);
-          localStorage.setItem("user", JSON.stringify(userInfo));
-          setRol(savedRol);
-          setIsAuthenticated(true);
-        })
-        .catch(() => {
-          logout();
-        })
-        .finally(() => setLoading(false));
-      return;
-    }
-
-    // Para PASAJERO: cargar datos completos
-    if (savedRol === "PASAJERO") {
-      obtenerDatosPasajero()
-        .then((userData) => {
-          const safeUser = sanitizeUser(userData);
-          setUser(safeUser);
-          localStorage.setItem("user", JSON.stringify(safeUser));
-          setRol(savedRol);
-          setIsAuthenticated(true);
-        })
-        .catch(() => {
-          logout();
-        })
-        .finally(() => setLoading(false));
-      return;
-    }
-
-    setLoading(false);
-  }, []);
+    initAuth();
+  }, [fetchUserProfile]);
 
   return (
     <AuthUserContext.Provider
@@ -190,7 +142,6 @@ export const AuthProvider = ({ children }) => {
         register,
         login,
         logout,
-        refreshUser,
       }}
     >
       {children}
