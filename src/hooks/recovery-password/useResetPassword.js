@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { passwordChange } from "../../services";
 import { useNavigateTo } from "../useNavigateTo";
-import { errorMessagesRecoverPassword } from "../../constants";
+import { errorConstants } from "../../constants";
 import { getErrorMessage } from "../../helpers";
 export const useResetPassword = () => {
   const [searchParams] = useSearchParams();
@@ -47,7 +47,7 @@ export const useResetPassword = () => {
       setSuccess(response.mensaje);
       setTimeout(() => goTo("/login"), 2000);
     } catch (err) {
-      const errorMessage = getErrorMessage(err, errorMessagesRecoverPassword);
+      const errorMessage = getErrorMessage(err, errorConstants);
       setError(errorMessage);
     } finally {
       setLoading(false);

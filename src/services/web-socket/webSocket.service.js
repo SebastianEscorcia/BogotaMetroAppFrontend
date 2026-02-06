@@ -37,7 +37,7 @@ class WebSocketService {
         },
 
         // Configuración de reconexión automática
-        reconnectDelay: 5000, // 5 segundos entre intentos
+        reconnectDelay: 5000, 
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
 
@@ -48,7 +48,7 @@ class WebSocketService {
         },
 
         onStompError: (frame) => {
-          console.error("❌ Error STOMP:", frame.headers["message"]);
+          console.error(" Error STOMP:", frame.headers["message"]);
           this.isConnected = false;
           this.connectionPromise = null;
           reject(new Error(frame.headers["message"]));
@@ -59,7 +59,7 @@ class WebSocketService {
         },
 
         onWebSocketError: (error) => {
-          console.error("❌ Error WebSocket:", error);
+          console.error(" Error WebSocket:", error);
           this.isConnected = false;
           this.connectionPromise = null;
           reject(error);
@@ -96,7 +96,7 @@ class WebSocketService {
    */
   subscribe(destination, callback) {
     if (!this.client || !this.isConnected) {
-      console.error("❌ No hay conexión WebSocket activa");
+      console.error(" No hay conexión WebSocket activa");
       return null;
     }
 
@@ -119,7 +119,7 @@ class WebSocketService {
     if (subscription) {
       subscription.unsubscribe();
       this.subscriptions.delete(subscriptionId);
-      console.log(`🚫 Suscripción cancelada: ${subscriptionId}`);
+      console.log(` Suscripción cancelada: ${subscriptionId}`);
     }
   }
 
@@ -130,7 +130,7 @@ class WebSocketService {
    */
   send(destination, body) {
     if (!this.client || !this.isConnected) {
-      console.error("❌ No hay conexión WebSocket activa");
+      console.error(" No hay conexión WebSocket activa");
       return;
     }
 
@@ -138,7 +138,7 @@ class WebSocketService {
       destination,
       body: JSON.stringify(body),
     });
-    console.log(`📤 Mensaje enviado a: ${destination}`);
+    //console.log(` Mensaje enviado a: ${destination}`);
   }
 
   /**

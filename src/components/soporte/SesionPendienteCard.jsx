@@ -4,7 +4,7 @@ import { MdAccessTime, MdPerson, MdPlayArrow } from "react-icons/md";
  * Tarjeta de sesión pendiente en la cola de espera
  */
 export const SesionPendienteCard = ({ sesion, onTomarSesion, loading }) => {
-  // Formatear fecha
+
   const formatearFecha = (fechaString) => {
     if (!fechaString) return "Sin fecha";
     const fecha = new Date(fechaString);
@@ -16,7 +16,6 @@ export const SesionPendienteCard = ({ sesion, onTomarSesion, loading }) => {
     });
   };
 
-  // Calcular tiempo de espera
   const calcularTiempoEspera = (fechaAsignacion) => {
     if (!fechaAsignacion) return "Recién llegado";
     const ahora = new Date();
@@ -30,7 +29,6 @@ export const SesionPendienteCard = ({ sesion, onTomarSesion, loading }) => {
     return `Hace ${diffHours}h ${diffMins % 60}min`;
   };
 
-  // Obtener nombre del pasajero de los participantes
   const obtenerNombrePasajero = () => {
     if (!sesion.participantes || sesion.participantes.length === 0) {
       return "Pasajero";
@@ -38,7 +36,7 @@ export const SesionPendienteCard = ({ sesion, onTomarSesion, loading }) => {
     const pasajero = sesion.participantes.find(
       (p) => p.rol === "PASAJERO" || p.tipoUsuario === "PASAJERO"
     );
-    return pasajero?.nombreCompleto || pasajero?.nombre || "Pasajero";
+    return pasajero?.nombreUsuario || pasajero?.nombre || "Pasajero";
   };
 
   return (

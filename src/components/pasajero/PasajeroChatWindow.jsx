@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { MdSend, MdSupportAgent } from "react-icons/md";
 import { TipoRemitente } from "../../hooks/chat/useChatRoom";
 import "./pasajero-chat.css";
@@ -13,6 +13,8 @@ import "./pasajero-chat.css";
  * @param {Function} props.enviarMensaje - Función para enviar mensaje
  * @param {number} props.idUsuario - ID del pasajero
  * @param {Object} props.sesionInfo - Información de la sesión
+ * @param {boolean} props.sesionCerrada - Indica si la sesión fue cerrada
+ * @param {Function} props.onNuevoChat - Función para iniciar un nuevo chat
  */
 export const PasajeroChatWindow = ({
   mensajes,
@@ -22,11 +24,12 @@ export const PasajeroChatWindow = ({
   enviarMensaje,
   idUsuario,
   sesionInfo,
+  sesionCerrada = false,
+  onNuevoChat,
 }) => {
   const [inputMensaje, setInputMensaje] = useState("");
   const mensajesEndRef = useRef(null);
 
-  // Scroll automático al último mensaje
   const scrollToBottom = () => {
     mensajesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -34,34 +37,45 @@ export const PasajeroChatWindow = ({
   useEffect(() => {
     scrollToBottom();
   }, [mensajes]);
-
-  // Verificar si hay un agente de soporte conectado
-  const hayAgenteConectado = () => {
-    if (!sesionInfo?.participantes) return false;
-    return sesionInfo.participantes.some(
+  
+  // Memoizar la verificación del agente para mejor rendimiento
+  const agenteConectado = useMemo(() => {
+    if (!sesionInfo?.participantes) return null;
+    return sesionInfo.participantes.find(
       (p) => p.rol === "SOPORTE" || p.tipoUsuario === "SOPORTE"
     );
-  };
+  }, [sesionInfo?.participantes]);
 
-  // Obtener nombre del agente de soporte
+  // Verificar si hay un agente conectado
+  const hayAgenteConectado = useMemo(() => !!agenteConectado, [agenteConectado]);
+
   const obtenerNombreAgente = () => {
-    if (!sesionInfo?.participantes) return "Agente de Soporte";
-    const agente = sesionInfo.participantes.find(
-      (p) => p.rol === "SOPORTE" || p.tipoUsuario === "SOPORTE"
-    );
-    return agente?.nombreCompleto || agente?.nombre || "Agente de Soporte";
+    if (!agenteConectado) return "Agente de Soporte";
+    return agenteConectado.nombreUsuario || agenteConectado.nombre || "Agente de Soporte";
   };
 
-  // Enviar mensaje
+  // Determinar el estado actual del chat
+  const estadoChat = useMemo(() => {
+    if (sesionCerrada) {
+      return { texto: "Sesión cerrada", clase: "cerrada", puedeEnviar: false };
+    }
+    if (!isConnected) {
+      return { texto: "Sin conexión", clase: "offline", puedeEnviar: false };
+    }
+    if (!hayAgenteConectado) {
+      return { texto: "Esperando agente", clase: "offline", puedeEnviar: false };
+    }
+    return { texto: "En línea", clase: "online", puedeEnviar: true };
+  }, [isConnected, hayAgenteConectado, sesionCerrada]);
+
   const handleEnviar = (e) => {
     e.preventDefault();
-    if (!inputMensaje.trim() || !isConnected) return;
+    if (!inputMensaje.trim() || !estadoChat.puedeEnviar) return;
 
     enviarMensaje(inputMensaje.trim(), idUsuario, TipoRemitente.PASAJERO);
     setInputMensaje("");
   };
 
-  // Manejar Enter para enviar
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       handleEnviar(e);
@@ -70,22 +84,26 @@ export const PasajeroChatWindow = ({
 
   return (
     <div className="pasajero-chat-window">
-      {/* Header del chat */}
       <div className="pasajero-chat-header">
         <div className="pasajero-chat-header-info">
-          <div className="avatar-agente">
+          <div className={`avatar-agente ${sesionCerrada ? "avatar-cerrado" : !estadoChat.puedeEnviar ? "avatar-esperando" : ""}`}>
             <MdSupportAgent />
           </div>
           <div className="info">
-            <h3>{hayAgenteConectado() ? obtenerNombreAgente() : "Esperando agente..."}</h3>
-            <span className={`status ${isConnected ? "online" : "offline"}`}>
-              {isConnected ? "Conectado" : "Desconectado"}
+            <h3>
+              {sesionCerrada 
+                ? "Sesión finalizada" 
+                : hayAgenteConectado 
+                  ? obtenerNombreAgente() 
+                  : "Esperando agente..."}
+            </h3>
+            <span className={`status ${estadoChat.clase}`}>
+              {estadoChat.texto}
             </span>
           </div>
         </div>
       </div>
 
-      {/* Área de mensajes */}
       <div className="pasajero-chat-messages">
         {loading && (
           <div className="chat-loading">
@@ -95,11 +113,11 @@ export const PasajeroChatWindow = ({
 
         {error && (
           <div className="chat-error">
-            <p>❌ {error}</p>
+            <p> {error}</p>
           </div>
         )}
 
-        {!hayAgenteConectado() && mensajes.length === 0 && (
+        {!hayAgenteConectado && !sesionCerrada && mensajes.length === 0 && (
           <div className="esperando-agente">
             <div className="esperando-icon">⏳</div>
             <p>Tu solicitud ha sido registrada.</p>
@@ -142,28 +160,44 @@ export const PasajeroChatWindow = ({
         <div ref={mensajesEndRef} />
       </div>
 
-      {/* Input de mensaje */}
-      <form className="pasajero-chat-input" onSubmit={handleEnviar}>
-        <input
-          type="text"
-          value={inputMensaje}
-          onChange={(e) => setInputMensaje(e.target.value)}
-          onKeyPress={handleKeyPress}
-          placeholder={
-            isConnected
-              ? "Escribe tu mensaje..."
-              : "Conectando..."
-          }
-          disabled={!isConnected}
-        />
-        <button
-          type="submit"
-          disabled={!inputMensaje.trim() || !isConnected}
-          className="btn-enviar"
-        >
-          <MdSend />
-        </button>
-      </form>
+      {sesionCerrada ? (
+        <div className="pasajero-chat-cerrado">
+          <p>La sesión ha finalizado</p>
+          {onNuevoChat && (
+            <button 
+              type="button" 
+              className="btn-nuevo-chat"
+              onClick={onNuevoChat}
+            >
+              Iniciar nuevo chat
+            </button>
+          )}
+        </div>
+      ) : (
+        <form className="pasajero-chat-input" onSubmit={handleEnviar}>
+          <input
+            type="text"
+            value={inputMensaje}
+            onChange={(e) => setInputMensaje(e.target.value)}
+            onKeyDown={handleKeyPress}
+            placeholder={
+              !isConnected
+                ? "Conectando..."
+                : !hayAgenteConectado
+                ? "Esperando a que un agente se conecte..."
+                : "Escribe tu mensaje..."
+            }
+            disabled={!estadoChat.puedeEnviar}
+          />
+          <button
+            type="submit"
+            disabled={!inputMensaje.trim() || !estadoChat.puedeEnviar}
+            className="btn-enviar"
+          >
+            <MdSend />
+          </button>
+        </form>
+      )}
     </div>
   );
 };

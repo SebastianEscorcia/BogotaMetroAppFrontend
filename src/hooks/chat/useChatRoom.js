@@ -1,5 +1,8 @@
 import { useState, useCallback, useEffect } from "react";
 import { useWebSocket } from "../web-socket/useWebSocket";
+import { useNotificationContext } from "../../context/NotificationContext";
+
+import {esAsignacionSoporte,esCierreSesion,limpiarSoporte} from '../../helpers'
 import {
   solicitarChat,
   asignarSoporteASesion,
@@ -21,14 +24,23 @@ export const TipoRemitente = {
  * Hook para manejar una sala de chat con WebSocket
  * @param {number|null} idSesionInicial - ID de sesión existente (opcional)
  */
+// Estados posibles de la sesión
+export const EstadoSesion = {
+  PENDIENTE: "PENDIENTE",
+  ACTIVO: "ACTIVO",
+  CERRADO: "CERRADO",
+};
+
 export const useChatRoom = (idSesionInicial = null) => {
   const [idSesion, setIdSesion] = useState(idSesionInicial);
   const [mensajes, setMensajes] = useState([]);
   const [sesionInfo, setSesionInfo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [sesionCerrada, setSesionCerrada] = useState(false);
 
   const { isConnected, subscribe, send, connect, unsubscribe  } = useWebSocket(false);
+  const { pushNotification } = useNotificationContext();
 
   // Cargar historial de mensajes
   const cargarHistorial = useCallback(async (sesionId) => {
@@ -44,17 +56,17 @@ export const useChatRoom = (idSesionInicial = null) => {
     }
   }, []);
 
-  // Cargar información de la sesión
   const cargarSesionInfo = useCallback(async (sesionId) => {
     try {
       const info = await obtenerSesionPorId(sesionId);
+      
       setSesionInfo(info);
     } catch (err) {
       console.error("Error al cargar info de sesión:", err);
+      
     }
   }, []);
 
-  // Solicitar nuevo chat (para pasajeros)
   const iniciarChat = useCallback(
     async (idUsuario) => {
       try {
@@ -79,52 +91,40 @@ export const useChatRoom = (idSesionInicial = null) => {
     [connect, cargarSesionInfo]
   );
 
-  const unirseASesion = useCallback(
-    async (sesionId, idSoporte) => {
-      try {
-        setLoading(true);
-        setError(null);
+  const conectarASesion = useCallback(
+  async (sesionId, asignarSoporte = false, idSoporte = null) => {
+    try {
+      setLoading(true);
+      setError(null);
 
+      if (asignarSoporte) {
         await asignarSoporteASesion(sesionId, idSoporte);
-        setIdSesion(sesionId);
-
-        await connect();
-
-        await Promise.all([cargarHistorial(sesionId), cargarSesionInfo(sesionId)]);
-
-        return sesionId;
-      } catch (err) {
-        setError(err.message || "Error al unirse a la sesión");
-        throw err;
-      } finally {
-        setLoading(false);
       }
-    },
-    [connect, cargarHistorial, cargarSesionInfo]
-  );
 
-  const reconectarASesion = useCallback(
-    async (sesionId) => {
-      try {
-        setLoading(true);
-        setError(null);
+      setIdSesion(sesionId);
+      await connect();
 
-        setIdSesion(sesionId);
+      await Promise.all([
+        cargarHistorial(sesionId),
+        cargarSesionInfo(sesionId),
+      ]);
 
-        await connect();
+      return sesionId;
+    } catch (err) {
+      setError("Error al conectar a la sesión");
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  },
+  [connect, cargarHistorial, cargarSesionInfo]
+);
 
-        await Promise.all([cargarHistorial(sesionId), cargarSesionInfo(sesionId)]);
 
-        return sesionId;
-      } catch (err) {
-        setError(err.message || "Error al conectar a la sesión");
-        throw err;
-      } finally {
-        setLoading(false);
-      }
-    },
-    [connect, cargarHistorial, cargarSesionInfo]
-  );
+  const unirseASesion = (id, soporteId) =>  conectarASesion(id, true, soporteId);
+
+  const reconectarASesion = id => conectarASesion(id);
+  
 
   /**
    * Enviar mensaje al chat
@@ -141,6 +141,7 @@ export const useChatRoom = (idSesionInicial = null) => {
         console.error("No hay sesión activa");
         return;
       }
+      if (!contenido?.trim()) return;
 
       if (!isConnected) {
         console.error("No hay conexión WebSocket");
@@ -153,7 +154,6 @@ export const useChatRoom = (idSesionInicial = null) => {
         tipoRemitente,
       };
 
-      // Destino: /app/chat/{idSesion}
       send(`/app/chat/${idSesion}`, mensajeDTO);
     },
     [idSesion, isConnected, send]
@@ -178,32 +178,55 @@ export const useChatRoom = (idSesionInicial = null) => {
     setError(null);
   }, []);
 
+  const procesarMensajeSistema = useCallback((mensaje = {}) =>{
+    const contenido = mensaje.contenido?.toLowerCase() || "";
+
+    if(contenido.startsWith("error:")){
+      setError(mensaje.contenido.replace("ERROR: " , ""));
+      return;
+    }
+    if (esCierreSesion(contenido)){
+      setSesionCerrada(true);
+      limpiarSoporte(setSesionInfo);
+      return;
+    }
+    if(esAsignacionSoporte (contenido)){
+      setSesionCerrada(false);
+      cargarSesionInfo(idSesion)
+      pushNotification({
+        title: "Soporte conectado",
+        message: "Un agente se ha unido a tu chat de soporte.",
+        type: "success",
+      });
+    }
+  }, [cargarSesionInfo, idSesion, pushNotification, setSesionInfo])
+
   // Suscribirse a mensajes cuando hay sesión y conexión
   useEffect(() => {
     if (!idSesion || !isConnected) return;
 
-   
     const subscriptionId = subscribe(`/topic/sala/${idSesion}`, (nuevoMensaje) => {
-      console.log("📩 Mensaje recibido:", nuevoMensaje);
-
-      if (
-        nuevoMensaje.tipoRemitente === TipoRemitente.SISTEMA &&
-        nuevoMensaje.contenido?.startsWith("ERROR:")
-      ) {
-        setError(nuevoMensaje.contenido.replace("ERROR: ", ""));
+      
+      if(nuevoMensaje.tipoRemitente === TipoRemitente.SISTEMA){
+        procesarMensajeSistema(nuevoMensaje);
       }
-
-      setMensajes((prev) => [...prev, nuevoMensaje]);
+      setMensajes(prev => [... prev, nuevoMensaje]);
+     
     });
 
     cargarHistorial(idSesion);
 
-    return () => {
-        if(subscriptionId) {
-            unsubscribe(subscriptionId)
-        }
-    };
-  }, [idSesion, isConnected, subscribe, cargarHistorial]);
+    return () => unsubscribe(subscriptionId);
+  }, [idSesion, isConnected, subscribe, cargarHistorial, cargarSesionInfo, unsubscribe]);
+
+  // Reiniciar chat para iniciar una nueva conversación
+  const reiniciarChat = useCallback(() => {
+    setIdSesion(null);
+    setMensajes([]);
+    setSesionInfo(null);
+    setSesionCerrada(false);
+    setError(null);
+  }, []);
 
   return {
     idSesion,
@@ -212,6 +235,7 @@ export const useChatRoom = (idSesionInicial = null) => {
     loading,
     error,
     isConnected,
+    sesionCerrada,
     iniciarChat,
     unirseASesion,
     reconectarASesion,
@@ -219,5 +243,6 @@ export const useChatRoom = (idSesionInicial = null) => {
     cerrarChat,
     cargarHistorial,
     limpiarError,
+    reiniciarChat,
   };
 };

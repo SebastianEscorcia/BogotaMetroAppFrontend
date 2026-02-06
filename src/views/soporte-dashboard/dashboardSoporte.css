@@ -6,7 +6,7 @@
 .dashboard-soporte {
   --header-height: 80px;
   --panel-gap: 1.5rem;
-  
+
   width: 100%;
   min-height: 100vh;
   display: flex;
@@ -27,7 +27,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.header-left {
+.soporte-dashboard-header .header-left {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -51,7 +51,7 @@
   margin: 0;
 }
 
-.header-right {
+.soporte-dashboard-header .header-right {
   display: flex;
   align-items: center;
   gap: 1.5rem;
@@ -143,8 +143,12 @@
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ==========================================
@@ -176,7 +180,7 @@
 /* ==========================================
    Contenido Principal
    ========================================== */
-.dashboard-content {
+.dashboard-soporte .dashboard-content {
   display: grid;
   grid-template-columns: 400px 1fr;
   gap: var(--panel-gap);
@@ -516,7 +520,17 @@
 
 .chat-header .status.online::before {
   content: "● ";
-  color: #90EE90;
+  color: #90ee90;
+}
+
+.chat-header .status.cerrada::before {
+  content: "● ";
+  color: #6c757d;
+}
+
+.chat-header .status.offline::before {
+  content: "● ";
+  color: #dc3545;
 }
 
 .chat-header-actions {
@@ -675,11 +689,46 @@
   font-size: 1.25rem;
 }
 
+/* Estado de sesión cerrada */
+.chat-cerrado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #f5f5f5;
+  border-top: 1px solid var(--border-color, #e9ecef);
+}
+
+.chat-cerrado p {
+  margin: 0;
+  color: var(--text-secondary, #6c757d);
+  font-size: 0.95rem;
+}
+
+.btn-volver {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 24px;
+  background: var(--rojo, #fd0000);
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-volver:hover {
+  background: var(--rojo-hover, #e60000);
+  transform: scale(1.02);
+}
+
 /* ==========================================
    Responsive
    ========================================== */
 @media (max-width: 1024px) {
-  .dashboard-content {
+  .dashboard-soporte .dashboard-content {
     grid-template-columns: 1fr;
   }
 
@@ -706,7 +755,7 @@
     padding: 1rem;
   }
 
-  .header-right {
+  .soporte-dashboard-header .header-right {
     width: 100%;
     justify-content: space-between;
   }
@@ -721,7 +770,7 @@
     font-size: 0.8rem;
   }
 
-  .dashboard-content {
+  .dashboard-soporte .dashboard-content {
     padding: 1rem;
   }
 }

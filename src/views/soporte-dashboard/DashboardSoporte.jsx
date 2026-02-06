@@ -1,5 +1,7 @@
 import { useState, useCallback } from "react";
 import { FondoPag } from "../../components/common";
+import {getErrorMessage} from '../../helpers';
+import {errorConstants} from '../../constants';
 import {
   SoporteHeader,
   SesionesPendientesList,
@@ -13,18 +15,13 @@ import { MdPending, MdChat } from "react-icons/md";
 import "./dashboardSoporte.css";
 
 export const DashboardSoporte = () => {
-  // Obtener ID del soporte desde el contexto (ajustar según tu implementación)
   const { user } = useAuth();
-  // Nota: Como el rol SOPORTE no carga el user completo, 
-  // necesitarás obtener el ID de otra manera o modificar el AuthContext
   const idSoporte = user?.id || localStorage.getItem("soporteId");
 
-  // Estado del dashboard
   const [activeTab, setActiveTab] = useState("pendientes");
   const [sesionSeleccionada, setSesionSeleccionada] = useState(null);
   const [loadingTomar, setLoadingTomar] = useState(false);
 
-  // Hook del dashboard de soporte
   const {
     sesionesPendientes,
     sesionesActivas,
@@ -36,50 +33,53 @@ export const DashboardSoporte = () => {
     agregarAActivas,
     quitarDeActivas,
     limpiarError,
+    mostrarError,
   } = useSoporteChat(idSoporte);
 
-  // Hook para manejar el chat activo
   const {
     unirseASesion,
     loading: loadingChat,
   } = useChatRoom();
 
-  // Tomar una sesión pendiente
   const handleTomarSesion = useCallback(
     async (sesion) => {
-      if (!idSoporte) {
-        console.error("No hay ID de soporte");
-        return;
-      }
+      if (!idSoporte || loadingTomar)return;
 
       try {
         setLoadingTomar(true);
 
-        // Unirse a la sesión
         await unirseASesion(sesion.id, idSoporte);
 
-        // Actualizar listas
         quitarDePendientes(sesion.id);
         agregarAActivas({ ...sesion, estado: "ACTIVO" });
 
-        // Seleccionar la sesión y abrir el chat
         setSesionSeleccionada(sesion);
         setActiveTab("activas");
       } catch (err) {
         console.error("Error al tomar sesión:", err);
+        
+        const messageError = getErrorMessage(err, errorConstants)
+     
+        const esSesionTomada = messageError === errorConstants.CHAT_TOMADO_POR_SOPORTE;
+         
+        mostrarError(messageError);
+        
+        if (esSesionTomada) {
+          quitarDePendientes(sesion.id);
+          // No llamar refrescar inmediatamente para no sobrescribir el error
+          setTimeout(() => refrescar(), 2000);
+        }
       } finally {
         setLoadingTomar(false);
       }
     },
-    [idSoporte, unirseASesion, quitarDePendientes, agregarAActivas]
+    [idSoporte, unirseASesion, quitarDePendientes, agregarAActivas, refrescar, mostrarError]
   );
 
-  // Abrir chat de una sesión activa
   const handleAbrirChat = useCallback((sesion) => {
     setSesionSeleccionada(sesion);
   }, []);
 
-  // Cerrar ventana de chat
   const handleCerrarChat = useCallback(() => {
     if (sesionSeleccionada) {
       quitarDeActivas(sesionSeleccionada.id);
@@ -90,7 +90,6 @@ export const DashboardSoporte = () => {
   return (
     <FondoPag>
       <div className="dashboard-soporte">
-        {/* Header */}
         <SoporteHeader
           pendientesCount={sesionesPendientes.length}
           activasCount={sesionesActivas.length}
@@ -99,7 +98,6 @@ export const DashboardSoporte = () => {
           loading={loading}
         />
 
-        {/* Error global */}
         {error && (
           <div className="error-banner">
             <p>❌ {error}</p>
@@ -107,11 +105,8 @@ export const DashboardSoporte = () => {
           </div>
         )}
 
-        {/* Contenido principal */}
         <div className="dashboard-content">
-          {/* Panel de sesiones */}
           <div className="sesiones-panel">
-            {/* Tabs */}
             <div className="tabs">
               <button
                 className={`tab ${activeTab === "pendientes" ? "active" : ""}`}
@@ -135,7 +130,6 @@ export const DashboardSoporte = () => {
               </button>
             </div>
 
-            {/* Lista de sesiones */}
             <div className="sesiones-content">
               {activeTab === "pendientes" ? (
                 <SesionesPendientesList
@@ -155,7 +149,6 @@ export const DashboardSoporte = () => {
             </div>
           </div>
 
-          {/* Panel de chat */}
           <div className="chat-panel">
             {sesionSeleccionada ? (
               <ChatWindow

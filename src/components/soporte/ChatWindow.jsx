@@ -1,117 +1,112 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { MdSend, MdClose, MdPerson } from "react-icons/md";
 import { useChatRoom, TipoRemitente } from "../../hooks/chat/useChatRoom";
+import { ConfirmDialog } from "../common";
 
-/**
- * Ventana de chat para el soporte
- */
 export const ChatWindow = ({ sesion, idSoporte, onCerrar }) => {
   const [inputMensaje, setInputMensaje] = useState("");
+  const [showConfirmClose, setShowConfirmClose] = useState(false);
+  const [closingChat, setClosingChat] = useState(false);
   const mensajesEndRef = useRef(null);
 
   const {
     mensajes,
+    sesionInfo,
     loading,
     error,
     isConnected,
+    sesionCerrada,
     reconectarASesion,
     enviarMensaje,
     cerrarChat,
     limpiarError,
   } = useChatRoom(sesion?.id);
 
-  // Scroll automático al último mensaje
-  const scrollToBottom = () => {
-    mensajesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
   useEffect(() => {
-    scrollToBottom();
+    mensajesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [mensajes]);
 
-  // Conectar a la sesión al montar (la asignación ya se hizo en el dashboard)
   useEffect(() => {
     if (sesion?.id) {
-      reconectarASesion(sesion.id).catch((err) => {
-        console.error("Error al conectar a sesión:", err);
-      });
+      reconectarASesion(sesion.id).catch(console.error);
     }
-  }, [sesion?.id, reconectarASesion]);
+  }, [sesion?.id]);
 
-  // Obtener nombre del pasajero
-  const obtenerNombrePasajero = () => {
-    if (!sesion?.participantes || sesion.participantes.length === 0) {
-      return "Pasajero";
-    }
-    const pasajero = sesion.participantes.find(
+  const nombrePasajero = useMemo(() => {
+    const pasajero = sesionInfo?.participantes?.find(
       (p) => p.rol === "PASAJERO" || p.tipoUsuario === "PASAJERO"
     );
-    return pasajero?.nombreCompleto || pasajero?.nombre || "Pasajero";
-  };
+    return pasajero?.nombreUsuario || pasajero?.nombre || "Pasajero";
+  }, [sesionInfo]);
 
-  // Enviar mensaje
   const handleEnviar = (e) => {
     e.preventDefault();
-    if (!inputMensaje.trim() || !isConnected) return;
+    if (!inputMensaje.trim() || !isConnected || sesionCerrada) return;
 
     enviarMensaje(inputMensaje.trim(), idSoporte, TipoRemitente.SOPORTE);
     setInputMensaje("");
   };
 
-  // Cerrar chat
   const handleCerrarChat = async () => {
+    setClosingChat(true);
     try {
       await cerrarChat();
       onCerrar?.();
-    } catch (err) {
-      console.error("Error al cerrar chat:", err);
+    } finally {
+      setClosingChat(false);
+      setShowConfirmClose(false);
     }
   };
 
   return (
     <div className="chat-window">
-      {/* Header del chat */}
       <div className="chat-header">
         <div className="chat-header-info">
           <div className="avatar">
             <MdPerson />
           </div>
           <div className="info">
-            <h3>{obtenerNombrePasajero()}</h3>
-            <span className={`status ${isConnected ? "online" : "offline"}`}>
-              {isConnected ? "En línea" : "Desconectado"}
+            <h3>{nombrePasajero}</h3>
+            <span
+              className={`status ${
+                sesionCerrada
+                  ? "cerrada"
+                  : isConnected
+                  ? "online"
+                  : "offline"
+              }`}
+            >
+              {sesionCerrada
+                ? "Sesión cerrada"
+                : isConnected
+                ? "En línea"
+                : "Desconectado"}
             </span>
           </div>
         </div>
-        <div className="chat-header-actions">
-          <button
-            className="btn-cerrar-chat"
-            onClick={handleCerrarChat}
-            title="Cerrar chat"
-          >
-            <MdClose />
-          </button>
-        </div>
+
+        <button
+          className="btn-cerrar-chat"
+          onClick={() => setShowConfirmClose(true)}
+          title="Cerrar chat"
+        >
+          <MdClose />
+        </button>
       </div>
 
-      {/* Mensajes */}
       <div className="chat-messages">
-        {loading && (
-          <div className="loading-messages">
-            <p>Cargando mensajes...</p>
-          </div>
-        )}
+        {loading && <p className="loading">Cargando mensajes…</p>}
 
         {error && (
           <div className="error-message">
-            <p>❌ {error}</p>
+            <p>{error}</p>
             <button onClick={limpiarError}>Cerrar</button>
           </div>
         )}
 
         {mensajes.map((msg, index) => (
           <div
-            key={msg.id || index}
+            key={msg.id ?? index}
             className={`message ${
               msg.tipoRemitente === TipoRemitente.SOPORTE
                 ? "sent"
@@ -120,40 +115,55 @@ export const ChatWindow = ({ sesion, idSoporte, onCerrar }) => {
                 : "received"
             }`}
           >
-            <div className="message-content">
-              <p>{msg.contenido}</p>
-              <span className="message-time">
-                {msg.fechaEnvio
-                  ? new Date(msg.fechaEnvio).toLocaleTimeString("es-CO", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })
-                  : ""}
+            <p>{msg.contenido}</p>
+            {msg.fechaEnvio && (
+              <span className="time">
+                {new Date(msg.fechaEnvio).toLocaleTimeString("es-CO", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </span>
-            </div>
+            )}
           </div>
         ))}
 
         <div ref={mensajesEndRef} />
       </div>
 
-      {/* Input de mensaje */}
-      <form className="chat-input" onSubmit={handleEnviar}>
-        <input
-          type="text"
-          value={inputMensaje}
-          onChange={(e) => setInputMensaje(e.target.value)}
-          placeholder="Escribe un mensaje..."
-          disabled={!isConnected}
-        />
-        <button
-          type="submit"
-          disabled={!isConnected || !inputMensaje.trim()}
-          title="Enviar mensaje"
-        >
-          <MdSend />
-        </button>
-      </form>
+      {sesionCerrada ? (
+        <div className="chat-cerrado">
+          <p>Esta sesión ha sido cerrada</p>
+          <button onClick={onCerrar}>Volver al panel</button>
+        </div>
+      ) : (
+        <form className="chat-input" onSubmit={handleEnviar}>
+          <input
+            value={inputMensaje}
+            onChange={(e) => setInputMensaje(e.target.value)}
+            placeholder="Escribe un mensaje…"
+            disabled={!isConnected}
+          />
+          <button
+            type="submit"
+            disabled={!isConnected || !inputMensaje.trim()}
+          >
+            <MdSend />
+          </button>
+        </form>
+      )}
+
+      <ConfirmDialog
+        isOpen={showConfirmClose}
+        onClose={() => setShowConfirmClose(false)}
+        onConfirm={handleCerrarChat}
+        title="Cerrar sesión de chat"
+        message="¿Estás seguro de que deseas cerrar esta sesión de chat? Esta acción no se puede deshacer."
+        loading={closingChat}
+        icon={<MdClose />}
+        confirmText="Cerrar chat"
+        loadingText="Cerrando..."
+        confirmVariant="btn-danger"
+      />
     </div>
   );
 };

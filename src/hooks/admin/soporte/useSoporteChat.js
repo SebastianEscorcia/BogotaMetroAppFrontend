@@ -4,6 +4,7 @@ import {
   obtenerSesionesActivasSoporte,
 } from "../../../services/chat/chatRoom.service";
 import { useWebSocket } from "../../web-socket/useWebSocket";
+import { useNotificationCenter } from "../../../context/NotificationContext";
 
 /**
  * Hook para manejar el dashboard del soporte
@@ -18,8 +19,8 @@ export const useSoporteChat = (idSoporte) => {
   const [error, setError] = useState(null);
 
   const { isConnected, subscribe, unsubscribe, connect } = useWebSocket(false);
+  const { pushNotification } = useNotificationCenter();
 
-  // Cargar sesiones pendientes
   const cargarSesionesPendientes = useCallback(async () => {
     try {
       const pendientes = await obtenerSesionesPendientes();
@@ -30,7 +31,6 @@ export const useSoporteChat = (idSoporte) => {
     }
   }, []);
 
-  // Cargar sesiones activas del soporte
   const cargarSesionesActivas = useCallback(async () => {
     if (!idSoporte) return;
 
@@ -43,7 +43,6 @@ export const useSoporteChat = (idSoporte) => {
     }
   }, [idSoporte]);
 
-  // Cargar todas las sesiones
   const cargarTodo = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -54,33 +53,32 @@ export const useSoporteChat = (idSoporte) => {
     }
   }, [cargarSesionesPendientes, cargarSesionesActivas]);
 
-  // Refrescar lista de sesiones
   const refrescar = useCallback(() => {
     cargarTodo();
   }, [cargarTodo]);
 
-  // Quitar sesión de pendientes (cuando el soporte la toma)
   const quitarDePendientes = useCallback((idSesion) => {
     setSesionesPendientes((prev) =>
       prev.filter((sesion) => sesion.id !== idSesion)
     );
   }, []);
 
-  // Agregar sesión a activas
   const agregarAActivas = useCallback((sesion) => {
     setSesionesActivas((prev) => [...prev, sesion]);
   }, []);
 
-  // Quitar sesión de activas (cuando se cierra)
   const quitarDeActivas = useCallback((idSesion) => {
     setSesionesActivas((prev) =>
       prev.filter((sesion) => sesion.id !== idSesion)
     );
   }, []);
 
-  // Limpiar error
   const limpiarError = useCallback(() => {
     setError(null);
+  }, []);
+
+  const mostrarError = useCallback((mensaje) => {
+    setError(mensaje);
   }, []);
 
   // Conectar WebSocket y suscribirse a notificaciones
@@ -88,6 +86,7 @@ export const useSoporteChat = (idSoporte) => {
     const inicializarWebSocket = async () => {
       try {
         await connect();
+        console.log(" WebSocket conectado (soporte)");
       } catch (err) {
         console.error("Error al conectar WebSocket:", err);
       }
@@ -101,26 +100,64 @@ export const useSoporteChat = (idSoporte) => {
     if (!isConnected) return;
 
     // Suscripción a topic de nuevas sesiones pendientes
-    // Tu backend debería publicar aquí cuando un pasajero solicita chat
+    // Tu backend publica el id de la sesión cuando un pasajero solicita chat
     const subscriptionId = subscribe(
       "/topic/sesiones-pendientes",
-      (nuevaSesion) => {
-        console.log("📩 Nueva sesión pendiente:", nuevaSesion);
-        setSesionesPendientes((prev) => {
-          // Evitar duplicados
-          const existe = prev.some((s) => s.id === nuevaSesion.id);
-          if (existe) return prev;
-          return [...prev, nuevaSesion];
+      (payload) => {
+        console.log("📩 Nueva sesión pendiente:", payload);
+
+        if (payload?.id) {
+          setSesionesPendientes((prev) => {
+            const existe = prev.some((s) => s.id === payload.id);
+            if (existe) return prev;
+            return [...prev, payload];
+          });
+        }
+
+        pushNotification({
+          title: "Nuevo chat pendiente",
+          message: "Hay un pasajero esperando soporte.",
+          type: "info",
         });
       }
     );
+    if (!subscriptionId) {
+      console.warn(" Suscripción fallida a /topic/sesiones-pendientes");
+    } else {
+      console.log(" Suscrito a /topic/sesiones-pendientes", subscriptionId);
+    }
+
+    /**
+     *  Suscripción a topic de sesiones tomadas por otro soporte
+     * Cuando un soporte toma una sesión, se notifica a todos los demás
+     */
+    
+    const subscriptionTomadaId = subscribe(
+      "/topic/sesion-tomada",
+      (sesionTomada) => {
+        console.log(" Sesión tomada por otro soporte:", sesionTomada);
+        // Quitar la sesión de la lista de pendientes
+        const idSesion = sesionTomada.id || sesionTomada.idSesion || sesionTomada;
+        setSesionesPendientes((prev) => 
+          prev.filter((s) => s.id !== idSesion)
+        );
+      }
+    );
+    if (!subscriptionTomadaId) {
+      console.warn(" Suscripción fallida a /topic/sesion-tomada");
+    } else {
+      console.log(" Suscrito a /topic/sesion-tomada", subscriptionTomadaId);
+    }
 
     return () => {
       if (subscriptionId) {
         unsubscribe(subscriptionId);
       }
+      if (subscriptionTomadaId) {
+        unsubscribe(subscriptionTomadaId);
+      }
     };
-  }, [isConnected, subscribe, unsubscribe]);
+  }, [isConnected, subscribe, unsubscribe, pushNotification]);
 
   // Cargar datos iniciales - sesiones pendientes siempre, activas solo si hay idSoporte
   useEffect(() => {
@@ -128,10 +165,8 @@ export const useSoporteChat = (idSoporte) => {
       setLoading(true);
       setError(null);
       try {
-        // Siempre cargar sesiones pendientes
         await cargarSesionesPendientes();
         
-        // Solo cargar sesiones activas si hay idSoporte
         if (idSoporte) {
           await cargarSesionesActivas();
         }
@@ -159,5 +194,6 @@ export const useSoporteChat = (idSoporte) => {
     agregarAActivas,
     quitarDeActivas,
     limpiarError,
+    mostrarError,
   };
 };

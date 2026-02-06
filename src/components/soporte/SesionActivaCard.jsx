@@ -28,7 +28,7 @@ export const SesionActivaCard = ({ sesion, onAbrirChat, isSelected }) => {
     const pasajero = sesion.participantes.find(
       (p) => p.rol === "PASAJERO" || p.tipoUsuario === "PASAJERO"
     );
-    return pasajero?.nombreCompleto || pasajero?.nombre || "Pasajero";
+    return pasajero?.nombreUsuario || pasajero?.nombre || "Pasajero";
   };
 
   return (

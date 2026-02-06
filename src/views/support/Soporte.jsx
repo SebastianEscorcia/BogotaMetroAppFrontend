@@ -1,15 +1,17 @@
 import { Button, FondoPag } from "../../components/common";
 import { SupportButton } from "../../components/supportfaq/SupportButton";
 import { PasajeroChatWindow } from "../../components/pasajero";
-import { useCategoryFaq, useNavigateTo } from "../../hooks";
+
 import { routeMapFaq } from "../../helpers";
+
 import { AiFillCaretLeft } from "react-icons/ai";
 import { CiSearch } from "react-icons/ci";
-import "./soporte.css";
+
 import { useAuth } from "../../context/AuthUserContext";
-import { useChatRoom } from "../../hooks";
+import { useChatRoom,useNavigateTo, useCategoryFaq } from "../../hooks";
 import { useState } from "react";
 
+import "./soporte.css";
 export const Soporte = () => {
   const { faqCategorys, loading, error } = useCategoryFaq();
   const { user } = useAuth();
@@ -23,9 +25,11 @@ export const Soporte = () => {
     loading: loadingChat,
     error: errorChat,
     isConnected,
+    sesionCerrada,
     iniciarChat,
     enviarMensaje,
     limpiarError,
+    reiniciarChat,
   } = useChatRoom();
 
    const handleSolicitarSoporte = async () => {
@@ -36,6 +40,11 @@ export const Soporte = () => {
     } catch (err) {
       console.error("Error al solicitar soporte:", err);
     }
+  };
+
+  const handleNuevoChat = async () => {
+    reiniciarChat();
+    await handleSolicitarSoporte();
   };
   
   if (loading) {
@@ -81,6 +90,8 @@ export const Soporte = () => {
               enviarMensaje={enviarMensaje}
               idUsuario={user?.id}
               sesionInfo={sesionInfo}
+              sesionCerrada={sesionCerrada}
+              onNuevoChat={handleNuevoChat}
             />
           </main>
         </div>
@@ -92,7 +103,7 @@ export const Soporte = () => {
     <FondoPag>
       <div className="soporte">
         <header>
-          <AiFillCaretLeft aria-label="Volver" />
+          <AiFillCaretLeft aria-label="Volver" onClick={()=> goTo('/home')}/>
           <h1>Soporte técnico</h1>
         </header>
 
