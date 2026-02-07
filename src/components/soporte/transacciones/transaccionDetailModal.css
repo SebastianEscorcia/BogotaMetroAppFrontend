@@ -1,0 +1,297 @@
+/* ==========================================
+   TransaccionDetailModal — Modal de detalle
+   Bogotá Metro - Módulo Soporte
+   ========================================== */
+
+/* ==========================================
+   Overlay
+   ========================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  animation: fadeInOverlay 0.2s ease;
+  padding: 1rem;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ==========================================
+   Modal
+   ========================================== */
+.modal-transaccion {
+  width: 100%;
+  max-width: 560px;
+  background: var(--bg-primary, #ffffff);
+  border-radius: var(--radius-xl, 18px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideUpModal 0.25s ease;
+}
+
+@keyframes slideUpModal {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ==========================================
+   Header
+   ========================================== */
+.modal-transaccion .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-color, #e9ecef);
+  background: var(--bg-secondary, #f8f9fa);
+}
+
+.modal-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.modal-header-info h2 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-dark, #212529);
+}
+
+.modal-tipo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: fit-content;
+}
+
+.modal-tipo-badge svg {
+  font-size: 0.9rem;
+}
+
+.modal-tipo-badge.recarga {
+  background: var(--success-light, #d4edda);
+  color: #155724;
+}
+
+.modal-tipo-badge.pasaje {
+  background: var(--info-light, #d1ecf1);
+  color: #0c5460;
+}
+
+.modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: 50%;
+  background: var(--bg-primary, #ffffff);
+  color: var(--text-secondary, #6c757d);
+  cursor: pointer;
+  transition: var(--transition, all 0.2s ease);
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.modal-close:hover {
+  background: var(--danger-light, #f8d7da);
+  color: var(--danger, #dc3545);
+  border-color: rgba(220, 53, 69, 0.3);
+}
+
+/* ==========================================
+   Body
+   ========================================== */
+.modal-transaccion .modal-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+/* — Valor destacado — */
+.modal-valor-destacado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
+  background: var(--bg-secondary, #f8f9fa);
+  border-radius: var(--radius-lg, 14px);
+  border: 1px solid var(--border-color, #e9ecef);
+  text-align: center;
+}
+
+.modal-valor-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary, #6c757d);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.modal-valor-amount {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.1;
+}
+
+.modal-valor-amount.recarga {
+  color: var(--success, #28a745);
+}
+
+.modal-valor-amount.pasaje {
+  color: var(--info, #17a2b8);
+}
+
+.modal-valor-moneda {
+  font-size: 0.75rem;
+  color: var(--text-muted, #adb5bd);
+  font-weight: 500;
+  margin-top: 0.25rem;
+}
+
+/* — Grid de detalles — */
+.modal-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.modal-detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: var(--bg-secondary, #f8f9fa);
+  border-radius: var(--radius-md, 10px);
+  border: 1px solid var(--border-light, #f1f3f5);
+  transition: border-color 0.15s ease;
+}
+
+.modal-detail-item:hover {
+  border-color: var(--border-color, #e9ecef);
+}
+
+.modal-detail-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.detail-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm, 6px);
+  background: var(--bg-primary, #ffffff);
+  border: 1px solid var(--border-color, #e9ecef);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--rojo, #fd0000);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.detail-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--text-muted, #adb5bd);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-value {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-dark, #212529);
+  word-break: break-word;
+}
+
+/* ==========================================
+   Footer
+   ========================================== */
+.modal-transaccion .modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-color, #e9ecef);
+  background: var(--bg-secondary, #f8f9fa);
+}
+
+.btn-modal-close {
+  padding: 0.625rem 1.5rem;
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: var(--radius-md, 10px);
+  background: var(--bg-primary, #ffffff);
+  color: var(--text-secondary, #6c757d);
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: var(--transition, all 0.2s ease);
+}
+
+.btn-modal-close:hover {
+  background: var(--bg-tertiary, #f1f3f5);
+  color: var(--text-dark, #212529);
+  border-color: var(--text-muted, #adb5bd);
+}
+
+/* ==========================================
+   Responsive
+   ========================================== */
+@media (max-width: 600px) {
+  .modal-transaccion {
+    max-width: 100%;
+    border-radius: var(--radius-lg, 14px);
+  }
+
+  .modal-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-valor-amount {
+    font-size: 1.75rem;
+  }
+
+  .modal-transaccion .modal-header,
+  .modal-transaccion .modal-body,
+  .modal-transaccion .modal-footer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

@@ -1,0 +1,393 @@
+/* ==========================================
+   TransaccionesTable — Tabla de transacciones
+   Bogotá Metro - Módulo Soporte
+   ========================================== */
+
+/* ==========================================
+   Wrapper y metadata
+   ========================================== */
+.transacciones-table-wrapper {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary, #ffffff);
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: var(--radius-lg, 14px);
+  box-shadow: var(--shadow-card, 0 2px 8px rgba(0, 0, 0, 0.06));
+  overflow: hidden;
+}
+
+.table-info {
+  padding: 0.875rem 1.25rem;
+  font-size: 0.8125rem;
+  color: var(--text-secondary, #6c757d);
+  border-bottom: 1px solid var(--border-light, #f1f3f5);
+  background: var(--bg-secondary, #f8f9fa);
+}
+
+.table-info strong {
+  color: var(--text-dark, #212529);
+}
+
+/* ==========================================
+   Scroll horizontal
+   ========================================== */
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.table-scroll::-webkit-scrollbar-track {
+  background: var(--bg-secondary, #f8f9fa);
+}
+
+.table-scroll::-webkit-scrollbar-thumb {
+  background: var(--gris, #aba99c);
+  border-radius: 3px;
+}
+
+/* ==========================================
+   Tabla
+   ========================================== */
+.transacciones-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+/* — Header — */
+.transacciones-table thead {
+  background: var(--bg-secondary, #f8f9fa);
+  border-bottom: 2px solid var(--border-color, #e9ecef);
+}
+
+.transacciones-table th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary, #6c757d);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  user-select: none;
+}
+
+.th-sortable {
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.th-sortable:hover {
+  color: var(--rojo, #fd0000);
+}
+
+.th-sortable span {
+  display: inline;
+}
+
+.th-actions {
+  text-align: center;
+  width: 70px;
+}
+
+/* Iconos de ordenamiento */
+.sort-icon {
+  vertical-align: middle;
+  margin-left: 0.25rem;
+  font-size: 1rem;
+}
+
+.sort-icon.inactive {
+  opacity: 0.35;
+}
+
+.sort-icon.active {
+  color: var(--rojo, #fd0000);
+}
+
+/* — Filas — */
+.transacciones-table tbody tr {
+  border-bottom: 1px solid var(--border-light, #f1f3f5);
+  transition: background 0.15s ease;
+}
+
+.table-row {
+  cursor: pointer;
+}
+
+.table-row:hover {
+  background: var(--rojo-light, #fff5f5);
+}
+
+.table-row:active {
+  background: #ffe5e5;
+}
+
+.transacciones-table td {
+  padding: 0.75rem 1rem;
+  color: var(--text-primary, #343a40);
+  vertical-align: middle;
+}
+
+/* — Columnas tipadas — */
+.td-id {
+  font-weight: 600;
+  color: var(--text-secondary, #6c757d);
+  font-size: 0.8125rem;
+}
+
+.td-usuario {
+  font-weight: 500;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.td-fecha {
+  font-size: 0.8125rem;
+  color: var(--text-secondary, #6c757d);
+}
+
+.td-descripcion {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-secondary, #6c757d);
+  font-size: 0.8125rem;
+}
+
+/* — Badges y chips — */
+.valor-badge {
+  display: inline-block;
+  padding: 0.25rem 0.625rem;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: -0.25px;
+}
+
+.valor-badge.recarga {
+  background: var(--success-light, #d4edda);
+  color: #155724;
+}
+
+.valor-badge.pasaje {
+  background: var(--info-light, #d1ecf1);
+  color: #0c5460;
+}
+
+.medio-pago-chip {
+  display: inline-block;
+  padding: 0.2rem 0.625rem;
+  background: var(--bg-tertiary, #f1f3f5);
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-primary, #343a40);
+}
+
+.estacion-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.625rem;
+  background: var(--info-light, #d1ecf1);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #0c5460;
+}
+
+.estacion-chip svg {
+  font-size: 0.95rem;
+}
+
+/* — Botón ver detalle — */
+.td-actions {
+  text-align: center;
+}
+
+.btn-ver-detalle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: var(--radius-md, 10px);
+  background: var(--bg-secondary, #f8f9fa);
+  color: var(--text-secondary, #6c757d);
+  cursor: pointer;
+  transition: var(--transition, all 0.2s ease);
+  font-size: 1.1rem;
+}
+
+.btn-ver-detalle:hover {
+  background: var(--rojo, #fd0000);
+  color: white;
+  border-color: var(--rojo, #fd0000);
+  transform: scale(1.08);
+}
+
+/* ==========================================
+   Paginación
+   ========================================== */
+.table-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--border-color, #e9ecef);
+  background: var(--bg-secondary, #f8f9fa);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.pagination-size {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--text-secondary, #6c757d);
+}
+
+.pagination-size select {
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: var(--radius-sm, 6px);
+  background: var(--bg-primary, #ffffff);
+  color: var(--text-dark, #212529);
+  font-size: 0.8125rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.pagination-size select:focus {
+  outline: none;
+  border-color: var(--rojo, #fd0000);
+}
+
+.pagination-info {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary, #6c757d);
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.pagination-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: var(--radius-sm, 6px);
+  background: var(--bg-primary, #ffffff);
+  color: var(--text-secondary, #6c757d);
+  cursor: pointer;
+  transition: var(--transition, all 0.2s ease);
+  font-size: 1.125rem;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: var(--rojo-light, #fff5f5);
+  color: var(--rojo, #fd0000);
+  border-color: rgba(253, 0, 0, 0.2);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ==========================================
+   Estados: Loading y Empty
+   ========================================== */
+.table-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  background: var(--bg-primary, #ffffff);
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: var(--radius-lg, 14px);
+  box-shadow: var(--shadow-card, 0 2px 8px rgba(0, 0, 0, 0.06));
+  gap: 1rem;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-color, #e9ecef);
+  border-top-color: var(--rojo, #fd0000);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.table-loading p {
+  color: var(--text-secondary, #6c757d);
+  font-size: 0.9375rem;
+  margin: 0;
+}
+
+.table-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  background: var(--bg-primary, #ffffff);
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: var(--radius-lg, 14px);
+  box-shadow: var(--shadow-card, 0 2px 8px rgba(0, 0, 0, 0.06));
+  text-align: center;
+}
+
+.table-empty .empty-icon {
+  font-size: 4rem;
+  color: var(--text-muted, #adb5bd);
+  margin-bottom: 1rem;
+}
+
+.table-empty h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-primary, #343a40);
+  font-size: 1.125rem;
+}
+
+.table-empty p {
+  margin: 0;
+  color: var(--text-secondary, #6c757d);
+  font-size: 0.9375rem;
+}
+
+/* ==========================================
+   Responsive
+   ========================================== */
+@media (max-width: 768px) {
+  .table-pagination {
+    justify-content: center;
+  }
+
+  .transacciones-table th,
+  .transacciones-table td {
+    padding: 0.625rem 0.75rem;
+    font-size: 0.8rem;
+  }
+}

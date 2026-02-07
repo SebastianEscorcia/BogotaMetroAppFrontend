@@ -1,0 +1,169 @@
+/* ==========================================
+   TransaccionFilters — Panel de filtros
+   Bogotá Metro - Módulo Soporte
+   ========================================== */
+
+.transaccion-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--bg-primary, #ffffff);
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: var(--radius-lg, 14px);
+  box-shadow: var(--shadow-card, 0 2px 8px rgba(0, 0, 0, 0.06));
+}
+
+/* ==========================================
+   Fila de filtros
+   ========================================== */
+.filters-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.875rem;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.filter-label {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary, #6c757d);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filter-label svg {
+  font-size: 0.9rem;
+  color: var(--rojo, #fd0000);
+}
+
+.filter-input {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  background: var(--bg-secondary, #f8f9fa);
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: var(--radius-md, 10px);
+  color: var(--text-dark, #212529);
+  font-size: 0.875rem;
+  font-family: inherit;
+  transition: var(--transition, all 0.2s ease);
+  box-sizing: border-box;
+}
+
+.filter-input:focus {
+  outline: none;
+  border-color: var(--rojo, #fd0000);
+  background: var(--bg-primary, #ffffff);
+  box-shadow: 0 0 0 3px rgba(253, 0, 0, 0.1);
+}
+
+.filter-input::placeholder {
+  color: var(--text-muted, #adb5bd);
+}
+
+/* Estilo para inputs de tipo number — ocultar spinners */
+.filter-input[type="number"]::-webkit-outer-spin-button,
+.filter-input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.filter-input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ==========================================
+   Botones de acción
+   ========================================== */
+.filters-actions {
+  display: flex;
+  gap: 0.75rem;
+  padding-top: 0.25rem;
+}
+
+.btn-filter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: var(--radius-md, 10px);
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: var(--transition, all 0.2s ease);
+}
+
+.btn-filter svg {
+  font-size: 1.1rem;
+}
+
+.btn-filter:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn-filter-primary {
+  background: linear-gradient(135deg, var(--rojo, #fd0000) 0%, var(--vinotinto, #722f37) 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(253, 0, 0, 0.25);
+}
+
+.btn-filter-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(253, 0, 0, 0.35);
+}
+
+.btn-filter-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-filter-secondary {
+  background: var(--bg-secondary, #f8f9fa);
+  color: var(--text-secondary, #6c757d);
+  border: 1px solid var(--border-color, #e9ecef);
+}
+
+.btn-filter-secondary:hover:not(:disabled) {
+  background: var(--bg-tertiary, #f1f3f5);
+  color: var(--text-dark, #212529);
+  border-color: var(--text-muted, #adb5bd);
+}
+
+/* ==========================================
+   Responsive
+   ========================================== */
+@media (max-width: 768px) {
+  .filters-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .filters-actions {
+    flex-direction: column;
+  }
+
+  .btn-filter {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .filters-row {
+    grid-template-columns: 1fr;
+  }
+
+  .transaccion-filters {
+    padding: 1rem;
+  }
+}
