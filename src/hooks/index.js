@@ -7,3 +7,5 @@ export * from './faqs-supports/useSupportsFaq';
 export * from './recovery-password/useRecoverPassword';
 export * from './recovery-password/useResetPassword';
 export * from './admin/useRoles';
+export * from './chat/useChatRoom';
+export * from './web-socket/useWebSocket';

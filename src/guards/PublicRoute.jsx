@@ -17,7 +17,7 @@ export const PublicRoute = ({ children }) => {
       case "SOPORTE":
         return <Navigate to="/soporte/dashboard" replace />;
       default:
-        return <Navigate to="/home" replace />;
+        return <Navigate to="/unauthorized"  />;
     }
   }
 

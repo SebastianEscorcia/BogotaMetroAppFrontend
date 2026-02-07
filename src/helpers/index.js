@@ -2,4 +2,5 @@ export * from  './formValidators';
 export * from './httpClient';
 export * from './constantRoles';
 export * from './routeMapFaq';
-export * from './errorMessage';
+export * from './getErrorMessage';
+export * from  './obtenerMensaje';

@@ -17,7 +17,6 @@ import { MdPeople, MdBarChart, MdSettings } from "react-icons/md";
 import "../../assets/styles/dashboard.css";
 
 export const DashBoardAdmin = () => {
-  // ==================== HOOKS ====================
   const {
     roles,
     loading,

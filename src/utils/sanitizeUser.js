@@ -4,6 +4,6 @@ export const sanitizeUser = (userData) => {
         nombreCompleto:userData.nombreCompleto,
         correo:userData.correo,
         saldo:userData.saldo,
-        
+        id: userData.idUsuario,
     }
 }

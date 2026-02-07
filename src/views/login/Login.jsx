@@ -6,13 +6,13 @@ import { useNavigateTo } from "../../hooks";
 import "./login.css";
 
 export const Login = () => {
-  const { login, rol } = useAuth();
+  const { login } = useAuth();
   const { goTo } = useNavigateTo();
 
   const handleLogin = async (data) => {
-    await login(data);
-
-    switch (rol) {
+    const userRol = await login(data);
+    
+    switch (userRol) {
       case "ADMIN":
         goTo("/admin/dashboard", { replace: true });
         break;

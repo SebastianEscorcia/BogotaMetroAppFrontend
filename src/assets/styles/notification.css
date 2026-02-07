@@ -1,0 +1,92 @@
+.system-notification-container {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 2000;
+  pointer-events: none;
+}
+
+.system-notification {
+  pointer-events: auto;
+  min-width: 240px;
+  max-width: 340px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  border-left: 4px solid var(--rojo, #c62828);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  padding: 0.75rem 1rem;
+  color: #1f2933;
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: system-toast 3s ease forwards;
+  overflow: hidden;
+  position: relative;
+}
+
+.system-notification h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.system-notification p {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.system-notification button {
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+  position: absolute;
+  top: 0.45rem;
+  right: 0.55rem;
+}
+
+.system-notification button:hover {
+  opacity: 1;
+}
+
+.system-notification--success {
+  border-left-color: #2e7d32;
+}
+
+.system-notification--info {
+  border-left-color: #1976d2;
+}
+
+.system-notification--warning {
+  border-left-color: #ed6c02;
+}
+
+.system-notification--error {
+  border-left-color: #c62828;
+}
+
+@keyframes system-toast {
+  0% {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  75% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
