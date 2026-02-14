@@ -28,13 +28,6 @@ export const buscarTransaccionesAvanzado = (idUsuario, params = {}) => {
   return httpClient(`/pagos/usuario/${idUsuario}/buscar${query ? `?${query}` : ""}`);
 };
 
-/* Obtener transacciones por pasarela (SOPORTE) */
-export const getTransaccionesPorPasarela = (idPasarela) =>
-  httpClient(`/pagos/pasarela/${idPasarela}`);
-
-/** Obtener transacción por referencia (SOPORTE) */
-export const getTransaccionPorReferencia = (referencia) =>
-  httpClient(`/pagos/referencia/${encodeURIComponent(referencia)}`);
 
 /**  Obtener por usuario y rango de fechas */
 export const getTransaccionesPorUsuarioYFechas = (idUsuario, fechaInicio, fechaFin) =>
@@ -49,3 +42,7 @@ export const getTransaccionesPorDocumento = (numDocumento) =>
 /**  Buscar transacciones por nombre del pasajero (SOPORTE) */
 export const getTransaccionesPorNombre = (nombre) =>
   httpClient(`/pagos/usuario/nombre/${encodeURIComponent(nombre)}`);
+
+export const getTransaccionesPorMedioDePago = (medioPago) =>{
+   return  httpClient(`/pagos/recarga/usuario/medio-pago/${encodeURIComponent(medioPago)}`)
+}

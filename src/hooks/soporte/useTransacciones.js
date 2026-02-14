@@ -4,9 +4,9 @@ import {
   getTransaccionesPorUsuario,
   buscarTransaccionesAvanzado,
   getTransaccionPorId,
-  getTransaccionPorReferencia,
   getTransaccionesPorDocumento,
   getTransaccionesPorNombre,
+  getTransaccionesPorMedioDePago
 } from "../../services/soporte";
 import { adaptTransaccionFromBackend } from "../../adapters/transaccionAdapter";
 
@@ -41,6 +41,7 @@ export const useTransacciones = () => {
     montoMax: "",
     numDocumento: "",
     nombre: "",
+    medioPago: "",
   });
 
   // — Cargar transacciones globales por fechas (SOPORTE) —
@@ -91,6 +92,22 @@ export const useTransacciones = () => {
     }
   }, []);
 
+  // — Buscar recargas por medio de pago —
+  const fetchPorMedioDePago = useCallback(async (medioPago) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await getTransaccionesPorMedioDePago(medioPago);
+      if (!data) return;
+      setTransacciones(data.map(adaptTransaccionFromBackend));
+    } catch (err) {
+      setError(err.message || "No se encontraron recargas para ese medio de pago");
+      setTransacciones([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   // — Buscar transacción individual por ID —
   const fetchPorId = useCallback(async (id) => {
     try {
@@ -107,21 +124,7 @@ export const useTransacciones = () => {
     }
   }, []);
 
-  // — Buscar transacción por referencia de pasarela —
-  const fetchPorReferencia = useCallback(async (referencia) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await getTransaccionPorReferencia(referencia);
-      if (data) {
-        setSelectedTransaccion(adaptTransaccionFromBackend(data));
-      }
-    } catch (err) {
-      setError(err.message || "Transacción no encontrada por referencia");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+
 
   // — Buscar transacciones por número de documento —
   const fetchPorDocumento = useCallback(async (numDocumento) => {
@@ -159,8 +162,10 @@ export const useTransacciones = () => {
   const handleBuscar = useCallback(async () => {
     const { fechaInicio, fechaFin, numDocumento, nombre } = filtros;
 
-    // Prioridad: documento > nombre > fechas globales
-    if (numDocumento.trim()) {
+    // Prioridad: medioPago > documento > nombre > fechas globales
+    if (medioPago) {
+      await fetchPorMedioDePago(medioPago);
+    } else if (numDocumento.trim()) {
       await fetchPorDocumento(numDocumento.trim());
     } else if (nombre.trim()) {
       await fetchPorNombre(nombre.trim());
@@ -172,7 +177,7 @@ export const useTransacciones = () => {
       await fetchPorFechas(fechaInicio, fechaFin);
     }
     setSuccess(null);
-  }, [filtros, fetchPorDocumento, fetchPorNombre, fetchPorFechas]);
+  }, [filtros, fetchPorMedioDePago, fetchPorDocumento, fetchPorNombre, fetchPorFechas]);
 
   // — Actualizar filtros —
   const updateFiltro = useCallback((campo, valor) => {
@@ -189,6 +194,7 @@ export const useTransacciones = () => {
       montoMax: "",
       numDocumento: "",
       nombre: "",
+      medioPago: "",
     });
     setTransacciones([]);
     setError(null);
@@ -239,7 +245,7 @@ export const useTransacciones = () => {
     fetchPorUsuario,
     fetchAvanzado,
     fetchPorId,
-    fetchPorReferencia,
+    fetchPorMedioDePago,
     handleBuscar,
     updateFiltro,
     resetFiltros,

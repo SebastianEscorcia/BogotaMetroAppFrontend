@@ -1,4 +1,5 @@
 export * from './pasajero/pasajero.service';
+export * from './pasajero/recarga.service';
 export * from './auth/auth.service';
 export * from './recovery-password/recoverypassword.service';
 export * from './admin/roles.service';

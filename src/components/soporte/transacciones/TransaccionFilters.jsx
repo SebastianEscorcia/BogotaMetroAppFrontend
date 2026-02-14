@@ -5,8 +5,21 @@ import {
   MdAttachMoney,
   MdPerson,
   MdBadge,
+  MdPayment,
 } from "react-icons/md";
 import "./transaccionFilters.css";
+
+const MEDIO_PAGO_OPTIONS = [
+  { value: "", label: "Todos" },
+  { value: "TARJETA_CREDITO", label: "Tarjeta de Crédito" },
+  { value: "TARJETA_DEBITO", label: "Tarjeta de Débito" },
+  { value: "PSE", label: "PSE" },
+  { value: "NEQUI", label: "Nequi" },
+  { value: "DAVIPLATA", label: "Daviplata" },
+  { value: "EFECTIVO", label: "Efectivo" },
+  { value: "TRANSFERENCIA", label: "Transferencia" },
+  { value: "SALDO_VIRTUAL", label: "Saldo Virtual" },
+];
 
 /**
  * Panel de filtros para transacciones.
@@ -109,6 +122,24 @@ export const TransaccionFilters = ({
             value={filtros.nombre}
             onChange={(e) => onUpdateFiltro("nombre", e.target.value)}
           />
+        </div>
+
+        <div className="filter-group">
+          <label className="filter-label">
+            <MdPayment />
+            <span>Medio de Pago</span>
+          </label>
+          <select
+            className="filter-input"
+            value={filtros.medioPago}
+            onChange={(e) => onUpdateFiltro("medioPago", e.target.value)}
+          >
+            {MEDIO_PAGO_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
