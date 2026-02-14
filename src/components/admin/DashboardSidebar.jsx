@@ -7,6 +7,7 @@ import {
   MdHeadsetMic,
   MdBarChart,
   MdSettings,
+  MdAccessTime,
   MdLogout,
 } from "react-icons/md";
 
@@ -65,6 +66,12 @@ export const DashboardSidebar = ({
       section: "system",
       title: "Sistema",
       items: [
+        {
+          id: "schedule",
+          icon: <MdAccessTime />,
+          label: "Horarios",
+          badge: null,
+        },
         { id: "reports", icon: <MdBarChart />, label: "Reportes", badge: null },
         {
           id: "settings",

@@ -10,8 +10,15 @@ import {
   AlertMessage,
   UserTable,
   UserModal,
+  HorariosSistemaTable,
+  HorarioSistemaModal,
 } from "../../components/admin";
-import { useRoles, useOperadores, useSoporte } from "../../hooks/admin";
+import {
+  useRoles,
+  useOperadores,
+  useSoporte,
+  useHorariosSistema,
+} from "../../hooks/admin";
 
 import { MdPeople, MdBarChart, MdSettings } from "react-icons/md";
 import "../../assets/styles/dashboard.css";
@@ -59,6 +66,18 @@ export const DashBoardAdmin = () => {
     clearMessages: clearSoporteMessages,
   } = useSoporte();
 
+  const {
+    horarios,
+    loading: horariosLoading,
+    error: horariosError,
+    success: horariosSuccess,
+    stats: horariosStats,
+    handleCreateHorario,
+    handleUpdateHorario,
+    handleDeleteHorario,
+    clearMessages: clearHorariosMessages,
+  } = useHorariosSistema();
+
   // ==================== ESTADO DEL SIDEBAR ====================
   const [activeSection, setActiveSection] = useState("roles");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -81,6 +100,14 @@ export const DashBoardAdmin = () => {
   const [isUserConfirmOpen, setIsUserConfirmOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
   const [userDeleteLoading, setUserDeleteLoading] = useState(false);
+
+  // ==================== ESTADOS PARA HORARIOS ====================
+  const [isHorarioModalOpen, setIsHorarioModalOpen] = useState(false);
+  const [horarioModalMode, setHorarioModalMode] = useState("create");
+  const [selectedHorario, setSelectedHorario] = useState(null);
+  const [isHorarioConfirmOpen, setIsHorarioConfirmOpen] = useState(false);
+  const [horarioToDelete, setHorarioToDelete] = useState(null);
+  const [horarioDeleteLoading, setHorarioDeleteLoading] = useState(false);
 
   // Mapas de acciones
   const userActions = {
@@ -212,12 +239,64 @@ export const DashBoardAdmin = () => {
   };
 
   const handleReactivarUser = async (user, userType) => {
-    const reactivateUser = userActions[userType];
+    const reactivateAction = userActions[userType];
     if (!reactivateAction) {
       console.warn("Tipo de usuario no válido");
       return;
     }
-    await reactivateUser.reactivate(user.id);
+    await reactivateAction.reactivate(user.id);
+  };
+
+  // ==================== HANDLERS DE HORARIOS ====================
+  const handleOpenCreateHorarioModal = () => {
+    setHorarioModalMode("create");
+    setSelectedHorario(null);
+    setIsHorarioModalOpen(true);
+  };
+
+  const handleOpenEditHorarioModal = (horario) => {
+    setHorarioModalMode("edit");
+    setSelectedHorario(horario);
+    setIsHorarioModalOpen(true);
+  };
+
+  const handleCloseHorarioModal = () => {
+    setIsHorarioModalOpen(false);
+    setSelectedHorario(null);
+  };
+
+  const handleSubmitHorario = async (idOrData, horarioData) => {
+    if (horarioModalMode === "create") {
+      await handleCreateHorario(idOrData);
+    } else {
+      await handleUpdateHorario(idOrData, horarioData);
+    }
+
+    handleCloseHorarioModal();
+  };
+
+  const handleOpenHorarioDeleteConfirm = (horario) => {
+    setHorarioToDelete(horario);
+    setIsHorarioConfirmOpen(true);
+  };
+
+  const handleCloseHorarioDeleteConfirm = () => {
+    setIsHorarioConfirmOpen(false);
+    setHorarioToDelete(null);
+  };
+
+  const handleConfirmHorarioDelete = async () => {
+    if (!horarioToDelete) return;
+
+    setHorarioDeleteLoading(true);
+    try {
+      await handleDeleteHorario(horarioToDelete.id);
+      handleCloseHorarioDeleteConfirm();
+    } catch (err) {
+      console.error("Error deleting horario:", err);
+    } finally {
+      setHorarioDeleteLoading(false);
+    }
   };
 
   // ==================== RENDERIZAR CONTENIDO ====================
@@ -331,6 +410,26 @@ export const DashBoardAdmin = () => {
           </>
         );
 
+      case "schedule":
+        return (
+          <>
+            <div className="content-header">
+              <h1 className="content-title">Horarios del Sistema</h1>
+              <p className="content-subtitle">
+                Configura los horarios de operación del metro por día de la semana
+              </p>
+            </div>
+            <StatsCards stats={horariosStats} />
+            <HorariosSistemaTable
+              horarios={horarios}
+              loading={horariosLoading}
+              onEdit={handleOpenEditHorarioModal}
+              onDelete={handleOpenHorarioDeleteConfirm}
+              onCreateNew={handleOpenCreateHorarioModal}
+            />
+          </>
+        );
+
       case "reports":
         return (
           <div className="content-header">
@@ -384,6 +483,7 @@ export const DashBoardAdmin = () => {
       passengers: ["Usuarios", "Pasajeros"],
       operators: ["Usuarios", "Operadores"],
       support: ["Usuarios", "Soporte"],
+      schedule: ["Sistema", "Horarios"],
       reports: ["Sistema", "Reportes"],
       settings: ["Sistema", "Configuración"],
     };
@@ -453,6 +553,18 @@ export const DashBoardAdmin = () => {
               onClose={clearSoporteMessages}
             />
 
+            {/* Mensajes de alerta de Horarios */}
+            <AlertMessage
+              type="success"
+              message={horariosSuccess}
+              onClose={clearHorariosMessages}
+            />
+            <AlertMessage
+              type="error"
+              message={horariosError}
+              onClose={clearHorariosMessages}
+            />
+
             {renderContent()}
           </div>
         </main>
@@ -494,6 +606,23 @@ export const DashBoardAdmin = () => {
           title={`¿Eliminar este ${currentUserType.toLowerCase()}?`}
           message={`Estás a punto de eliminar a "${getUserDeleteName()}". Esta acción desactivará su cuenta.`}
           loading={userDeleteLoading}
+        />
+
+        <HorarioSistemaModal
+          isOpen={isHorarioModalOpen}
+          onClose={handleCloseHorarioModal}
+          onSubmit={handleSubmitHorario}
+          horario={selectedHorario}
+          mode={horarioModalMode}
+        />
+
+        <ConfirmDialog
+          isOpen={isHorarioConfirmOpen}
+          onClose={handleCloseHorarioDeleteConfirm}
+          onConfirm={handleConfirmHorarioDelete}
+          title="¿Eliminar este horario?"
+          message={`Se eliminará el horario de ${horarioToDelete?.dia || "este día"}. Esta acción no se puede deshacer.`}
+          loading={horarioDeleteLoading}
         />
       </div>
     </FondoPag>
