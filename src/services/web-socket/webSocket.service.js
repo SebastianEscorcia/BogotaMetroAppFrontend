@@ -1,4 +1,4 @@
-import { Client } from "@stomp/stompjs";
+﻿import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
 const WEBSOCKET_URL = "http://localhost:8080/ws-metro";
@@ -27,14 +27,8 @@ class WebSocketService {
     }
 
     this.connectionPromise = new Promise((resolve, reject) => {
-      const token = localStorage.getItem("token");
-
       this.client = new Client({
         webSocketFactory: () => new SockJS(WEBSOCKET_URL),
-        
-        connectHeaders: {
-          Authorization: token ? `Bearer ${token}` : "",
-        },
 
         // Configuración de reconexión automática
         reconnectDelay: 5000, 

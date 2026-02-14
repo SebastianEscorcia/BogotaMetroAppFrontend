@@ -16,6 +16,7 @@ import {
   Unauthorized,
   DashBoardAdmin,
   DashboardSoporte,
+  Movimientos,
 } from "./views";
 import {
   MapFaq,
@@ -36,6 +37,7 @@ import "./assets/styles/layout.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthUserContext";
 import { NotificationProvider } from "./context/NotificationContext";
+import { WebSocketNotificationsProvider } from "./context/WebSocketNotificationsContext";
 import { ROLES } from "./helpers";
 import { ProtectedRoute, PublicRoute, RoleGuard } from "./guards";
 import LineTwo from "./views/linetwo/LineTwo";
@@ -45,8 +47,10 @@ export const BogotaMetroApp = () => {
   return (
     <AuthProvider>
       <NotificationProvider>
-        <BrowserRouter>
-          <Routes>
+        <WebSocketNotificationsProvider>
+          <SystemNotificationCenter />
+          <BrowserRouter>
+            <Routes>
             <Route path="/" element={<Welcome />} />
             <Route
               path="/login"
@@ -299,6 +303,17 @@ export const BogotaMetroApp = () => {
               }
             ></Route>
 
+            <Route
+              path="/movimientos"
+              element={
+                <ProtectedRoute>
+                  <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
+                    <Movimientos />
+                  </RoleGuard>
+                </ProtectedRoute>
+              }
+            />
+
             {/* Rutas de Administrador */}
             <Route
               path="/admin/dashboard"
@@ -324,6 +339,7 @@ export const BogotaMetroApp = () => {
             />
           </Routes>
         </BrowserRouter>
+        </WebSocketNotificationsProvider>
         <SystemNotificationCenter />
       </NotificationProvider>
     </AuthProvider>

@@ -13,14 +13,9 @@ import {
 } from "../services";
 import { sanitizeUser } from "../utils/sanitizeUser";
 
-const getRolFromToken = (token) => {
-  if (!token) return null;
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    return payload.rol || payload.role || null;
-  } catch {
-    return null;
-  }
+const getRolFromUser = (userData) => {
+  if (!userData) return null;
+  return userData.rol?.nombre || userData.rol || userData.role || null;
 };
 
 export const AuthUserContext = createContext(null);
@@ -39,15 +34,12 @@ export const AuthProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : null;
   });
 
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    () => !!localStorage.getItem("token"),
-  );
-  const [rol, setRol] = useState(() => getRolFromToken(localStorage.getItem("token")));
+  const [isAuthenticated, setIsAuthenticated] = useState(() => !!localStorage.getItem("user"));
+  const [rol, setRol] = useState(() => getRolFromUser(user));
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const saveUserSession = (token, role, userData) => {
-    if (token) localStorage.setItem("token", token);
+  const saveUserSession = (role, userData) => {
     if (role) {
       setRol(role);
     }
@@ -80,7 +72,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       if (userData) {
-        saveUserSession(null, currentRol, userData);
+        saveUserSession(currentRol, userData);
       }
     } catch (err) {
       console.error("Error fetching profile:", err);
@@ -95,14 +87,24 @@ export const AuthProvider = ({ children }) => {
   const login = async (data) => {
     try {
       const response = await loginUser(data);
+      const currentRol = response?.rol || response?.role || null;
 
-      localStorage.setItem("token", response.token);
-      setRol(response.rol);
+      if (currentRol) {
+        setRol(currentRol);
+      }
       setIsAuthenticated(true);
 
-      await fetchUserProfile(response.rol);
+      if (currentRol) {
+        await fetchUserProfile(currentRol);
+      } else {
+        const userData = await obtenerUserAuth();
+        const roleFromUser = getRolFromUser(userData);
+        if (userData) {
+          saveUserSession(roleFromUser, userData);
+        }
+      }
 
-      return response.rol;
+      return currentRol;
     } catch (err) {
       setError(err);
       throw err;
@@ -110,30 +112,45 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
     setRol(null);
     setIsAuthenticated(false);
   };
 
+  /**
+   * Refresca los datos del usuario autenticado (ej. tras una recarga de saldo).
+   */
+  const refreshUser = useCallback(async () => {
+    if (rol) {
+      await fetchUserProfile(rol);
+    }
+  }, [rol, fetchUserProfile]);
+
   useEffect(() => {
     const initAuth = async () => {
-      const token = localStorage.getItem("token");
       const savedUser = localStorage.getItem("user");
 
-      if (!token) {
-        setLoading(false);
-        return;
-      }
-
       if (savedUser) {
-        setUser(JSON.parse(savedUser));
+        const parsed = JSON.parse(savedUser);
+        setUser(parsed);
+        setRol(getRolFromUser(parsed));
         setIsAuthenticated(true);
-        setLoading(false);
-        return;
       }
 
+      try {
+        const userData = await obtenerUserAuth();
+        const currentRol = getRolFromUser(userData);
+        if (userData) {
+          saveUserSession(currentRol, userData);
+        }
+      } catch {
+        if (!savedUser) {
+          setIsAuthenticated(false);
+          setRol(null);
+          setUser(null);
+        }
+      }
 
       setLoading(false);
     };
@@ -152,6 +169,7 @@ export const AuthProvider = ({ children }) => {
         register,
         login,
         logout,
+        refreshUser,
       }}
     >
       {children}

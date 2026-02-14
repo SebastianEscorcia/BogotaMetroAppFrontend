@@ -32,7 +32,10 @@ export function HomeBalance() {
 
             <button className="action-button bloquear-button">Bloquear</button>
 
-            <button className="action-button movimientos-button">
+            <button
+              className="action-button movimientos-button"
+              onClick={() => navigate("/movimientos")}
+            >
               Movimientos
             </button>
 

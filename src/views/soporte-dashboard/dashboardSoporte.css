@@ -1,17 +1,48 @@
 /* ==========================================
-   Dashboard Soporte - Panel de Chat
+   Dashboard Soporte - Panel Completo
+   Bogotá Metro - Módulo de Soporte
    ========================================== */
 
-/* Variables locales */
-.dashboard-soporte {
-  --header-height: 80px;
-  --panel-gap: 1.5rem;
+/* ==========================================
+   Topbar móvil (toggle sidebar)
+   ========================================== */
+.soporte-topbar {
+  display: none;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: var(--bg-primary, #ffffff);
+  border-bottom: 1px solid var(--border-color, #e9ecef);
+}
 
-  width: 100%;
-  min-height: 100vh;
+.soporte-topbar .menu-toggle {
   display: flex;
-  flex-direction: column;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md, 10px);
   background: var(--bg-secondary, #f8f9fa);
+  border: 1px solid var(--border-color, #e9ecef);
+  color: var(--text-secondary, #6c757d);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  transition: var(--transition, all 0.2s ease);
+}
+
+.soporte-topbar .menu-toggle:hover {
+  background: var(--rojo-light, #fff5f5);
+  color: var(--rojo, #fd0000);
+}
+
+/* ==========================================
+   Sección de Chat (layout existente adaptado)
+   ========================================== */
+.soporte-chat-layout {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 1.5rem;
+  flex: 1;
+  min-height: 0;
 }
 
 /* ==========================================

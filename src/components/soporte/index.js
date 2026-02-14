@@ -4,3 +4,4 @@ export { SesionActivaCard } from "./SesionActivaCard";
 export { SesionesPendientesList } from "./SesionesPendientesList";
 export { SesionesActivasList } from "./SesionesActivasList";
 export { ChatWindow } from "./ChatWindow";
+export * from './SoporteSidebar';

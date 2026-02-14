@@ -1,11 +1,12 @@
-export const httpClient = async (endpoint, options = {}) => {
-  const token = localStorage.getItem("token");
+﻿export const httpClient = async (endpoint, options = {}) => {
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options.headers || {}),
+  };
 
   const response = await fetch(`http://localhost:8080/api${endpoint}`, {
-    headers: {
-      "Content-Type": "application/json",
-      ...(token && { Authorization: `Bearer ${token}` }),
-    },
+    credentials: "include",
+    headers,
     ...options,
   });
 

@@ -9,3 +9,6 @@ export * from './recovery-password/useResetPassword';
 export * from './admin/useRoles';
 export * from './chat/useChatRoom';
 export * from './web-socket/useWebSocket';
+export * from './soporte/useTransacciones';
+export * from './pasajero/useRecarga';
+export * from './pasajero/useMovimientos';
