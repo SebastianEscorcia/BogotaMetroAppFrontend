@@ -7,3 +7,9 @@ export const loginUser = (data) => {
 };
 
 export const obtenerUserAuth  = () => httpClient("/auth/usuario/me");
+
+export const logoutUser = () => {
+  return httpClient("/auth/logout", {
+    method: "POST",
+  });
+};

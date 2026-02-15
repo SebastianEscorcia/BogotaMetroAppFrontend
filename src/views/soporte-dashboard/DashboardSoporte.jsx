@@ -8,11 +8,19 @@ import {
   SesionesPendientesList,
   SesionesActivasList,
   ChatWindow,
+  FaqCategoryTable,
+  FaqCategoryModal,
+  SupportFaqTable,
+  SupportFaqModal,
 } from "../../components/soporte";
+import { ConfirmDialog } from "../../components/common";
+import { AlertMessage } from "../../components/admin/AlertMessage";
 import { TransaccionesPanel } from "../../components/soporte/transacciones";
 import { useSoporteChat } from "../../hooks/admin/soporte/useSoporteChat";
 import { useChatRoom } from "../../hooks/chat/useChatRoom";
 import { useTransacciones } from "../../hooks/soporte/useTransacciones";
+import { useFaqCategoryManagement } from "../../hooks/soporte/useFaqCategoryManagement";
+import { useSupportFaqManagement } from "../../hooks/soporte/useSupportFaqManagement";
 import { useAuth } from "../../context/AuthUserContext";
 import { MdPending, MdChat, MdMenu } from "react-icons/md";
 import "../../assets/styles/dashboard.css";
@@ -63,6 +71,42 @@ export const DashboardSoporte = () => {
     clearError: clearTxError,
   } = useTransacciones();
 
+  const {
+    categories,
+    loading: categoriesLoading,
+    error: categoriesError,
+    success: categoriesSuccess,
+    handleCreateCategory,
+    handleUpdateCategory,
+    handleDeleteCategory,
+    clearMessages: clearCategoriesMessages,
+  } = useFaqCategoryManagement();
+
+  const {
+    faqs,
+    loading: faqsLoading,
+    error: faqsError,
+    success: faqsSuccess,
+    handleCreateFaq,
+    handleUpdateFaq,
+    handleDeleteFaq,
+    clearMessages: clearFaqsMessages,
+  } = useSupportFaqManagement();
+
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+  const [categoryModalMode, setCategoryModalMode] = useState("create");
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isCategoryConfirmOpen, setIsCategoryConfirmOpen] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
+  const [categoryDeleteLoading, setCategoryDeleteLoading] = useState(false);
+
+  const [isFaqModalOpen, setIsFaqModalOpen] = useState(false);
+  const [faqModalMode, setFaqModalMode] = useState("create");
+  const [selectedFaq, setSelectedFaq] = useState(null);
+  const [isFaqConfirmOpen, setIsFaqConfirmOpen] = useState(false);
+  const [faqToDelete, setFaqToDelete] = useState(null);
+  const [faqDeleteLoading, setFaqDeleteLoading] = useState(false);
+
   // — Handlers de chat (sin cambios en lógica) —
   const handleTomarSesion = useCallback(
     async (sesion) => {
@@ -110,6 +154,104 @@ export const DashboardSoporte = () => {
     }
     setSesionSeleccionada(null);
   }, [sesionSeleccionada, quitarDeActivas]);
+
+  const handleOpenCreateCategoryModal = () => {
+    setCategoryModalMode("create");
+    setSelectedCategory(null);
+    setIsCategoryModalOpen(true);
+  };
+
+  const handleOpenEditCategoryModal = (category) => {
+    setCategoryModalMode("edit");
+    setSelectedCategory(category);
+    setIsCategoryModalOpen(true);
+  };
+
+  const handleCloseCategoryModal = () => {
+    setIsCategoryModalOpen(false);
+    setSelectedCategory(null);
+  };
+
+  const handleSubmitCategory = async (idOrName, categoryData) => {
+    if (categoryModalMode === "create") {
+      await handleCreateCategory(idOrName);
+    } else {
+      await handleUpdateCategory(idOrName, categoryData);
+    }
+    handleCloseCategoryModal();
+  };
+
+  const handleOpenDeleteCategory = (category) => {
+    setCategoryToDelete(category);
+    setIsCategoryConfirmOpen(true);
+  };
+
+  const handleCloseDeleteCategory = () => {
+    setIsCategoryConfirmOpen(false);
+    setCategoryToDelete(null);
+  };
+
+  const handleConfirmDeleteCategory = async () => {
+    if (!categoryToDelete) return;
+    setCategoryDeleteLoading(true);
+    try {
+      await handleDeleteCategory(categoryToDelete.id);
+      handleCloseDeleteCategory();
+    } catch (err) {
+      console.error("Error eliminando categoría FAQ:", err);
+    } finally {
+      setCategoryDeleteLoading(false);
+    }
+  };
+
+  const handleOpenCreateFaqModal = () => {
+    setFaqModalMode("create");
+    setSelectedFaq(null);
+    setIsFaqModalOpen(true);
+  };
+
+  const handleOpenEditFaqModal = (faq) => {
+    setFaqModalMode("edit");
+    setSelectedFaq(faq);
+    setIsFaqModalOpen(true);
+  };
+
+  const handleCloseFaqModal = () => {
+    setIsFaqModalOpen(false);
+    setSelectedFaq(null);
+  };
+
+  const handleSubmitFaq = async (idOrData, faqData) => {
+    if (faqModalMode === "create") {
+      await handleCreateFaq(idOrData);
+    } else {
+      await handleUpdateFaq(idOrData, faqData);
+    }
+    handleCloseFaqModal();
+  };
+
+  const handleOpenDeleteFaq = (faq) => {
+    setFaqToDelete(faq);
+    setIsFaqConfirmOpen(true);
+  };
+
+  const handleCloseDeleteFaq = () => {
+    setIsFaqConfirmOpen(false);
+    setFaqToDelete(null);
+  };
+
+  const handleConfirmDeleteFaq = async () => {
+    if (!faqToDelete) return;
+    setFaqDeleteLoading(true);
+    try {
+      await handleDeleteFaq(faqToDelete.id);
+      handleCloseDeleteFaq();
+    } catch (err) {
+      console.error("Error eliminando pregunta frecuente:", err);
+    } finally {
+      setFaqDeleteLoading(false);
+    }
+  };
 
   // — Render de secciones —
   const renderChatSection = () => (
@@ -232,6 +374,45 @@ export const DashboardSoporte = () => {
             onClearError={clearTxError}
           />
         );
+      case "faq-categorias":
+        return (
+          <>
+            <div className="content-header">
+              <h1 className="content-title">Categorías FAQ</h1>
+              <p className="content-subtitle">
+                Gestiona las categorías de preguntas frecuentes para pasajeros
+              </p>
+            </div>
+
+            <FaqCategoryTable
+              categories={categories}
+              loading={categoriesLoading}
+              onCreateNew={handleOpenCreateCategoryModal}
+              onEdit={handleOpenEditCategoryModal}
+              onDelete={handleOpenDeleteCategory}
+            />
+          </>
+        );
+      case "faq-preguntas":
+        return (
+          <>
+            <div className="content-header">
+              <h1 className="content-title">Preguntas Frecuentes</h1>
+              <p className="content-subtitle">
+                Administra preguntas y respuestas visibles en el módulo de soporte
+              </p>
+            </div>
+
+            <SupportFaqTable
+              faqs={faqs}
+              categories={categories}
+              loading={faqsLoading}
+              onCreateNew={handleOpenCreateFaqModal}
+              onEdit={handleOpenEditFaqModal}
+              onDelete={handleOpenDeleteFaq}
+            />
+          </>
+        );
       default:
         return renderChatSection();
     }
@@ -257,6 +438,63 @@ export const DashboardSoporte = () => {
           </div>
           <div className="dashboard-content">{renderContent()}</div>
         </main>
+
+        <AlertMessage
+          type="success"
+          message={categoriesSuccess}
+          onClose={clearCategoriesMessages}
+        />
+        <AlertMessage
+          type="error"
+          message={categoriesError}
+          onClose={clearCategoriesMessages}
+        />
+
+        <AlertMessage
+          type="success"
+          message={faqsSuccess}
+          onClose={clearFaqsMessages}
+        />
+        <AlertMessage
+          type="error"
+          message={faqsError}
+          onClose={clearFaqsMessages}
+        />
+
+        <FaqCategoryModal
+          isOpen={isCategoryModalOpen}
+          onClose={handleCloseCategoryModal}
+          onSubmit={handleSubmitCategory}
+          category={selectedCategory}
+          mode={categoryModalMode}
+        />
+
+        <ConfirmDialog
+          isOpen={isCategoryConfirmOpen}
+          onClose={handleCloseDeleteCategory}
+          onConfirm={handleConfirmDeleteCategory}
+          title="¿Eliminar esta categoría?"
+          message={`Estás a punto de eliminar la categoría "${categoryToDelete?.name || ""}".`}
+          loading={categoryDeleteLoading}
+        />
+
+        <SupportFaqModal
+          isOpen={isFaqModalOpen}
+          onClose={handleCloseFaqModal}
+          onSubmit={handleSubmitFaq}
+          faq={selectedFaq}
+          mode={faqModalMode}
+          categories={categories}
+        />
+
+        <ConfirmDialog
+          isOpen={isFaqConfirmOpen}
+          onClose={handleCloseDeleteFaq}
+          onConfirm={handleConfirmDeleteFaq}
+          title="¿Eliminar esta pregunta frecuente?"
+          message={`Se eliminará la pregunta "${faqToDelete?.question || ""}".`}
+          loading={faqDeleteLoading}
+        />
       </div>
     </FondoPag>
   );

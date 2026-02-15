@@ -6,6 +6,8 @@ import {
   MdLogout,
   MdHeadsetMic,
   MdReceipt,
+  MdCategory,
+  MdQuiz,
 } from "react-icons/md";
 
 /**
@@ -47,6 +49,24 @@ export const SoporteSidebar = ({
           id: "pagos-metro",
           icon: <MdDirectionsSubway />,
           label: "Pagos al Metro",
+          badge: null,
+        },
+      ],
+    },
+    {
+      section: "faqs",
+      title: "Preguntas Frecuentes",
+      items: [
+        {
+          id: "faq-categorias",
+          icon: <MdCategory />,
+          label: "Categorías FAQ",
+          badge: null,
+        },
+        {
+          id: "faq-preguntas",
+          icon: <MdQuiz />,
+          label: "Preguntas FAQ",
           badge: null,
         },
       ],
