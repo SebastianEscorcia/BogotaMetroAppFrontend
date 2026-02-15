@@ -7,3 +7,5 @@ export { ConfirmDialog } from "../common/ConfirmDialog";
 export { AlertMessage } from "./AlertMessage";
 export { UserTable } from "./UserTable";
 export { UserModal } from "./UserModal";
+export { HorariosSistemaTable } from "./HorariosSistemaTable";
+export { HorarioSistemaModal } from "./HorarioSistemaModal";
