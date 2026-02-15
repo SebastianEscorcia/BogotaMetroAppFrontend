@@ -208,13 +208,20 @@ npm install
 
 ### 3. Configurar variables de entorno
 
-Crea un archivo `.env` en la raíz del proyecto con la URL del backend:
+Crea tu archivo local a partir del ejemplo:
 
-```env
-VITE_API_URL=http://localhost:3000/api
+```bash
+cp .env.example .env
 ```
 
-> **Nota:** Ajusta la URL según la configuración de tu backend.
+Luego ajusta las variables según tu backend:
+
+```env
+VITE_API_URL=http://localhost:8080/api
+VITE_WEBSOCKET_URL=http://localhost:8080/ws-metro
+```
+
+> **Nota:** En Vite, solo las variables con prefijo `VITE_` se exponen al frontend. No guardes secretos reales (tokens, contraseñas, llaves privadas) en `.env` del cliente.
 
 ### 4. Ejecutar en modo desarrollo
 

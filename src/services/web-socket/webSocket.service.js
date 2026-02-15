@@ -1,7 +1,7 @@
 ﻿import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
-const WEBSOCKET_URL = "http://localhost:8080/ws-metro";
+const WEBSOCKET_URL = import.meta.env.VITE_WEBSOCKET_URL ;
 
 class WebSocketService {
   constructor() {
