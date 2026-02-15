@@ -5,3 +5,7 @@ export { SesionesPendientesList } from "./SesionesPendientesList";
 export { SesionesActivasList } from "./SesionesActivasList";
 export { ChatWindow } from "./ChatWindow";
 export * from './SoporteSidebar';
+export { FaqCategoryTable } from "./FaqCategoryTable";
+export { FaqCategoryModal } from "./FaqCategoryModal";
+export { SupportFaqTable } from "./SupportFaqTable";
+export { SupportFaqModal } from "./SupportFaqModal";

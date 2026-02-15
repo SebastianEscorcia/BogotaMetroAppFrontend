@@ -5,6 +5,8 @@ export * from './recovery-password/recoverypassword.service';
 export * from './admin/roles.service';
 export * from './admin/operadores.service';
 export * from './admin/horariosSistema.service';
+export * from './faqs-soporte/faqcategorys.service';
+export * from './faqs-soporte/faqsupport.service';
 export {webSocketService} from './web-socket/webSocket.service'
 export * from './chat/chatRoom.service'
 export * from './soporte/transaccion.service'

@@ -10,6 +10,7 @@ import {
   obtenerDatosPasajero,
   loginUser,
   obtenerUserAuth,
+  logoutUser,
 } from "../services";
 import { sanitizeUser } from "../utils/sanitizeUser";
 
@@ -38,6 +39,13 @@ export const AuthProvider = ({ children }) => {
   const [rol, setRol] = useState(() => getRolFromUser(user));
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const clearUserSession = useCallback(() => {
+    localStorage.removeItem("user");
+    setUser(null);
+    setRol(null);
+    setIsAuthenticated(false);
+  }, []);
 
   const saveUserSession = (role, userData) => {
     if (role) {
@@ -76,9 +84,9 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (err) {
       console.error("Error fetching profile:", err);
-      logout();
+      clearUserSession();
     }
-  }, []);
+  }, [clearUserSession]);
 
   const register = async (data) => {
     await registerPasajero(data);
@@ -111,12 +119,15 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-    setRol(null);
-    setIsAuthenticated(false);
-  };
+  const logout = useCallback(async () => {
+    try {
+      await logoutUser();
+    } catch (err) {
+      console.warn("No se pudo invalidar sesión en backend:", err);
+    } finally {
+      clearUserSession();
+    }
+  }, [clearUserSession]);
 
   /**
    * Refresca los datos del usuario autenticado (ej. tras una recarga de saldo).
@@ -145,18 +156,14 @@ export const AuthProvider = ({ children }) => {
           saveUserSession(currentRol, userData);
         }
       } catch {
-        if (!savedUser) {
-          setIsAuthenticated(false);
-          setRol(null);
-          setUser(null);
-        }
+        clearUserSession();
       }
 
       setLoading(false);
     };
 
     initAuth();
-  }, [fetchUserProfile]);
+  }, [clearUserSession]);
 
   return (
     <AuthUserContext.Provider
