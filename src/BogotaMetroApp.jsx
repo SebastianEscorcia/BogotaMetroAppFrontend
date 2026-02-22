@@ -1,17 +1,19 @@
-import { Login, Welcome, Register,RecoverPassword  } from "./views";
+
+
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import "./assets/styles/layout.css";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+export default function BogotaMetroApp() {
+    const navigate = useNavigate();
 
-export const BogotaMetroApp = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Welcome />}></Route>
-        <Route path="/login" element={<Login/>}></Route>
-        <Route path="/register" element={<Register />}></Route>
-        <Route path="/recover-password" element={<RecoverPassword/>}></Route>
-      </Routes>
-    </BrowserRouter>
-  );
-};
+    return (
+        <div className="welcome-container">
+            {/*  diseño de bienvenida */}
+            <h1>Bienvenido al Metro de Bogotá</h1>
+            <button onClick={() => navigate('/home')}>
+                Ingresar
+            </button>
+        </div>
+    );
+}

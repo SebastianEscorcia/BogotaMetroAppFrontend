@@ -1,0 +1,306 @@
+/* Esto aplica el fondo a cualquier elemento con la clase .app-screen */
+.app-screen { 
+    width: 360px; 
+    height: 640px; 
+    margin: 20px auto; 
+    border: 8px solid #000; 
+    border-radius: 40px; 
+    overflow: hidden; 
+    display: flex; 
+    flex-direction: column; 
+    
+    /* Configuración de Fondo Global */
+    background-image: url('/assets/imagenes de fondo/imagendefondo (1).png'); 
+    background-size: cover;          
+    background-position: center;     
+    background-repeat: no-repeat;
+    background-color: #f0f0f0; /* Color de respaldo si la imagen falla */
+}
+
+/* 2. Capa para el efecto visual sobre el fondo */
+.content-wrapper {
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.7); /* Transparencia para ver el fondo */
+    backdrop-filter: blur(5px);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.header-red {
+    background-color: #E30613;
+    padding: 20px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Separa los elementos */
+}
+
+.title-center {
+    font-size: 32px;            
+    font-weight: 700;           
+    font-style: italic;
+    margin: 0;
+    flex-grow: 1;
+    text-align: center;
+    letter-spacing: 1px;       
+}
+
+/* 4. Botón Viajar con QR (Transparente Rojo) */
+.btn-qr-transparente {
+    background: rgba(227, 6, 19, 0.2);
+    border: 2px solid #E30613;
+    color: #E30613;
+    width: 90%;
+    margin: 15px auto;
+    display: block;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 5. Planificador y Estilos de Inputs */
+.card-planificador {
+    background: white;
+    margin: 0 15px;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.input-group img {
+    width: 24px;
+    height: 24px;
+}
+
+/* 6. Botones de Acción (Guardar/Eliminar) */
+.action-btn {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    padding: 12px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.delete-btn {
+    color: #E30613;
+    background: none;
+    font-weight: bold;
+    margin: 5px auto;
+    display: block;
+}
+
+.btn-continuar {
+    background-color: #E30613;
+    color: white;
+    width: 90%;
+    
+    /* Centrado horizontal y margen inferior */
+    margin: 20px auto 30px auto; 
+    
+    display: block;
+    padding: 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    
+    /* Esto lo ancla al flujo del flexbox */
+    flex-shrink: 0; 
+}
+
+
+
+  /* css viaja con qr */
+
+.app-screen { 
+    width: 360px; height: 640px; margin: 20px auto; 
+    border: 8px solid #000; border-radius: 40px; 
+    overflow: hidden; display: flex; flex-direction: column; 
+    background-color: white; 
+}
+
+.header-red { 
+    background-color: #E30613; padding: 20px; color: white; 
+    display: flex; justify-content: space-between; align-items: center; 
+}
+
+.title-center { font-size: 20px; font-weight: 900; text-transform: uppercase; margin: 0; }
+.back-btn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+
+.main-content { 
+    flex: 1; padding: 20px; display: flex; flex-direction: column; align-items: center; 
+    overflow-y: auto;
+}
+
+.logo-container { margin: 10px 0; }
+.logo-img { width: 100px; height: auto; object-fit: contain; }
+
+.lineas-container { display: flex; gap: 5px; margin: 15px 0; }
+.linea-btn { 
+    background: #E30613; color: white; border: none; 
+    padding: 8px 5px; font-size: 10px; cursor: pointer; border-radius: 4px;
+}
+
+.qr-container { 
+    background: white; padding: 20px; border-radius: 15px; 
+    margin: 15px 0; display: flex; justify-content: center;
+}
+
+.info-box { font-size: 11px; text-align: center; color: #555; margin-bottom: 10px; padding: 0 10px; }
+
+.btn-continuar { 
+    background: #E30613; color: white; padding: 15px; 
+    width: 90%; margin: 0 auto 20px auto; border-radius: 20px; 
+    border: none; cursor: pointer; font-weight: bold; 
+}
+
+/*viajes en otras lineas se refiere a la conexiones que hay entre los otros sistema de trasporte ejemplo  trasmilenio*/
+
+/*linea 1*/
+
+.estaciones-list {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Espacio entre botones */
+}
+
+.estacion-btn {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 12px;
+    border-radius: 10px;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 100%;
+}
+
+.estacion-btn:hover {
+    background-color: #f0f0f0;
+    border-color: #E30613;
+}
+
+/* Estilos específicos para la pantalla Sistema Integrado */
+.main-content-integrado {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0; /* Quitamos padding para que el mapa ocupe el ancho completo */
+    background-color: rgba(255, 255, 255, 0.85); /* Fondo blanco semi-transparente */
+    margin: 10px; /* Margen para que se vea el fondo global */
+    border-radius: 20px; /* Bordes redondeados como en otras secciones */
+    overflow-y: auto; /* Para permitir scroll si hay mucho contenido */
+}
+
+.map-container {
+    width: 100%;
+    position: relative;
+    padding-bottom: 75%; /* Ratio 4:3 para el mapa (ajusta si tu imagen tiene otro ratio) */
+    background-color: #f0f0f0; /* Fondo gris si la imagen no carga */
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    overflow: hidden; /* Para que la imagen del mapa no se salga del contenedor */
+}
+
+.map-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Asegura que la imagen cubra el contenedor */
+    border-radius: 20px; /* Bordes redondeados para el mapa */
+}
+
+.search-icon, .location-icon {
+    position: absolute;
+    background-color: white;
+    padding: 8px;
+    border-radius: 50%;
+    font-size: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    cursor: pointer;
+}
+
+.search-icon {
+    bottom: 20px;
+    left: 20px;
+}
+
+.location-icon {
+    bottom: 20px;
+    right: 20px;
+    color: red;
+}
+
+.sistemas-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 20px;
+    gap: 0px; /* Espacio entre los ítems de la lista */
+}
+
+.sistema-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #e0e0e0;
+    color: #333;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.sistema-item:last-child {
+    border-bottom: none; /* Elimina la línea en el último elemento */
+}
+
+.sistema-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.sistema-icon {
+    width: 30px; /* Tamaño de los íconos de transporte */
+    height: 30px;
+    object-fit: contain;
+}
+
+.arrow-icon {
+    font-size: 20px;
+    color: #E30613; /* Color de la flecha */
+}
+
+.btn-continuar-integrado {
+    background: #E30613;
+    color: white;
+    padding: 15px;
+    width: 90%;
+    margin: 20px auto; /* Espacio antes y después del botón */
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+}

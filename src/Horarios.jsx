@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-// Importación corregida con PhoneCall para evitar pantalla blanca
+// Importación corregida con PhoneCall tube que crear esta parte porque no se consideo los festivos y cambios de horarios hay que diseñar esta pantalla com aparece aqui//
 import { ChevronLeft, ChevronRight, Search, PhoneCall } from 'lucide-react';
 
 export default function Horarios() {

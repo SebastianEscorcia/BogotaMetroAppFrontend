@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-// Se agregó PhoneCall a la importación para evitar el error de pantalla blanca
+
 import { ChevronLeft, ChevronRight, Search, PhoneCall } from 'lucide-react'; 
 
 export default function Tarifas() {

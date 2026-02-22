@@ -1,13 +1,13 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-// Se incluye PhoneCall para el botón inferior como pediste
+// Se incluye PhoneCall para el botón inferior 
 import { ChevronLeft, ChevronRight, Search, PhoneCall } from 'lucide-react';
 
 export default function Actualizaciondedatos() {
   const navigate = useNavigate();
 
-  // Lista exacta de preguntas de tu imagen
+  // Lista exacta de preguntas 
   const preguntas = [
     "No guarda mis datos nuevos",
     "No logro modificar mi correo",

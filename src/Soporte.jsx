@@ -3,12 +3,12 @@ import React from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Search, ChevronLeft, PhoneCall } from 'lucide-react';
 
-// Importación de componentes corregida según archivos
+// Importación de componentes corregida 
 import Registro from './Registro';
 import Metroapp from './Metroapp';
 import Actualizaciondedatos from './Actualizaciondedatos';
 import Recarga from './Recarga';
-import Pasarsaldo from './Pasarsaldo';
+import Pasarsaldo from './Pasarsaldo';//problemilla//
 import Masservicios from './Masservicios';
 import Metropay from './Metropay';
 import Transporte from './Transporte';

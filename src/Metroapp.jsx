@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight, Search, PhoneCall } from 'lucide-react';
 export default function Metroapp() {
   const navigate = useNavigate();
 
-  // Lista de preguntas extraída de tu imagen de referencia
+  // Lista de preguntas //
   const preguntas = [
     "¿Como descargo la Metro App?",
     "¿Que puedo hacer en la Metro App?",
