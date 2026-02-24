@@ -19,6 +19,12 @@ const getRolFromUser = (userData) => {
   return userData.rol?.nombre || userData.rol || userData.role || null;
 };
 
+const normalizeRole = (value) => {
+  if (!value) return null;
+  const role = String(value).toUpperCase().trim();
+  return role.startsWith("ROLE_") ? role.replace("ROLE_", "") : role;
+};
+
 export const AuthUserContext = createContext(null);
 
 export const useAuth = () => {
@@ -36,7 +42,7 @@ export const AuthProvider = ({ children }) => {
   });
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => !!localStorage.getItem("user"));
-  const [rol, setRol] = useState(() => getRolFromUser(user));
+  const [rol, setRol] = useState(() => normalizeRole(getRolFromUser(user)));
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -48,12 +54,14 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const saveUserSession = (role, userData) => {
-    if (role) {
-      setRol(role);
+    const normalizedRole = normalizeRole(role);
+    if (normalizedRole) {
+      setRol(normalizedRole);
     }
-
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
+    const currentRole = normalizedRole;
+    const userWithRole = currentRole ? { ...userData, rol: currentRole } : userData;
+    localStorage.setItem("user", JSON.stringify(userWithRole));
+    setUser(userWithRole);
     setIsAuthenticated(true);
   };
 
@@ -95,7 +103,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (data) => {
     try {
       const response = await loginUser(data);
-      const currentRol = response?.rol || response?.role || null;
+      const currentRol = normalizeRole(response?.rol || response?.role || null);
 
       if (currentRol) {
         setRol(currentRol);
@@ -106,7 +114,7 @@ export const AuthProvider = ({ children }) => {
         await fetchUserProfile(currentRol);
       } else {
         const userData = await obtenerUserAuth();
-        const roleFromUser = getRolFromUser(userData);
+        const roleFromUser = normalizeRole(getRolFromUser(userData) || localStorage.getItem("rol"));
         if (userData) {
           saveUserSession(roleFromUser, userData);
         }
@@ -141,29 +149,43 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initAuth = async () => {
       const savedUser = localStorage.getItem("user");
+      let roleFromSavedUser = null;
 
       if (savedUser) {
-        const parsed = JSON.parse(savedUser);
-        setUser(parsed);
-        setRol(getRolFromUser(parsed));
-        setIsAuthenticated(true);
+        try {
+          const parsed = JSON.parse(savedUser);
+          roleFromSavedUser = normalizeRole(getRolFromUser(parsed));
+          setUser(parsed);
+          setRol(roleFromSavedUser);
+          setIsAuthenticated(true);
+        } catch {
+          clearUserSession();
+          setLoading(false);
+          return;
+        }
       }
 
-      try {
-        const userData = await obtenerUserAuth();
-        const currentRol = getRolFromUser(userData);
-        if (userData) {
-          saveUserSession(currentRol, userData);
+      const currentRol = roleFromSavedUser;
+
+      if (currentRol) {
+        await fetchUserProfile(currentRol);
+      } else {
+        try {
+          const userData = await obtenerUserAuth();
+          const roleFromUserData = normalizeRole(getRolFromUser(userData));
+          if (userData) {
+            saveUserSession(roleFromUserData, userData);
+          }
+        } catch {
+          clearUserSession();
         }
-      } catch {
-        clearUserSession();
       }
 
       setLoading(false);
     };
 
     initAuth();
-  }, [clearUserSession]);
+  }, [clearUserSession, fetchUserProfile]);
 
   return (
     <AuthUserContext.Provider

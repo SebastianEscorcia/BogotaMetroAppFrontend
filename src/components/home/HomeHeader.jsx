@@ -9,6 +9,7 @@ import {
   MdAccountBalanceWallet,
   MdInfo,
   MdWarning,
+  MdSyncAlt,
   MdError,
 } from "react-icons/md";
 import { Logo, Button } from "../common";
@@ -21,6 +22,15 @@ import "./homeHeader.css";
 const ICON_MAP = {
   RECARGA_EXITOSA: <MdAccountBalanceWallet />,
   RECARGA: <MdAccountBalanceWallet />,
+  SALDO_ENVIADO: <MdSyncAlt />,
+  SALDO_RECIBIDO: <MdSyncAlt />,
+  SOLUCIONAR: <MdCheckCircle />,
+  INTERRUPCION: <MdWarning />,
+  FALLA_TECNICA: <MdWarning />,
+  ACCIDENTE: <MdWarning />,
+  MANTENIMIENTO: <MdWarning />,
+  EVENTO_CLIMATICO: <MdWarning />,
+  OTRO: <MdWarning />,
   SUCCESS: <MdCheckCircle />,
   WARNING: <MdWarning />,
   ERROR: <MdError />,
@@ -46,6 +56,7 @@ export const HomeHeader = () => {
     marcarLeida,
     marcarTodasLeidas,
     limpiarHistorial,
+    
   } = useWebSocketNotifications();
 
   const [panelOpen, setPanelOpen] = useState(false);

@@ -2,6 +2,61 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { useWebSocket } from "../web-socket/useWebSocket";
 import { useNotificationContext } from "../../context/NotificationContext";
 
+const TOPIC_NOTIFICACIONES_USUARIO = "/user/queue/notificaciones";
+const TOPIC_INTERRUPCIONES = "/topic/interrupciones";
+
+const ACTION_ALIASES = {
+  CREAR: "CREAR",
+  CREATE: "CREAR",
+  ACTUALIZAR: "ACTUALIZAR",
+  UPDATE: "ACTUALIZAR",
+  UPDATED: "ACTUALIZAR",
+  ELIMINAR: "ELIMINAR",
+  DELETE: "ELIMINAR",
+  REMOVER: "ELIMINAR",
+  REMOVE: "ELIMINAR",
+  SOLUCIONAR: "SOLUCIONAR",
+  SOLVE: "SOLUCIONAR",
+  SOLVED: "SOLUCIONAR",
+};
+
+const normalizeAction = (value) => {
+  if (!value) return null;
+  const key = String(value).toUpperCase();
+  return ACTION_ALIASES[key] ?? key;
+};
+
+const normalizeInterrupcionEvent = (message) => {
+  if (typeof message === "number" || typeof message === "string") {
+    return { action: "ELIMINAR", payload: { id: Number(message) } };
+  }
+
+  if (!message || typeof message !== "object") {
+    return null;
+  }
+
+  const action = normalizeAction(message.accion ?? message.action ?? message.event ?? message.tipoAccion);
+
+  if (action) {
+    return {
+      action,
+      payload:
+        message.payload ??
+        message.data ??
+        message.interrupcion ??
+        message.interruption ??
+        message.interrupcionResponse ??
+        message,
+    };
+  }
+
+  if (message.id || message.idInterrupcion) {
+    return { action: "ACTUALIZAR", payload: message };
+  }
+
+  return null;
+};
+
 /**
  * Hook para recibir notificaciones del backend vía WebSocket (STOMP).
  * Se suscribe a /user/queue/notificaciones (destino de Spring convertAndSendToUser).
@@ -23,7 +78,8 @@ export const useNotificaciones = () => {
     }
   });
 
-  const subscribedRef = useRef(false);
+  const userNotificationsSubscribedRef = useRef(false);
+  const interruptionsSubscribedRef = useRef(false);
 
   /** Persiste historial en sessionStorage */
   const persistir = useCallback((lista) => {
@@ -39,7 +95,8 @@ export const useNotificaciones = () => {
     (payload) => {
       
       const esRecarga = payload.tipo === "RECARGA_EXITOSA";
-
+      
+      
       const nueva = {
         id: `notif-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
         titulo: esRecarga ? "Recarga exitosa" : (payload.titulo || "Notificación"),
@@ -81,9 +138,76 @@ export const useNotificaciones = () => {
     [pushNotification, persistir]
   );
 
+  const procesarInterrupcion = useCallback(
+    (message) => {
+      const normalized = normalizeInterrupcionEvent(message);
+      if (!normalized) return;
+
+      const action = normalized.action;
+      const payload = normalized.payload ?? {};
+
+      const estadoNormalizado = String(
+        payload?.estado ?? payload?.estadoInterrupcion ?? ""
+      ).toUpperCase();
+
+      const effectiveAction =
+        action === "ACTUALIZAR" && estadoNormalizado === "SOLUCIONADA"
+          ? "SOLUCIONAR"
+          : action;
+
+      const idInterrupcion = payload?.id ? Number(payload.id) : payload?.idInterrupcion ? Number(payload.idInterrupcion) : null;
+      const tipoInterrupcion =
+        payload?.tipoInterrupcion || payload?.tipo || "INTERRUPCION";
+      const descripcion = payload?.descripcion || "Se actualizó una interrupción del sistema.";
+      const nombreLinea = payload?.nombreLinea;
+      const nombreEstacion = payload?.nombreEstacion;
+
+      const ubicacion = [nombreLinea, nombreEstacion].filter(Boolean).join(" · ");
+
+      const titulo =
+        effectiveAction === "CREAR"
+          ? "Nueva interrupción reportada"
+          : effectiveAction === "SOLUCIONAR"
+          ? "Interrupción solucionada"
+          : effectiveAction === "ELIMINAR"
+          ? "Interrupción eliminada"
+          : "Interrupción actualizada";
+
+      const mensajeBase =
+        effectiveAction === "ELIMINAR"
+          ? `Se eliminó la interrupción${idInterrupcion ? ` #${idInterrupcion}` : ""}.`
+          : effectiveAction === "SOLUCIONAR"
+          ? `Se marcó como solucionada la interrupción${idInterrupcion ? ` #${idInterrupcion}` : ""}.`
+          : `${tipoInterrupcion}: ${descripcion}`;
+
+      const mensaje = ubicacion ? `${mensajeBase} (${ubicacion})` : mensajeBase;
+
+      const nueva = {
+        id: `interrupcion-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        titulo,
+        mensaje,
+        tipo: effectiveAction === "SOLUCIONAR" ? "SOLUCIONAR" : "INTERRUPCION",
+        fecha: payload?.inicio || payload?.fecha || new Date().toISOString(),
+        leida: false,
+        datos: {
+          idInterrupcion,
+          accion: effectiveAction,
+          tipoInterrupcion,
+        },
+      };
+
+      setNotificaciones((prev) => {
+        const updated = [nueva, ...prev].slice(0, 50);
+        persistir(updated);
+        return updated;
+      });
+    },
+    [persistir]
+  );
+
   /** Conectar y suscribirse */
   const conectar = useCallback(async () => {
-    if (subscribedRef.current) return;
+    if (userNotificationsSubscribedRef.current && interruptionsSubscribedRef.current) return;
 
     try {
       await connect();
@@ -94,14 +218,21 @@ export const useNotificaciones = () => {
 
   /** Suscribirse cuando la conexión esté lista */
   useEffect(() => {
-    if (isConnected && !subscribedRef.current) {
-      const subId = subscribe("/user/queue/notificaciones", (payload) => {
+    if (isConnected && !userNotificationsSubscribedRef.current) {
+      subscribe(TOPIC_NOTIFICACIONES_USUARIO, (payload) => {
         procesarNotificacion(payload);
       });
-      subscribedRef.current = true;
+      userNotificationsSubscribedRef.current = true;
     }
 
-  }, [isConnected, subscribe, procesarNotificacion]);
+    if (isConnected && !interruptionsSubscribedRef.current) {
+      subscribe(TOPIC_INTERRUPCIONES, (payload) => {
+        procesarInterrupcion(payload);
+      });
+      interruptionsSubscribedRef.current = true;
+    }
+
+  }, [isConnected, subscribe, procesarNotificacion, procesarInterrupcion]);
 
   /** Marcar una notificación como leída */
   const marcarLeida = useCallback(

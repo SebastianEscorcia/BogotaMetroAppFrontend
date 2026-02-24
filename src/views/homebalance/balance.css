@@ -1,0 +1,167 @@
+/* ============================================================
+   balance.css — HomeBalance corregido
+   Basado en tu estructura REAL del componente
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+:root {
+  --red:        #fd0000;
+  --red-dark:   #c20000;
+  --red-light:  #ff3333;
+  --red-glow:   rgba(253, 0, 0, 0.15);
+  --bg:         #f8f9fa;
+  --surface:    #ffffff;
+  --border:     #e9ecef;
+  --text:       #212529;
+  --text-muted: #6c757d;
+
+  --radius-md:  12px;
+  --shadow-sm:  0 2px 8px rgba(0,0,0,0.06);
+  --shadow-red: 0 4px 16px rgba(253, 0, 0, 0.25);
+}
+
+/* ── Contenedor principal (NO ocupa toda la pantalla) ── */
+.home-one {
+  font-family: 'DM Sans', sans-serif;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+  color: var(--text);
+}
+
+/* ── Header rojo ───────────────────────────────────── */
+.homebalance-header {
+  background: var(--red);
+  padding-top: 16px;
+  padding-bottom: 24px;
+  padding-left: 16px;
+  padding-right: 16px;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  box-shadow: 0 4px 20px rgba(208, 16, 48, 0.25);
+}
+
+/* Botón flecha */
+.button-flecha {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.25);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 22px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.button-flecha:hover {
+  background: rgba(255,255,255,0.35);
+}
+
+.icon-fle {
+  color: white;
+}
+
+/* ── Card saldo ───────────────────────────────────── */
+.home-card {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+.home-card h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: var(--text);
+}
+
+.saldo-valor {
+  font-family: 'Syne', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  margin: 0;
+  color: var(--red);
+}
+
+/* ── Acciones ───────────────────────────────────── */
+.home-actions {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Botones */
+.action-button {
+  width: 100%;
+  min-height: 54px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.action-button:hover {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px var(--red-glow);
+  transform: translateY(-1px);
+}
+
+/* Primera acción destacada */
+.action-button:first-child {
+  background: var(--red);
+  background-image: linear-gradient(
+    135deg,
+    var(--red-light) 0%,
+    var(--red) 60%,
+    var(--red-dark) 100%
+  );
+  border: none;
+  color: white;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: var(--shadow-red);
+}
+
+.action-button:first-child:hover {
+  box-shadow: 0 8px 24px rgba(208, 16, 48, 0.35);
+}
+
+/* ── Responsive ─────────────────────────────────── */
+@media (max-width: 360px) {
+  .saldo-valor {
+    font-size: 28px;
+  }
+
+  .action-button {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 600px) {
+  .home-one {
+    margin-top: 20px;
+  }
+
+  .saldo-valor {
+    font-size: 42px;
+  }
+}

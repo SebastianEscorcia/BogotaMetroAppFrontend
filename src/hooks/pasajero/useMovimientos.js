@@ -19,7 +19,7 @@ export const useMovimientos = (idUsuario) => {
     fechaFin: "",
     montoMin: "",
     montoMax: "",
-    tipo: "TODOS", // TODOS | RECARGA | PASAJE
+    tipo: "TODOS", // TODOS | RECARGA | PASAJE | TRANSFERENCIA
   });
 
   /** Obtener todas las transacciones del pasajero */
@@ -96,6 +96,7 @@ export const useMovimientos = (idUsuario) => {
   const stats = useMemo(() => {
     const recargas = transacciones.filter((tx) => tx.tipo === "RECARGA");
     const pasajes = transacciones.filter((tx) => tx.tipo === "PASAJE");
+    const transferencias = transacciones.filter((tx) => tx.tipo === "TRANSFERENCIA");
 
     const totalRecargas = recargas.reduce(
       (sum, tx) => sum + Number(tx.valorPagado || 0),
@@ -105,13 +106,16 @@ export const useMovimientos = (idUsuario) => {
       (sum, tx) => sum + Number(tx.valorPagado || 0),
       0
     );
+    const totalTransferencias = transferencias.reduce((sum, tx) => sum + Number(tx.valorPagado || 0), 0);
 
     return {
       totalTransacciones: transacciones.length,
       cantRecargas: recargas.length,
       cantPasajes: pasajes.length,
+      cantTransFerencias: transferencias.length,
       totalRecargas,
       totalPasajes,
+      totalTransferencias
     };
   }, [transacciones]);
 

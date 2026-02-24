@@ -5,6 +5,8 @@ export const sanitizeUser = (userData) => {
         correo:userData.correo,
         saldo:userData.saldo,
         numTarjeta:userData.numTarjetaVirtual,
+        direccion: userData.direccion ?? "",
+        fechaNacimiento: userData.fechaNacimiento ?? "",
         id: userData.idUsuario,
     }
 }

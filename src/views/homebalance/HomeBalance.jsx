@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { GoArrowLeft } from "react-icons/go";
 import {useAuth} from '../../context/AuthUserContext'
 import { FondoPag } from "../../components/common";
-import "./HomeBalance.css";
+import "./balance.css";
 
 export function HomeBalance() {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ export function HomeBalance() {
   return (
     <FondoPag>
       <div className="home-one">
-        <div className="home-header">
+        <div className="homebalance-header ">
           <button className="button-flecha" onClick={() => navigate("/home")}>
             <GoArrowLeft className="icon-fle" />
           </button>

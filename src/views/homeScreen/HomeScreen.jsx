@@ -12,13 +12,18 @@ import {
   UserInfo,
 } from "../../components/home";
 
-import { useNavigateTo } from "../../hooks";
+import { useNavigateTo, useInterrupcionesFeed } from "../../hooks";
 
 import "./homescreen.css";
 
 export function HomeScreen() {
   const {user} = useAuth();
   const { goTo } = useNavigateTo();
+  const {
+    interrupcionesActivas,
+    loading: interrupcionesLoading,
+    isWebSocketConnected,
+  } = useInterrupcionesFeed();
 
    return (
     <FondoPag>
@@ -29,7 +34,11 @@ export function HomeScreen() {
           <QuickActions />
           <ServicesGrid goTo={goTo} />
           <TravelPlanner />
-          <LineStatus />
+          <LineStatus
+            interrupcionesActivas={interrupcionesActivas}
+            loading={interrupcionesLoading}
+            isWebSocketConnected={isWebSocketConnected}
+          />
           <HelpSection />
         </div>
         <Footer />

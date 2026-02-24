@@ -10,3 +10,10 @@ export const obtenerDatosPasajero =  () => {
   return httpClient("/pasajero/me");
 };
 
+export const actualizarPasajero = (data) =>{
+  return httpClient("/pasajero",{
+    method:"PUT",
+    body:JSON.stringify(data),
+  })
+}
+

@@ -1,14 +1,10 @@
 import {GoChevronLeft} from "react-icons/go";
-import { Navigate, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import iconoHeart from "../../assets/img/imgs/iconoHeart.jpg";
 import iconoMap from "../../assets/img/imgs/iconoMap.png";
 import {FondoPag} from "../../components/common";
 
 import "./travel.css"
-
-
-
-
 
 export function Travel() {
   const Navigate = useNavigate();

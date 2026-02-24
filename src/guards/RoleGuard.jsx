@@ -9,8 +9,10 @@ export const RoleGuard = ({ allowedRoles, children }) => {
     return <Navigate to="/login" replace />;
   }
 
-  if (!rol || !allowedRoles.includes(rol)) {
-    console.log("RoleGuard - RECHAZADO, redirigiendo a /unauthorized");
+  const normalizedRol = String(rol || "").toUpperCase().replace("ROLE_", "");
+
+  if (!normalizedRol || !allowedRoles.includes(normalizedRol)) {
+    console.log("RoleGuard - RECHAZADO, redirigiendo a /unauthorized");1
     return <Navigate to="/unauthorized" replace />;
   }
   return children;

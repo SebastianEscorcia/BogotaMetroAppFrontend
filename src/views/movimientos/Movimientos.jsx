@@ -6,16 +6,19 @@ import {
   MdFilterList,
   MdSearch,
   MdClear,
-  MdArrowUpward,
   MdArrowDownward,
   MdAccountBalanceWallet,
   MdDirectionsTransit,
   MdCalendarToday,
+  MdSyncAlt,
 } from "react-icons/md";
 import { FondoPag } from "../../components/common";
 import { useAuth } from "../../context/AuthUserContext";
 import { useMovimientos } from "../../hooks/pasajero/useMovimientos";
-import { formatCurrency, formatFecha, formatFechaCorta } from "../../adapters/transaccionAdapter";
+import {
+  formatCurrency,
+  formatFechaCorta,
+} from "../../adapters/transaccionAdapter";
 
 import "./movimientos.css";
 
@@ -42,6 +45,33 @@ export function Movimientos() {
   const handleBuscar = (e) => {
     e.preventDefault();
     buscarConFiltros();
+  };
+
+  // Helpers para renderizar cada tarjeta según el tipo
+  const getTipoClass = (tipo) => {
+    if (tipo === "RECARGA") return "tipo-recarga";
+    if (tipo === "TRANSFERENCIA") return "tipo-transferencia";
+    return "tipo-pasaje";
+  };
+
+  const getTipoIcono = (tipo) => {
+    if (tipo === "RECARGA") return <MdAccountBalanceWallet />;
+    if (tipo === "TRANSFERENCIA") return <MdSyncAlt />;
+    return <MdDirectionsTransit />;
+  };
+
+  const getTipoLabel = (tipo) => {
+    if (tipo === "RECARGA") return "Recarga de saldo";
+    if (tipo === "TRANSFERENCIA") return "Transferencia enviada";
+    return "Pago pasaje";
+  };
+
+  const getValorClass = (tipo) => {
+    return tipo === "RECARGA" ? "valor-positivo" : "valor-negativo";
+  };
+
+  const getValorPrefix = (tipo) => {
+    return tipo === "RECARGA" ? "+" : "-";
   };
 
   return (
@@ -80,6 +110,14 @@ export function Movimientos() {
             <div>
               <span className="stat-number">{stats.cantPasajes}</span>
               <span className="stat-label">Pasajes</span>
+            </div>
+          </div>
+          {/* ── NUEVO: Stat de Transferencias ── */}
+          <div className="mov-stat-card transferencias">
+            <MdSyncAlt className="stat-icon" />
+            <div>
+              <span className="stat-number">{stats.cantTransFerencias}</span>
+              <span className="stat-label">Transferencias</span>
             </div>
           </div>
         </div>
@@ -132,9 +170,9 @@ export function Movimientos() {
             </div>
           </div>
 
-          {/* Tipo de transacción */}
+          {/* ── Tipo de transacción — ahora incluye TRANSFERENCIA ── */}
           <div className="filtro-tabs">
-            {["TODOS", "RECARGA", "PASAJE"].map((tipo) => (
+            {["TODOS", "RECARGA", "PASAJE", "TRANSFERENCIA"].map((tipo) => (
               <button
                 key={tipo}
                 type="button"
@@ -144,6 +182,7 @@ export function Movimientos() {
                 {tipo === "TODOS" && "Todos"}
                 {tipo === "RECARGA" && "Recargas"}
                 {tipo === "PASAJE" && "Pasajes"}
+                {tipo === "TRANSFERENCIA" && "Transferencias"}
               </button>
             ))}
           </div>
@@ -188,29 +227,19 @@ export function Movimientos() {
             transacciones.map((tx) => (
               <div
                 key={tx.id}
-                className={`mov-card ${
-                  tx.tipo === "RECARGA" ? "tipo-recarga" : "tipo-pasaje"
-                }`}
+                className={`mov-card ${getTipoClass(tx.tipo)}`}
               >
                 <div className="mov-card-icon">
-                  {tx.tipo === "RECARGA" ? (
-                    <MdAccountBalanceWallet />
-                  ) : (
-                    <MdDirectionsTransit />
-                  )}
+                  {getTipoIcono(tx.tipo)}
                 </div>
 
                 <div className="mov-card-info">
                   <div className="mov-card-top">
                     <span className="mov-card-tipo">
-                      {tx.tipo === "RECARGA" ? "Recarga de saldo" : "Pago pasaje"}
+                      {getTipoLabel(tx.tipo)}
                     </span>
-                    <span
-                      className={`mov-card-valor ${
-                        tx.tipo === "RECARGA" ? "valor-positivo" : "valor-negativo"
-                      }`}
-                    >
-                      {tx.tipo === "RECARGA" ? "+" : "-"}
+                    <span className={`mov-card-valor ${getValorClass(tx.tipo)}`}>
+                      {getValorPrefix(tx.tipo)}
                       {formatCurrency(tx.valorPagado, tx.moneda)}
                     </span>
                   </div>
@@ -225,6 +254,12 @@ export function Movimientos() {
                     {tx.idEstacion && (
                       <span className="mov-card-estacion">
                         Estación #{tx.idEstacion}
+                      </span>
+                    )}
+
+                    {tx.tipo === "TRANSFERENCIA" && (
+                      <span className="mov-card-transferencia-badge">
+                        <MdSyncAlt /> {tx.medioDePagoLabel}
                       </span>
                     )}
                   </div>

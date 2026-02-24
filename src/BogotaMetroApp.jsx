@@ -5,6 +5,7 @@ import {
   RecoverPassword,
   ResetPassword,
   HomeScreen,
+  UpdatePassengerData,
   HomeBalance,
   ConfirmInfo,
   LineOne,
@@ -16,6 +17,7 @@ import {
   Unauthorized,
   DashBoardAdmin,
   DashboardSoporte,
+  DashboardOperador,
   Movimientos,
 } from "./views";
 import {
@@ -88,6 +90,16 @@ export const BogotaMetroApp = () => {
                 <ProtectedRoute>
                   <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
                     <HomeBalance />
+                  </RoleGuard>
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route
+              path="/actualizar-datos"
+              element={
+                <ProtectedRoute>
+                  <RoleGuard allowedRoles={[ROLES.PASAJERO]}>
+                    <UpdatePassengerData />
                   </RoleGuard>
                 </ProtectedRoute>
               }
@@ -333,6 +345,17 @@ export const BogotaMetroApp = () => {
                 <ProtectedRoute>
                   <RoleGuard allowedRoles={[ROLES.SOPORTE]}>
                     <DashboardSoporte />
+                  </RoleGuard>
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/operador/dashboard"
+              element={
+                <ProtectedRoute>
+                  <RoleGuard allowedRoles={[ROLES.OPERADOR]}>
+                    <DashboardOperador />
                   </RoleGuard>
                 </ProtectedRoute>
               }

@@ -178,6 +178,10 @@
   font-size: 1.1rem;
   flex-shrink: 0;
 }
+.notif-item.tipo-saldo_enviado .notif-item-icon {
+  color: #f59e0b; 
+  background-color: #fef3c7;
+}
 
 .tipo-recarga_exitosa .notif-item-icon,
 .tipo-recarga .notif-item-icon,

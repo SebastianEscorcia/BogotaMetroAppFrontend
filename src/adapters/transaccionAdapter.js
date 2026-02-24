@@ -12,6 +12,8 @@
 const MEDIO_PAGO_LABELS = {
   TARJETA_CREDITO: "Tarjeta de Crédito",
   TARJETA_DEBITO: "Tarjeta de Débito",
+  TRANSFERENCIA_ENVIADA: "Transferencia enviada",
+  TRANSFERENCIA_RECIBIDA: "Transferencia recibida",
   PSE: "PSE",
   NEQUI: "Nequi",
   DAVIPLATA: "Daviplata",
@@ -30,8 +32,18 @@ const MONEDA_SYMBOLS = {
  * - Si tiene medioDePago o nombrePasarela → RECARGA
  * - Si tiene idEstacion → PASAJE
  */
-const determinarTipoTransaccion = (tx) => {
+const determinarTipoTransaccion = (tx, medioPagoRaw) => {
   if (tx.idEstacion != null) return "PASAJE";
+
+  // Detección primaria: por el enum del backend (más confiable)
+  if (
+    medioPagoRaw === "TRANSFERENCIA_ENVIADA" ||
+    medioPagoRaw === "TRANSFERENCIA_RECIBIDA"
+  ) return "TRANSFERENCIA";
+
+  // Detección secundaria: por descripción (fallback)
+  if (tx.descripcion?.startsWith("Transferencia")) return "TRANSFERENCIA";
+
   return "RECARGA";
 };
 
@@ -39,21 +51,24 @@ const determinarTipoTransaccion = (tx) => {
  * Adapta una transacción del backend eliminando datos sensibles
  * y enriqueciendo con tipo y formatos legibles.
  */
-export const adaptTransaccionFromBackend = (tx) => ({
-  id: tx.id,
-  valorPagado: tx.valorPagado,
-  fechaPago: tx.fechaPago,
-  descripcion: tx.descripcion || "Sin descripción",
-  moneda: tx.moneda || "COP",
-  medioDePago: tx.medioDePago,
-  medioDePagoLabel: MEDIO_PAGO_LABELS[tx.medioDePago] || tx.medioDePago || "—",
-  nombreUsuario: tx.nombreUsuario || "Usuario desconocido",
-  nombrePasarela: tx.nombrePasarela || null,
-  idEstacion: tx.idEstacion || null,
-  tipo: determinarTipoTransaccion(tx),
-  // Campo auxiliar para guardar el idUsuario (necesario para búsquedas internas, NO se muestra)
-  _idUsuario: tx.idUsuario,
-});
+export const adaptTransaccionFromBackend = (tx) => {
+  const medioPagoRaw = tx.medioDePago ?? tx.medioPago ?? null;
+
+  return {
+    id: tx.id,
+    valorPagado: tx.valorPagado ?? tx.valor,     
+    fechaPago: tx.fechaPago ?? tx.fecha,            
+    descripcion: tx.descripcion || "Sin descripción",
+    moneda: tx.moneda || "COP",
+    medioDePago: medioPagoRaw,
+    medioDePagoLabel: MEDIO_PAGO_LABELS[medioPagoRaw] || medioPagoRaw || "—",
+    nombreUsuario: tx.nombreUsuario || "Usuario desconocido",
+    nombrePasarela: tx.nombrePasarela || null,
+    idEstacion: tx.idEstacion || null,
+    tipo: determinarTipoTransaccion(tx, medioPagoRaw),
+    _idUsuario: tx.idUsuario,
+  };
+};
 
 /**
  * Formatea un valor monetario con el símbolo de moneda.
