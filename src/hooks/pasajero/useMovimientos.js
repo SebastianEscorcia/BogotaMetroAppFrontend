@@ -19,7 +19,7 @@ export const useMovimientos = (idUsuario) => {
     fechaFin: "",
     montoMin: "",
     montoMax: "",
-    tipo: "TODOS", // TODOS | RECARGA | PASAJE | TRANSFERENCIA
+    tipo: "TODOS", 
   });
 
   /** Obtener todas las transacciones del pasajero */
@@ -34,6 +34,14 @@ export const useMovimientos = (idUsuario) => {
         ? data.map(adaptTransaccionFromBackend)
         : [];
       setTransacciones(adaptadas);
+      console.table(
+        adaptadas.map((tx) => ({
+          id: tx.id,
+          tipo: tx.tipo,
+          medioDePago: tx.medioDePago,
+          medioDePagoLabel: tx.medioDePagoLabel,
+        })),
+      );
     } catch (err) {
       setError(err?.message || "Error al cargar los movimientos");
     } finally {
@@ -62,7 +70,7 @@ export const useMovimientos = (idUsuario) => {
       const adaptadas = Array.isArray(data)
         ? data.map(adaptTransaccionFromBackend)
         : [];
-      setTransacciones(adaptadas);
+      setTransacciones((prev) => [adaptadas, ...prev]);
     } catch (err) {
       setError(err?.message || "Error al buscar movimientos");
     } finally {
@@ -96,17 +104,22 @@ export const useMovimientos = (idUsuario) => {
   const stats = useMemo(() => {
     const recargas = transacciones.filter((tx) => tx.tipo === "RECARGA");
     const pasajes = transacciones.filter((tx) => tx.tipo === "PASAJE");
-    const transferencias = transacciones.filter((tx) => tx.tipo === "TRANSFERENCIA");
+    const transferencias = transacciones.filter(
+      (tx) => tx.tipo === "TRANSFERENCIA",
+    );
 
     const totalRecargas = recargas.reduce(
       (sum, tx) => sum + Number(tx.valorPagado || 0),
-      0
+      0,
     );
     const totalPasajes = pasajes.reduce(
       (sum, tx) => sum + Number(tx.valorPagado || 0),
-      0
+      0,
     );
-    const totalTransferencias = transferencias.reduce((sum, tx) => sum + Number(tx.valorPagado || 0), 0);
+    const totalTransferencias = transferencias.reduce(
+      (sum, tx) => sum + Number(tx.valorPagado || 0),
+      0,
+    );
 
     return {
       totalTransacciones: transacciones.length,
@@ -115,7 +128,7 @@ export const useMovimientos = (idUsuario) => {
       cantTransFerencias: transferencias.length,
       totalRecargas,
       totalPasajes,
-      totalTransferencias
+      totalTransferencias,
     };
   }, [transacciones]);
 

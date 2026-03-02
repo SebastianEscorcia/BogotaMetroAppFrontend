@@ -21,6 +21,13 @@ import {
 } from "../../adapters/transaccionAdapter";
 
 import "./movimientos.css";
+const getTipoLabel = (tx) => {
+  return tx.tipoLabel || (
+    tx.tipo === "RECARGA"       ? "Recarga de saldo" :
+    tx.tipo === "TRANSFERENCIA" ? "Transferencia"    :
+    "Pago pasaje"
+  );
+};
 
 export function Movimientos() {
   const navigate = useNavigate();
@@ -58,12 +65,6 @@ export function Movimientos() {
     if (tipo === "RECARGA") return <MdAccountBalanceWallet />;
     if (tipo === "TRANSFERENCIA") return <MdSyncAlt />;
     return <MdDirectionsTransit />;
-  };
-
-  const getTipoLabel = (tipo) => {
-    if (tipo === "RECARGA") return "Recarga de saldo";
-    if (tipo === "TRANSFERENCIA") return "Transferencia enviada";
-    return "Pago pasaje";
   };
 
   const getValorClass = (tipo) => {
@@ -236,7 +237,7 @@ export function Movimientos() {
                 <div className="mov-card-info">
                   <div className="mov-card-top">
                     <span className="mov-card-tipo">
-                      {getTipoLabel(tx.tipo)}
+                      {getTipoLabel(tx)}
                     </span>
                     <span className={`mov-card-valor ${getValorClass(tx.tipo)}`}>
                       {getValorPrefix(tx.tipo)}
@@ -257,8 +258,8 @@ export function Movimientos() {
                       </span>
                     )}
 
-                    {tx.tipo === "TRANSFERENCIA" && (
-                      <span className="mov-card-transferencia-badge">
+                    { tx.medioDePagoLabel && tx.tipo === "TRANSFERENCIA" && (
+                      <span className="mov-card-medio">
                         <MdSyncAlt /> {tx.medioDePagoLabel}
                       </span>
                     )}

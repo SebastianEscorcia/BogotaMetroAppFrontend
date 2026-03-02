@@ -25,6 +25,21 @@ const normalizeAction = (value) => {
   const key = String(value).toUpperCase();
   return ACTION_ALIASES[key] ?? key;
 };
+const TIPO_NOTIFICACION_TITULOS = {
+  RECARGA_EXITOSA:           "Recarga exitosa",
+  RECARGA_FALLIDA:           "Recarga fallida",
+  COBRO_PASAJE_EXITOSO:      "Pago de pasaje exitoso",
+  COBRO_PASAJE_FALLIDO:      "Pago de pasaje fallido",
+  DEVOLUCION_PASAJE_EXITOSA: "Devolución de pasaje",
+  DEVOLUCION_PASAJE_FALLIDA: "Devolución fallida",
+  SALDO_ENVIADO:             "Saldo enviado",
+  SALDO_RECIBIDO:            "Saldo recibido",
+};
+
+// Función pura a nivel de módulo
+const determinarTipoTransaccion = (tipo) => {
+   return TIPO_NOTIFICACION_TITULOS[tipo] || "Notificación";
+};
 
 const normalizeInterrupcionEvent = (message) => {
   if (typeof message === "number" || typeof message === "string") {
@@ -94,12 +109,12 @@ export const useNotificaciones = () => {
   const procesarNotificacion = useCallback(
     (payload) => {
       
-      const esRecarga = payload.tipo === "RECARGA_EXITOSA";
+      const tipoTransaccion = determinarTipoTransaccion(payload.tipo);
       
       
       const nueva = {
         id: `notif-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-        titulo: esRecarga ? "Recarga exitosa" : (payload.titulo || "Notificación"),
+        titulo: tipoTransaccion,
         mensaje: payload.mensaje || "",
         tipo: payload.tipo || "info",
         fecha: payload.fechaTransaccion || new Date().toISOString(),
@@ -108,7 +123,7 @@ export const useNotificaciones = () => {
           idRecarga: payload.idRecarga || null,
           monto: payload.monto || null,
           nuevoSaldo: payload.nuevoSaldo || null,
-          medioPago: payload.medioPago || null,
+          medioDePago: payload.medioPago || null,
         },
       };
 
@@ -120,7 +135,7 @@ export const useNotificaciones = () => {
 
       // Mapeo de tipo backend → tipo toast
       const tipoToast =
-        nueva.tipo === "RECARGA_EXITOSA" || nueva.tipo === "SUCCESS"
+        nueva.tipo === "RECARGA_EXITOSA" || nueva.tipo === "SUCCESS" || nueva.tipo === "SALDO_RECIBIDO"
           ? "success"
           : nueva.tipo === "ERROR"
           ? "error"

@@ -19,12 +19,22 @@ const MEDIO_PAGO_LABELS = {
   DAVIPLATA: "Daviplata",
   EFECTIVO: "Efectivo",
   TRANSFERENCIA: "Transferencia",
-  SALDO_VIRTUAL: "Saldo virtual"
+  SALDO_VIRTUAL: "Saldo virtual",
 };
 
 const MONEDA_SYMBOLS = {
   COP: "$",
   USD: "US$",
+};
+const TIPO_TRANSACCION_MAP = {
+  RECARGA_EXITOSA: { tipo: "RECARGA", label: "Recarga exitosa" },
+  RECARGA_FALLIDA: { tipo: "RECARGA", label: "Recarga fallida" },
+  COBRO_PASAJE_EXITOSO: { tipo: "PASAJE", label: "Pago pasaje" },
+  COBRO_PASAJE_FALLIDO: { tipo: "PASAJE", label: "Pago pasaje fallido" },
+  DEVOLUCION_PASAJE_EXITOSA: { tipo: "PASAJE", label: "Devolución pasaje" },
+  DEVOLUCION_PASAJE_FALLIDA: { tipo: "PASAJE", label: "Devolución fallida" },
+  SALDO_ENVIADO: { tipo: "TRANSFERENCIA", label: "Saldo enviado" },
+  SALDO_RECIBIDO: { tipo: "TRANSFERENCIA", label: "Saldo recibido" },
 };
 
 /**
@@ -33,15 +43,16 @@ const MONEDA_SYMBOLS = {
  * - Si tiene idEstacion → PASAJE
  */
 const determinarTipoTransaccion = (tx, medioPagoRaw) => {
-  if (tx.idEstacion != null) return "PASAJE";
+  if (tx.tipoTransaccion && TIPO_TRANSACCION_MAP[tx.tipoTransaccion]) {
+    return TIPO_TRANSACCION_MAP[tx.tipoTransaccion].tipo;
+  }
 
-  // Detección primaria: por el enum del backend (más confiable)
+  if (tx.idEstacion != null) return "PASAJE";
   if (
     medioPagoRaw === "TRANSFERENCIA_ENVIADA" ||
     medioPagoRaw === "TRANSFERENCIA_RECIBIDA"
-  ) return "TRANSFERENCIA";
-
-  // Detección secundaria: por descripción (fallback)
+  )
+    return "TRANSFERENCIA";
   if (tx.descripcion?.startsWith("Transferencia")) return "TRANSFERENCIA";
 
   return "RECARGA";
@@ -52,20 +63,24 @@ const determinarTipoTransaccion = (tx, medioPagoRaw) => {
  * y enriqueciendo con tipo y formatos legibles.
  */
 export const adaptTransaccionFromBackend = (tx) => {
-  const medioPagoRaw = tx.medioDePago ?? tx.medioPago ?? null;
+  const medioPagoRaw = tx.medioDePago;
+  
+  const tipoInfo = TIPO_TRANSACCION_MAP[tx.tipoTransaccion];
 
   return {
     id: tx.id,
-    valorPagado: tx.valorPagado ?? tx.valor,     
-    fechaPago: tx.fechaPago ?? tx.fecha,            
+    valorPagado: tx.valorPagado ?? tx.valor,
+    fechaPago: tx.fechaPago ?? tx.fecha,
     descripcion: tx.descripcion || "Sin descripción",
     moneda: tx.moneda || "COP",
     medioDePago: medioPagoRaw,
-    medioDePagoLabel: MEDIO_PAGO_LABELS[medioPagoRaw] || medioPagoRaw || "—",
+    medioDePagoLabel: MEDIO_PAGO_LABELS[medioPagoRaw] || medioPagoRaw,
     nombreUsuario: tx.nombreUsuario || "Usuario desconocido",
     nombrePasarela: tx.nombrePasarela || null,
     idEstacion: tx.idEstacion || null,
     tipo: determinarTipoTransaccion(tx, medioPagoRaw),
+    tipoLabel: tipoInfo?.label || null,
+    tipoTransaccionRaw: tx.tipoTransaccion || null,
     _idUsuario: tx.idUsuario,
   };
 };
