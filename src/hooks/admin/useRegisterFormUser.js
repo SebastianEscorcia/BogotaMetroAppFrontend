@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { validateEmail, validatePassword } from "../../helpers";
+import { validateEmail, validatePassword } from "../../global/utils/helpers";
 import { adaptUserToBackend } from "../../adapters/userAdapter";
 const initialFormData = {
   nombre: "",

@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import { useNotificationContext } from "../../context/NotificationContext";
+import { useNotificationContext } from "../../global/context/NotificationContext";
 import "../../assets/styles/notification.css";
 
 export const SystemNotificationCenter = () => {

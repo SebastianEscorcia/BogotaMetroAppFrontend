@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { validateEmail, validatePassword } from "../helpers";
+import { validateEmail, validatePassword } from "../global/utils/helpers";
 
 export const useRegisterForm = (handleRegister) => {
   const [nombres, setNombres] = useState({

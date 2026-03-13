@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoArrowLeft } from "react-icons/go";
 import { FondoPag } from "../../components/common";
-import { useAuth } from "../../context/AuthUserContext";
+import { useAuth } from "../../global/context";
 import { usePasajero } from "../../hooks/pasajero/usePasajero";
 import "./updatePassengerData.css";
 

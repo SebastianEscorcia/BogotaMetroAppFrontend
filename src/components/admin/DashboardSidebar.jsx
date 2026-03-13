@@ -1,4 +1,4 @@
-import { useAuth } from "../../context/AuthUserContext";
+import { useAuth } from "../../global/context/AuthUserContext";
 import {
   MdDashboard,
   MdSecurity,

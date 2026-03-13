@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useWebSocket } from "../web-socket/useWebSocket";
-import { useNotificationContext } from "../../context/NotificationContext";
+import { useNotificationContext } from "../../global/context/NotificationContext";
 
 const TOPIC_NOTIFICACIONES_USUARIO = "/user/queue/notificaciones";
 const TOPIC_INTERRUPCIONES = "/topic/interrupciones";

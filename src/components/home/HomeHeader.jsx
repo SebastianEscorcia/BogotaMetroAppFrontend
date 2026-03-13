@@ -13,8 +13,7 @@ import {
   MdError,
 } from "react-icons/md";
 import { Logo, Button } from "../common";
-import { useNotificationContext } from "../../context/NotificationContext";
-import { useWebSocketNotifications } from "../../context/WebSocketNotificationsContext";
+import {useNotificationContext,useWebSocketNotifications} from '../../global/context';
 import iconoMetro from "../../assets/img/imgs/iconoMetro1.png";
 
 import "./homeHeader.css";

@@ -2,16 +2,14 @@ import {FondoPag} from "../../components/common";
 import iconoMetro from "../../assets/img/imgs/iconoMetro1.png";
 import qrOne from "../../assets/img/imgs/qrOne.png";
 import { GoChevronLeft } from "react-icons/go";
-import { Navigate, useNavigate } from "react-router-dom";
+import {useNavigateTo} from '../../hooks'
 
 
 import "./qrtravel.css"
 
 
 export function QrTravel() {
-  const Navigate = useNavigate();
-
-
+  const {goTo} = useNavigateTo()
   return (
 
     <FondoPag>
@@ -31,9 +29,9 @@ export function QrTravel() {
           </div>
 
         <div className="buttonsQrtravel">
-          <button onClick={() => Navigate ('/linea-uno')}>Linea 1</button>
-          <button onClick={() => Navigate ('/linea-dos')}>Linea 2</button>
-          <button onClick={() => Navigate ('/linea-tres')}>Linea 3</button>
+          <button onClick={() => goTo('/linea-uno')}>Linea 1</button>
+          <button onClick={() => goTo('/linea-dos')}>Linea 2</button>
+          <button onClick={() => goTo('/linea-tres')}>Linea 3</button>
           <button>Linea 4</button>
           <button>Linea 5</button>
         </div>

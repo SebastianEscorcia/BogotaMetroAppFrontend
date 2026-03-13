@@ -1,7 +1,7 @@
 import { Logo } from "../../components/common";
 import logo from "../../assets/img/imgs/logo2.svg";
 import { LoginForms } from "../../components/login/LoginForms";
-import { useAuth } from "../../context/AuthUserContext";
+import {useAuth} from '../../global/context';
 import { useNavigateTo } from "../../hooks";
 import "./login.css";
 

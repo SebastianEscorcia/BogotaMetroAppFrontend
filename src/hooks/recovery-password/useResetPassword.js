@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { passwordChange } from "../../services";
-import { useNavigateTo } from "../useNavigateTo";
-import { errorConstants } from "../../constants";
-import { getErrorMessage } from "../../helpers";
+import { useNavigateTo } from "../../modules/shared/hooks/useNavigateTo";
+import { errorConstants } from "../../global/utils/constants";
+import { getErrorMessage } from "../../global/utils/helpers";
 export const useResetPassword = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");

@@ -1,4 +1,4 @@
-import { httpClient } from "../../helpers";
+import { httpClient } from "../../global/utils/helpers";
 /**
  * Método que permite crear el rol de soporte
  * @param {Object} soporteData - Objeto con los datos requeridos del soporte

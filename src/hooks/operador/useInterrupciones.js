@@ -7,7 +7,7 @@ import {
   updateInterrupcion,
 } from "../../services/operador";
 import { useWebSocket } from "../web-socket/useWebSocket";
-import { useNotificationContext } from "../../context/NotificationContext";
+import {useNotificationContext} from '../../global/context'
 
 const TOPIC_INTERRUPCIONES = "/topic/interrupciones";
 

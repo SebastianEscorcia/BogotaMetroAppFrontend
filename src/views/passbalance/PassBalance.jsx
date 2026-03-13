@@ -2,7 +2,7 @@ import { useState } from "react";
 import { GoChevronLeft } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
 import { FondoPag } from "../../components/common";
-import { useAuth } from "../../context/AuthUserContext";
+import { useAuth } from "../../global/context";
 import { pasarSaldo } from "../../services";
 import "./passBalance.css";
 

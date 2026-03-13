@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { validateEmail, validatePassword } from "../helpers";
+import { validateEmail, validatePassword } from "../global/utils/helpers";
 
 export const useLoginForms = (handleLogin) => {
   const [correo, setCorreo] = useState("");

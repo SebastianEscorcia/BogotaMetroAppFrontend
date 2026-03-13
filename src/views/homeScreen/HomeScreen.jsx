@@ -1,7 +1,7 @@
 // Components
 import { FondoPag } from "../../components/common";
-import {useAuth} from '../../context/AuthUserContext';
-import { Footer } from "../../layouts";
+import {useAuth} from '../../global/context';
+import { Footer } from "../../global/layouts";
 import {
   HelpSection,
   HomeHeader,

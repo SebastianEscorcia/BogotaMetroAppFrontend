@@ -15,11 +15,12 @@ import {
   Travel,
   Soporte,
   Unauthorized,
-  DashBoardAdmin,
   DashboardSoporte,
   DashboardOperador,
-  Movimientos,
 } from "./views";
+
+import {DashBoardAdmin} from './modules/admin/views/DashBoardAdmin'
+import {Movimientos} from './modules/movimientos/views/Movimientos'
 import {
   MapFaq,
   MetroAppFaq,
@@ -37,11 +38,9 @@ import {
 import "./assets/styles/layout.css";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./context/AuthUserContext";
-import { NotificationProvider } from "./context/NotificationContext";
-import { WebSocketNotificationsProvider } from "./context/WebSocketNotificationsContext";
-import { ROLES } from "./helpers";
-import { ProtectedRoute, PublicRoute, RoleGuard } from "./guards";
+import {AuthProvider,NotificationProvider,WebSocketNotificationsProvider} from './global/context'
+import { ROLES } from "./global/utils/constants";
+import { ProtectedRoute, PublicRoute, RoleGuard } from "./global/guards";
 import LineTwo from "./views/linetwo/LineTwo";
 import LineThree from "./views/linethree/LineThree";
 import { SystemNotificationCenter } from "./components/common";

@@ -1,4 +1,4 @@
-import { httpClient } from "../../helpers";
+import { httpClient } from "../../global/utils/helpers";
 
 /**
  * Obtener todos los operadores del sistema

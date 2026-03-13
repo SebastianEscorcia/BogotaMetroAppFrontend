@@ -1,4 +1,4 @@
-import { httpClient } from "../../helpers/httpClient";
+import { httpClient } from "../../modules/shared/helpers/httpClient";
 
 /**
  * Servicio para manejar las sesiones de chat (chat rooms)

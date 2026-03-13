@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getInterrupciones } from "../../services/operador/interrupciones.service";
 import { useWebSocket } from "../web-socket/useWebSocket";
-import { useNotificationContext } from "../../context/NotificationContext";
+import { useNotificationContext } from "../../global/context/NotificationContext";
 
 const TOPIC_INTERRUPCIONES = "/topic/interrupciones";
 

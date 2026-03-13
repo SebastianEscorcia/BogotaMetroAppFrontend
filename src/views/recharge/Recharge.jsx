@@ -14,7 +14,7 @@ import {
   MdSwapHoriz,
 } from "react-icons/md";
 import { FondoPag } from "../../components/common";
-import { useAuth } from "../../context/AuthUserContext";
+import { useAuth } from "../../global/context";
 import { useRecarga } from "../../hooks/pasajero/useRecarga";
 import { formatCurrency, formatFecha } from "../../adapters/transaccionAdapter";
 

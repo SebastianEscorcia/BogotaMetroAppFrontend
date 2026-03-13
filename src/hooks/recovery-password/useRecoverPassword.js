@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { requestPasswordChange } from "../../services";
-import { getErrorMessage } from "../../helpers";
-import { errorConstants } from "../../constants";
+import { errorConstants } from "../../global/utils/constants";
+import { getErrorMessage } from "../../global/utils/helpers";
 export const useRecoverPassword = () => {
   const [correo, setCorreo] = useState("");
   const [error, setError] = useState("");

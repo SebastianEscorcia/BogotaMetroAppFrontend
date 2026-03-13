@@ -1,4 +1,4 @@
-import { httpClient } from "../../helpers";
+import { httpClient } from "../../global/utils/helpers";
 
 export const getHorariosSistema = () => {
   return httpClient("/horarios-sistema");

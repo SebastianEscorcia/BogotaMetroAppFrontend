@@ -1,5 +1,5 @@
 export * from './useLoginForm';
-export * from './useNavigateTo';
+export * from '../modules/shared/hooks/useNavigateTo';
 export * from './useRegisterForm';
 export * from './useDebounce';
 export * from './faqs-supports/useCategorysFaq';
@@ -17,5 +17,4 @@ export * from './operador/useEstaciones';
 export * from './operador/useEstacionesLineas';
 export * from './operador/useInterrupciones';
 export * from './pasajero/useRecarga';
-export * from './pasajero/useMovimientos';
 export * from './pasajero/useInterrupcionesFeed';

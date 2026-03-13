@@ -1,4 +1,4 @@
-import { useAuth } from "../../context/AuthUserContext";
+import { useAuth } from "../../global/context";
 import { useRegisterForm, useNavigateTo } from "../../hooks";
 import { Logo, Form, Input, Button } from "../../components/common";
 import logo from "../../assets/img/imgs/logo2.svg";

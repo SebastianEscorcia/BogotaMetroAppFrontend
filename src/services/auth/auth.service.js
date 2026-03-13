@@ -1,4 +1,4 @@
-import { httpClient } from "../../helpers";
+import { httpClient } from "../../global/utils/helpers";
 export const loginUser = (data) => {
   return httpClient("/auth/login", {
     method: "POST",

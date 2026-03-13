@@ -1,4 +1,4 @@
-import {httpClient} from '../../helpers'
+import {httpClient} from '../../global/utils/helpers'
 
 export const pasarSaldo = (numTelefono, valor) => {
     if (typeof numTelefono !== 'string' || !numTelefono.trim()) {

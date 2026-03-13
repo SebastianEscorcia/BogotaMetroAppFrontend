@@ -1,7 +1,7 @@
 import { HeaderTop, Button, Logo } from "../../components/common";
 import logo from "../../assets/img/imgs/logoconeslogan.png";
 import "./welcome.css";
-import { useNavigateTo } from "../../hooks/useNavigateTo";
+import { useNavigateTo } from "../../hooks";
 
 export function Welcome() {
   const { goTo } = useNavigateTo();

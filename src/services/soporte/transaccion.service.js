@@ -1,4 +1,4 @@
-import { httpClient } from "../../helpers";
+import { httpClient } from "../../global/utils/helpers";
 
 /**
  * Servicio de transacciones para el rol SOPORTE.

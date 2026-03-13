@@ -4,7 +4,7 @@ import {
   obtenerSesionesActivasSoporte,
 } from "../../../services/chat/chatRoom.service";
 import { useWebSocket } from "../../web-socket/useWebSocket";
-import { useNotificationCenter } from "../../../context/NotificationContext";
+import { useNotificationCenter } from "../../../global/context/NotificationContext";
 
 /**
  * Hook para manejar el dashboard del soporte

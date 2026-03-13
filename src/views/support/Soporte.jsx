@@ -2,12 +2,12 @@ import { Button, FondoPag } from "../../components/common";
 import { SupportButton } from "../../components/supportfaq/SupportButton";
 import { PasajeroChatWindow } from "../../components/pasajero";
 
-import { routeMapFaq } from "../../helpers";
+import { routeMapFaq } from "../../global/utils/helpers";
 
 import { AiFillCaretLeft } from "react-icons/ai";
 import { CiSearch } from "react-icons/ci";
 
-import { useAuth } from "../../context/AuthUserContext";
+import { useAuth } from "../../global/context";
 import { useChatRoom,useNavigateTo, useCategoryFaq } from "../../hooks";
 import { useState } from "react";
 

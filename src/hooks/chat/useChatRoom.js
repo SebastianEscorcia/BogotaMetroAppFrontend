@@ -1,8 +1,8 @@
 import { useState, useCallback, useEffect } from "react";
 import { useWebSocket } from "../web-socket/useWebSocket";
-import { useNotificationContext } from "../../context/NotificationContext";
+import { useNotificationContext } from "../../global/context/NotificationContext";
 
-import {esAsignacionSoporte,esCierreSesion,limpiarSoporte} from '../../helpers'
+import {esAsignacionSoporte,esCierreSesion,limpiarSoporte} from '../../global/utils/helpers'
 import {
   solicitarChat,
   asignarSoporteASesion,
