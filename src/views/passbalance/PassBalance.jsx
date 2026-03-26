@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FondoPag } from "../../components/common";
 import { useAuth } from "../../context/AuthUserContext";
 import { pasarSaldo } from "../../services";
-import "./passBalance.css";
+import "./passbalance.css";
 
 const MONTOS_RAPIDOS = [5000, 10000, 50000, 100000];
 
