@@ -1,0 +1,688 @@
+
+
+/* ============================================
+   HOME SCREEN - CONTENEDOR PRINCIPAL
+   ============================================ */
+.home-screen {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0;
+}
+
+.home-main-content {
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 1rem; /* Espacio antes del footer */
+}
+
+/* Asegura que el footer siempre esté al fondo */
+.home-screen > footer,
+.home-screen > div:last-child {
+  flex-shrink: 0;
+  margin-top: auto; 
+}
+
+/* ============================================
+   HOME HEADER
+   ============================================ */
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+
+  position: relative;
+}
+
+.home-header .icon-btn {
+  background-color: transparent;
+  color: var(--rojo);
+  padding: 0;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  border-radius: 0;
+}
+
+.home-logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.home-logo img {
+  width: 80px;
+  height: 45px;
+  object-fit: contain;
+}
+
+.home-logo p {
+  font-size: 0.65rem;
+  color: var(--negro);
+  font-weight: 600;
+  text-align: center;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.notification {
+  background-color: white;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  font-size: 20px;
+  color: var(--rojo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.notification:hover {
+  background-color: #f8f8f8;
+}
+
+.notification-dot {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--rojo);
+  box-shadow: 0 0 0 2px #ffffff;
+}
+
+/* ============================================
+   BOTONES INGRESA Y REGÍSTRATE
+   ============================================ */
+
+/* ============================================
+   USER INFO
+   ============================================ */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.75rem 1rem;
+  color: var(--negro);
+  margin: 0 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-info .icon-btn {
+  background-color: white;
+  color: var(--rojo);
+  font-size: 25px;
+  
+}
+.user-info h2 {
+  font-size: 1.1rem;
+  margin: 0;
+  font-weight: 600;
+  color: var(--negro);
+}
+
+/* ============================================
+   QUICK ACTIONS - MOVIMIENTOS Y METROPAY
+   ============================================ */
+.quick-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin: 1rem;
+  padding: 0;
+}
+
+.action {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  font-size: 1rem;
+  font-weight: 600;
+  height: 50px;
+}
+
+.action img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.action.primary {
+  background-color: var(--rojo);
+  color: white;
+}
+
+.action.secondary {
+  background-color: white;
+  color: var(--negro);
+  border: 2px solid #e0e0e0;
+}
+
+.action.secondary img {
+  width: 60px;
+  height: 40px;
+}
+
+.action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.action:active {
+  transform: translateY(0);
+}
+
+/* ============================================
+   SERVICES GRID - 4 BOTONES
+   ============================================ */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin: 0 1rem;
+  padding: 1rem 0;
+}
+
+.service-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0.5rem;
+}
+
+.service-icon {
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--rojo);
+  border-radius: 50%;
+  font-size: 28px;
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 8px rgba(253, 0, 0, 0.3);
+}
+
+.service-icon img {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+  
+}
+
+.service-item:nth-child(3) .service-icon img {
+  width: 40px;
+  height: 40px;
+}
+
+.service-item p {
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--negro);
+  margin: 0;
+  line-height: 1.2;
+  max-width: 70px;
+}
+
+.service-item:hover .service-icon {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(253, 0, 0, 0.4);
+}
+
+.service-item:active .service-icon {
+  transform: scale(0.95);
+}
+
+/* ============================================
+   TRAVEL PLANNER - ¿A DÓNDE VAS?
+   ============================================ */
+.travel-planner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: var(--rojo);
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 8px rgba(253, 0, 0, 0.3);
+  margin: 1rem;
+}
+
+.travel-planner img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: brightness(0) invert(1);
+}
+
+.travel-planner p {
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
+}
+
+.travel-planner:hover {
+  background-color: #d40000;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(253, 0, 0, 0.4);
+}
+
+.travel-planner:active {
+  transform: translateY(0);
+}
+
+/* ============================================
+   LINE STATUS - ESTADOS DE LAS LÍNEAS
+   ============================================ */
+
+.line-status {
+  padding: 1.1rem 1rem;
+  background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+  border-radius: 18px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+  margin: 0 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.line-status::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #fd0000 0%, #f57f17 55%, #388e3c 100%);
+}
+
+.line-status h3 {
+  font-size: 1.02rem;
+  margin-bottom: 0.85rem;
+  color: var(--negro);
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  text-align: center;
+}
+
+.status-tags {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.status-tags span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 12px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  color: var(--negro);
+  min-width: 0;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-tags span svg {
+  font-size: 1rem;
+  animation: rotate-status 2s linear infinite; /* Animación de rotación continua */
+}
+
+.status-tags .blue {
+  background-color: #fff1ee;
+  border: 1px solid rgba(253, 0, 0, 0.35);
+}
+
+.status-tags .blue svg {
+  color: var(--rojo);
+}
+
+.status-tags .yellow {
+  background-color: #fff8de;
+  border: 1px solid rgba(245, 127, 23, 0.45);
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.status-tags .yellow svg {
+  color: #f57f17;
+}
+
+.status-tags .green {
+  background-color: #edf8ee;
+  border: 1px solid rgba(56, 142, 60, 0.4);
+}
+
+.status-tags .green svg {
+  color: #388e3c;
+}
+
+.status-tags span:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
+}
+
+.status-tags span:hover svg {
+  animation-play-state: paused; /* Pausa la rotación al hover */
+}
+
+.status-tags span:active {
+  transform: scale(0.98);
+}
+
+.line-status p {
+  margin: 0.8rem 0 0;
+  font-size: 0.8rem;
+  color: #4a4a4a;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.line-status ul {
+  margin: 0.8rem 0 0;
+  padding: 0.6rem 0.75rem;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  list-style: none;
+}
+
+.line-status li {
+  font-size: 0.79rem;
+  color: #303030;
+  margin-bottom: 0.45rem;
+  line-height: 1.35;
+  padding-left: 0.9rem;
+  position: relative;
+}
+
+.line-status li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--rojo);
+}
+
+.line-status li:last-child {
+  margin-bottom: 0;
+}
+
+/* Animación de rotación para los iconos de estado */
+@keyframes rotate-status {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* ============================================
+   HELP SECTION - ¿NECESITAS AYUDA?
+   ============================================ */
+.help-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 25px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--rojo);
+}
+
+.help-section svg {
+  font-size: 28px;
+}
+
+
+
+.help-section:hover {
+  background-color: #d40000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(253, 0, 0, 0.3);
+}
+
+.help-section:active {
+  transform: translateY(0);
+}
+
+/* ============================================
+   RESPONSIVE - TABLETS
+   ============================================ */
+@media (min-width: 481px) and (max-width: 768px) {
+  .home-screen {
+    max-width: 600px;
+  }
+
+  .services-grid {
+    gap: 1.5rem;
+  }
+
+  .service-icon {
+    width: 65px;
+    height: 65px;
+    font-size: 32px;
+  }
+
+  .service-item p {
+    font-size: 0.8rem;
+    max-width: 80px;
+  }
+
+  .action {
+    height: 55px;
+    font-size: 1.1rem;
+  }
+
+  .travel-planner p {
+    font-size: 1.1rem;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - DESKTOP
+   ============================================ */
+@media (min-width: 769px) {
+  .home-screen {
+    max-width: 480px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MÓVILES PEQUEÑOS
+   ============================================ */
+@media (max-width: 375px) {
+  .home-header {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .home-logo img {
+    width: 70px;
+    height: 40px;
+  }
+
+  .home-logo p {
+    font-size: 0.6rem;
+  }
+
+  .home-header .icon-btn,
+  .notification {
+    width: 30px;
+    height: 30px;
+    font-size: 24px;
+  }
+
+  .quick-actions,
+  .services-grid,
+  .travel-planner,
+  .line-status,
+  .help-section {
+    margin: 0.75rem;
+  }
+
+  .user-info {
+    margin: 0 0.75rem;
+    padding: 0.6rem 0.75rem;
+  }
+
+  .user-info h2 {
+    font-size: 1rem;
+  }
+
+  .action {
+    height: 45px;
+    font-size: 0.9rem;
+    gap: 0.4rem;
+  }
+
+  .action img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .action.secondary img {
+    width: 50px;
+    height: 35px;
+  }
+
+  .services-grid {
+    gap: 0.75rem;
+  }
+
+  .service-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+  }
+
+  .service-icon img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .service-item:nth-child(3) .service-icon img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .service-item p {
+    font-size: 0.65rem;
+    max-width: 60px;
+  }
+
+  .travel-planner {
+    padding: 0.85rem;
+  }
+
+  .travel-planner img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .travel-planner p {
+    font-size: 0.9rem;
+  }
+
+  .line-status {
+    padding: 0.85rem;
+  }
+
+  .line-status h3 {
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .status-tags {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+
+  .status-tags span {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .help-section {
+    padding: 0.85rem;
+  }
+
+  .help-section svg {
+    font-size: 24px;
+  }
+
+  .help-section span {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .services-grid {
+    gap: 0.5rem;
+  }
+
+  .service-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 20px;
+  }
+
+  .service-item p {
+    font-size: 0.6rem;
+    max-width: 55px;
+  }
+}

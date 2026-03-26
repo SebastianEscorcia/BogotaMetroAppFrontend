@@ -1,0 +1,23 @@
+.footer-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  background-color: red;
+  align-items: center;
+  justify-content: space-around;
+
+}
+
+.btn-container {
+  color: white;
+  text-align: center;
+  
+}
+
+.btn-container p {
+    font-size: 10px;
+    font-weight: 900;
+}
+.btn-container button{
+    padding: 10px;
+}

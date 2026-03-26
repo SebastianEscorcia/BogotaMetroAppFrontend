@@ -1,0 +1,308 @@
+
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+/* ── Variables (sincronizadas con el sistema de diseño) ─── */
+:root {
+  --red:        #fd0000;
+  --red-dark:   #c20000;
+  --red-light:  #ff3333;
+  --red-glow:   rgba(253, 0, 0, 0.15);
+  --bg:         #f8f9fa;
+  --surface:    #ffffff;
+  --border:     #e9ecef;
+  --text:       #212529;
+  --text-muted: #6c757d;
+  --success:    #28a745;
+  --success-bg: #d4edda;
+  --error-bg:   #fff5f5;
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  14px;
+  --shadow-sm:  0 1px 4px rgba(0,0,0,0.07);
+  --shadow-md:  0 4px 20px rgba(0,0,0,0.10);
+  --shadow-red: 0 3px 10px rgba(253, 0, 0, 0.30);
+}
+
+/* ── Página raíz ───────────────────────────────────────── */
+.update-passenger-page {
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100dvh;
+  background-color: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;        /* neutraliza stretch de FondoPag */
+  width: 100%;
+  max-width: 500px;
+  color: var(--text);
+}
+
+/* ── Header ────────────────────────────────────────────── */
+.update-passenger-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--red);
+  background-image: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 64px;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 2px 12px rgba(253, 0, 0, 0.35);
+}
+
+.update-passenger-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 22px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s;
+  padding: 0;
+}
+.update-passenger-back:hover {
+  background: rgba(255,255,255,0.28);
+}
+
+.update-passenger-header h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+.update-passenger-spacer {
+  width: 40px;
+  flex-shrink: 0;
+}
+
+/* ── Contenido principal ───────────────────────────────── */
+.update-passenger-content {
+  flex: 1;
+  width: 100%;
+  padding: 20px 16px 40px;
+  box-sizing: border-box;
+}
+
+/* ── Formulario ────────────────────────────────────────── */
+.update-passenger-form {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;                    /* controlamos el spacing con los grupos */
+}
+
+/* ── Grupos de campos ──────────────────────────────────── */
+/* Par de campos en fila (nombres y apellidos) */
+.update-passenger-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+/* Campo individual de ancho completo */
+.update-passenger-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.update-passenger-field:last-of-type {
+  margin-bottom: 0;
+}
+
+.update-passenger-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── Inputs ────────────────────────────────────────────── */
+.update-passenger-form input {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 11px 14px;
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.update-passenger-form input:focus {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px var(--red-glow);
+  background: var(--surface);
+}
+
+.update-passenger-form input::placeholder {
+  color: #adb5bd;
+  font-weight: 400;
+}
+
+/* Input tipo date — evita que el ícono nativo rompa el diseño */
+.update-passenger-form input[type="date"] {
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* ── Divisor visual entre secciones del form ───────────── */
+.update-passenger-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 16px 0;
+}
+
+/* ── Mensajes de feedback ──────────────────────────────── */
+.update-passenger-feedback {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 4px;
+  animation: slideDown 0.25s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.update-passenger-error {
+  background: var(--error-bg);
+  color: var(--red-dark);
+  border: 1px solid #fde0e0;
+}
+
+.update-passenger-success {
+  background: var(--success-bg);
+  color: #1b5e20;
+  border: 1px solid #a3e4c1;
+}
+
+.update-passenger-feedback-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: white;
+}
+.update-passenger-error   .update-passenger-feedback-icon { background: var(--red); }
+.update-passenger-success .update-passenger-feedback-icon { background: var(--success); }
+
+/* ── Botón submit ──────────────────────────────────────── */
+.update-passenger-submit {
+  width: 100%;
+  min-height: 52px;
+  margin-top: 20px;
+  background: var(--red);
+  background-image: linear-gradient(135deg, var(--red-light) 0%, var(--red) 60%, var(--red-dark) 100%);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: var(--shadow-red);
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.update-passenger-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(253, 0, 0, 0.40);
+}
+
+.update-passenger-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.update-passenger-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Spinner dentro del botón */
+.update-passenger-spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Responsive ────────────────────────────────────────── */
+
+/* Móvil pequeño: apila los campos del row */
+@media (max-width: 380px) {
+  .update-passenger-row {
+    grid-template-columns: 1fr;
+  }
+  .update-passenger-content {
+    padding: 16px 12px 32px;
+  }
+  .update-passenger-header h1 {
+    font-size: 16px;
+  }
+}
+
+/* Tablet y escritorio */
+@media (min-width: 600px) {
+  .update-passenger-header {
+    height: 72px;
+    padding: 0 32px;
+  }
+  .update-passenger-header h1 {
+    font-size: 20px;
+  }
+  .update-passenger-content {
+    padding: 28px 24px 60px;
+  }
+  .update-passenger-form {
+    padding: 28px;
+  }
+}

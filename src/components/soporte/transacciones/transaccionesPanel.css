@@ -1,0 +1,206 @@
+/* ==========================================
+   TransaccionesPanel — Panel contenedor
+   Bogotá Metro - Módulo Soporte
+   ========================================== */
+
+.transacciones-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  animation: fadeInPanel 0.3s ease;
+}
+
+@keyframes fadeInPanel {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================
+   Header de sección
+   ========================================== */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  background: var(--bg-primary, #ffffff);
+  border-radius: var(--radius-lg, 14px);
+  border: 1px solid var(--border-color, #e9ecef);
+  box-shadow: var(--shadow-card, 0 2px 8px rgba(0, 0, 0, 0.06));
+}
+
+.section-header-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.section-header-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md, 10px);
+  background: linear-gradient(135deg, var(--rojo, #fd0000) 0%, var(--vinotinto, #722f37) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 12px rgba(253, 0, 0, 0.25);
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--text-dark, #212529);
+  margin: 0;
+  letter-spacing: -0.25px;
+}
+
+.section-subtitle {
+  font-size: 0.875rem;
+  color: var(--text-secondary, #6c757d);
+  margin: 0.125rem 0 0 0;
+}
+
+/* ==========================================
+   Stats rápidas
+   ========================================== */
+.transaccion-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.transaccion-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--bg-primary, #ffffff);
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: var(--radius-lg, 14px);
+  box-shadow: var(--shadow-card, 0 2px 8px rgba(0, 0, 0, 0.06));
+  transition: var(--transition, all 0.2s ease);
+}
+
+.transaccion-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.1));
+}
+
+.stat-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md, 10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.stat-card-icon.primary {
+  background: var(--rojo-light, #fff5f5);
+  color: var(--rojo, #fd0000);
+}
+
+.stat-card-icon.success {
+  background: var(--success-light, #d4edda);
+  color: var(--success, #28a745);
+}
+
+.stat-card-icon.info {
+  background: var(--info-light, #d1ecf1);
+  color: var(--info, #17a2b8);
+}
+
+.stat-card-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.stat-card-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-dark, #212529);
+  letter-spacing: -0.25px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-card-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary, #6c757d);
+  font-weight: 500;
+}
+
+/* ==========================================
+   Error de transacciones
+   ========================================== */
+.transaccion-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: var(--danger-light, #f8d7da);
+  color: #721c24;
+  border-radius: var(--radius-md, 10px);
+  border: 1px solid #f5c6cb;
+}
+
+.transaccion-error p {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.transaccion-error button {
+  background: transparent;
+  border: 1px solid #721c24;
+  color: #721c24;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-sm, 6px);
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: var(--transition, all 0.2s ease);
+}
+
+.transaccion-error button:hover {
+  background: #721c24;
+  color: white;
+}
+
+/* ==========================================
+   Responsive
+   ========================================== */
+@media (max-width: 900px) {
+  .transaccion-stats-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .section-header {
+    padding: 1rem;
+  }
+
+  .section-header-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+  }
+
+  .section-title {
+    font-size: 1.125rem;
+  }
+}

@@ -1,0 +1,181 @@
+.register-container {
+  min-height: 100dvh;
+  width: 100%;
+  background-image: url("../../assets/img/imgs/fondo.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.register-form {
+  width: 100%;
+  max-width: 600px;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.logo-register {
+  width: 150px;
+}
+
+.register-title {
+  color: var(--rojo);
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.register-form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+
+.input-group {
+  background-color: var(--grisclaro);
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  border-bottom: 3px solid var(--gris);
+  transition: all 0.3s ease;
+}
+
+.input-group:focus-within {
+  background-color: #fff;
+  border-bottom-color: var(--rojo);
+}
+
+.input-group input,
+.input-group select {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  color: var(--negro);
+}
+
+.icon {
+  margin-right: 10px;
+  color: var(--vinotinto);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+
+
+.input-flex-1 {
+  flex: 1;
+}
+
+.input-flex-35 {
+  flex: 0 0 35%;
+}
+
+.input-flex-30 {
+  flex: 0 0 30%;
+}
+
+.input-flex-35,
+.input-flex-30 {
+  position: relative;
+}
+
+.input-flex-35 .icon,
+.input-flex-30 .icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.input-flex-35 select,
+.input-flex-30 select {
+  padding-left: 30px;
+}
+
+
+.date-input input {
+  color: #7a7a7a;
+}
+
+.date-input.has-value input {
+  color: var(--negro);
+}
+
+.btn-register {
+  margin-top: 10px;
+  padding: 12px;
+  width: 100%;
+  background-color: var(--rojo);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-register:hover {
+  background-color: var(--rojoprofundo);
+}
+
+.error-msg {
+  color: var(--rojo);
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.login-link-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.login-link {
+  color: var(--vinotinto);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Scrollbar personalizado */
+.register-form::-webkit-scrollbar {
+  width: 8px;
+}
+.register-form::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+.register-form::-webkit-scrollbar-thumb {
+  background: var(--gris);
+  border-radius: 4px;
+}
+.register-form::-webkit-scrollbar-thumb:hover {
+  background: var(--vinotinto);
+}
