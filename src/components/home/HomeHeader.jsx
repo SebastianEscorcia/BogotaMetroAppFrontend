@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { FiAlignJustify } from "react-icons/fi";
+import {CiLogout} from 'react-icons/ci'
 import { BsBell } from "react-icons/bs";
 import {
   MdCheckCircle,
@@ -13,8 +14,9 @@ import {
   MdError,
 } from "react-icons/md";
 import { Logo, Button } from "../common";
-import { useNotificationContext } from "../../context/NotificationContext";
+import { useNotificationContext,  } from "../../context/NotificationContext";
 import { useWebSocketNotifications } from "../../context/WebSocketNotificationsContext";
+import {useAuth} from '../../context/AuthUserContext'
 import iconoMetro from "../../assets/img/imgs/iconoMetro1.png";
 
 import "./homeHeader.css";
@@ -58,6 +60,7 @@ export const HomeHeader = () => {
     limpiarHistorial,
     
   } = useWebSocketNotifications();
+  const {logout} = useAuth();
 
   const [panelOpen, setPanelOpen] = useState(false);
   const panelRef = useRef(null);
@@ -84,8 +87,8 @@ export const HomeHeader = () => {
 
   return (
     <header className="home-header">
-      <Button className="icon-btn">
-        <FiAlignJustify />
+      <Button className="icon-btn" onClick={logout} >
+        <CiLogout/>
       </Button>
 
       <div className="home-logo">
